@@ -1,0 +1,5 @@
+Exception occurred for site <%= @site %> while processing: <%= @exception %><br/>
+<h4>Backtrace:</h4>
+<% @exception.backtrace.each do |msg| %>
+<%= msg %><br/>
+<% end %>

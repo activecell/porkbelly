@@ -9,6 +9,22 @@ PROJECT_DIR = File.dirname(__FILE__)
 DB_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
 DB_FILE = File.join(PROJECT_DIR, DB_CONFIG[STAGE]["database"])
 
+namespace :site do
+  namespace :mixpanel do
+    desc "Fetch all Mixpanel events"
+    task :events do
+      #require File.expand_path("../lib/fetchers/mixpanel_fetcher", __FILE__)
+      puts "Fetching all events for given credentials..."
+    end
+
+    desc "Fetch all Mixpanel events"
+    task :events do
+      #require File.expand_path("../lib/fetchers/mixpanel_fetcher", __FILE__)
+      puts "Fetching all events for given credentials..."
+    end
+  end
+end
+
 namespace :db do
   desc "Create database"
   task :create do

@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    aaronh-chronic (0.3.9)
     abstract (1.0.0)
     actionmailer (3.0.3)
       actionpack (= 3.0.3)
@@ -40,6 +41,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mixpanel_client (0.5.1)
     pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -47,6 +49,8 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
+    rest-client (1.6.1)
+      mime-types (>= 1.16)
     ruby-debug-base19 (0.11.24)
       columnize (>= 0.3.1)
       linecache19 (>= 0.5.11)
@@ -61,6 +65,9 @@ GEM
     treetop (1.4.9)
       polyglot (>= 0.3.1)
     tzinfo (0.3.24)
+    whenever (0.6.2)
+      aaronh-chronic (>= 0.3.9)
+      activesupport (>= 2.3.4)
 
 PLATFORMS
   ruby
@@ -68,6 +75,9 @@ PLATFORMS
 DEPENDENCIES
   actionmailer
   activerecord
+  mixpanel_client
   pg
+  rest-client
   ruby-debug19
   sqlite3
+  whenever
