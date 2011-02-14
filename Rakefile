@@ -1,7 +1,41 @@
-# Add your own tasks in files placed in lib/tasks ending in .rake,
-# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
+require "rubygems"
+require "bundler/setup"
+require "active_record"
+require "yaml"
+require "sqlite3"
+require File.expand_path("../initializers/stage", __FILE__)
 
-require File.expand_path('../config/application', __FILE__)
-require 'rake'
+PROJECT_DIR = File.dirname(__FILE__)
+DB_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
+DB_FILE = File.join(PROJECT_DIR, DB_CONFIG[STAGE]["database"])
 
-Profitably::Application.load_tasks
+namespace :db do
+  desc "Create database"
+  task :create do
+    puts STAGE
+    unless File.exist?(DB_FILE)
+      SQLite3::Database.new(DB_FILE)
+    end
+  end
+
+  desc "Delete database"
+  task :drop do
+    if File.exist?(DB_FILE)
+      File.delete(DB_FILE)
+    end
+  end
+
+  task :migrate => :"migrate:up"
+  namespace :migrate do
+    desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"
+    task :up do
+      ActiveRecord::Base.establish_connection(DB_CONFIG[STAGE])
+      ActiveRecord::Migrator.migrate("db/migrate", ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+    end
+
+    task :down do
+      ActiveRecord::Base.establish_connection(DB_CONFIG[STAGE])
+      ActiveRecord::Migrator.down("db/migrate", ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+    end
+  end
+end
