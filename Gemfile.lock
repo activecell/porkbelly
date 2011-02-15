@@ -75,6 +75,7 @@ PLATFORMS
 DEPENDENCIES
   actionmailer
   activerecord
+  activesupport
   mixpanel_client
   pg
   rest-client

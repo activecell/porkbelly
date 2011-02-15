@@ -10,7 +10,11 @@ module Fetchers
       raise NotImplementedError.new("This method should be overriden and return credentials of a site.")
     end
 
-    def fetch_data(credential)
+    # Params:
+    #   data_type: type of data need fetching.
+    #   credential: authentication info (username/password or api_key).
+    #   params: optional parameters.
+    def fetch_data(data_type, credential, params={})
       raise NotImplementedError.new("Implement this method to fetch data from the apis with the given credential.")
     end
 

@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem "activerecord"
+gem "activesupport"
 gem "sqlite3"
 gem "actionmailer"
 gem "pg"
