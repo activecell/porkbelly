@@ -73,11 +73,8 @@ module Fetchers
       end    
       
       def get_api_credentials(credentials_source)
-        
-      end    
-      
-      def parse_credentials(credentials_source)
         # Case 1: "api_key=<key>, api_secret=<secret>"
+        # @credential = {}
         
         # Case 2: get credentials from csv file
       end
@@ -172,7 +169,10 @@ module Fetchers
         
         if changed
           # insert data into database
-          record = MP::Event.create!(:content => data, :credential => credential[:api_key])
+          record = MP::Event.create!(
+            :content => data, 
+            :credential => credential[:api_key],
+            :params => client.url)
         end
         
         return data
