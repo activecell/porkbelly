@@ -11,16 +11,13 @@ DB_FILE = File.join(PROJECT_DIR, DB_CONFIG[STAGE]["database"])
 
 namespace :site do
   namespace :mixpanel do
-    desc "Fetch all Mixpanel events"
+    desc "Fetch all Mixpanel events for the given credentials (single/multiple)"
     task :events do
+      unless ENV.include?("credentials")
+        raise "usage: rake site:mixpanel:events credentials=<your credentials>"
+      end
       #require File.expand_path("../lib/fetchers/mixpanel_fetcher", __FILE__)
-      puts "Fetching all events for given credentials..."
-    end
-
-    desc "Fetch all Mixpanel events"
-    task :events do
-      #require File.expand_path("../lib/fetchers/mixpanel_fetcher", __FILE__)
-      puts "Fetching all events for given credentials..."
+      puts "Fetching all events for '#{ENV['credentials']}'..."
     end
   end
 end
