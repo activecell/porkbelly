@@ -13,7 +13,7 @@ module Fetchers
 		PASSWORD = "tpl123456"
 		
 		def self.request_url
-	  	RestClient::Resource.new(SITE, :user =>  AGENTEMAIL, :password => PASSWORD)
+	  	RestClient::Resource.new(SITE, :user => AGENTEMAIL, :password => PASSWORD)
 		end				
 	end
 
