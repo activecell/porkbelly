@@ -13,6 +13,33 @@ module Fetchers
       UNITS = {:hour => 'hour', :day => 'day', :week => 'week', :month =>'month'}
       DEFAULT_LIMIT = 255
       
+      # Keys word in the Mixpanel response
+      RESPONSE_KEYS = {:legend_size => 'legend_size'}
+      
+      def get_api_credentials(credentials_source)
+        # Case 1: "api_key=<key>, api_secret=<secret>"
+        if(credentials_source.include?("api_key"))
+          keys = credentials_source.split(',')
+          api_key = ""
+          api_secret = ""
+          
+          keys.each do |k|
+            sub_key = k.split('=')
+            value = sub_key[0].strip
+            if(value == "api_key")
+              api_key = sub_key[1].strip
+            elsif(sub_key[0].strip == "api_secret")
+              api_secret = sub_key[1].strip
+            end
+          end
+          
+          return {:api_key => api_key, :api_secret => api_secret}
+        end
+        
+        # Case 2: get credentials from csv file
+        # Read from file
+      end
+      
       def new_client(credential={})
         @credential = credential.to_options
         @client = Mixpanel::Client.new( 'api_key' => @credential[:api_key], 
@@ -56,8 +83,24 @@ module Fetchers
           params[:limit] = DEFAULT_LIMIT
         end
         
+        if !params.has_key?(:detect_changes)
+          # Auto detect changes          
+          params[:detect_changes] = true
+        end
+        
         return params
-      end   
+      end
+      
+      def check_changes(data, request_url)
+        url = MP::Event.format_params_string(request_url)
+        search_result = MP::Event.where(:params => url, :content => data).first
+        
+        if search_result.blank?
+          return true
+        end
+        
+        return false
+      end
     end  
     
     class MixpanelFetcher
@@ -70,14 +113,7 @@ module Fetchers
       @@logger = BaseLogger.new(File.expand_path("../../../log/mixpanel.log",__FILE__))
       def logger
         @@logger
-      end    
-      
-      def get_api_credentials(credentials_source)
-        # Case 1: "api_key=<key>, api_secret=<secret>"
-        # @credential = {}
-        
-        # Case 2: get credentials from csv file
-      end
+      end     
       
       # fetch data for the given credential
       def fetch_data(data_type, credential, params={})
@@ -151,7 +187,6 @@ module Fetchers
         
         # Get names of events.        
         event_names = self.names
-        
         data = client.request do
           resource 'events'
           event    event_names.to_s
@@ -159,23 +194,33 @@ module Fetchers
           unit     params[:unit]
           format   params[:format]
           interval params[:interval]
+        end      
+        
+        should_save = false # Flag to save the data to DB or not.
+        
+        # Detect data is empty or not
+        is_empty = (data.blank? || data[RESPONSE_KEYS[:legend_size]].to_i <= 0)
+        
+        # Format to raw data.
+        raw_data = data.to_json
+        
+        if !is_empty && params[:detect_changes]
+          # Detect data were changed
+          should_save = check_changes(raw_data, currrent_url)
+        elsif !is_empty
+          should_save = true
         end
         
-        # Convert to raw data
-        data = data.to_json
-        
-        # Detect data were changed
-        changed = true # detect_change(data)
-        
-        if changed
+        if should_save
           # insert data into database
+          puts "===> insert data into database..."
           record = MP::Event.create!(
-            :content => data, 
+            :content => raw_data, 
             :credential => credential[:api_key],
-            :params => client.url)
+            :params => currrent_url)
         end
         
-        return data
+        return raw_data
       end
       
       # Get the top events from the last day.
@@ -205,5 +250,3 @@ module Fetchers
     end
   end
 end
-
-#Fetchers::MixpanelFetcher.new.fetch_data({:api_key => "4d9b20366fda6e248d8d282946fc988a", :api_secret => "b58997c62b91b19fe039b017ccb6b668"})
