@@ -10,26 +10,26 @@ module MP
     id: int         int (primary key)
     content:        string
     request_url:    string
-    content_format: string
+    format:         string
     credential:     string
     created_at:     datetime
     updated_at:     datetime  
 =end
   class Event < ActiveRecord::Base
-    before_save :format_params_string
-    before_create :format_params_string
+    before_save :format_request_url
+    before_create :format_request_url
     
     def self.table_name
       "mixpanel_events"
     end
     
-    def format_params_string
-      self.params = Event.format_params_string(self.params)
+    def format_request_url
+      self.request_url = Event.format_request_url(self.request_url)
       return true # To not interrupt the saving process.
     end
     
     # Format the parameters string before saving to DB.
-    def self.format_params_string(full_url="")
+    def self.format_request_url(full_url="")
       # Not save 'expire' and 'sig' params to DB, 
       # because they are always different and not important params.
       uri = URI.parse(full_url)

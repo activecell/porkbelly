@@ -1,5 +1,6 @@
 require File.expand_path("../base", __FILE__)
 require File.expand_path("../../models/mixpanel", __FILE__)
+require File.expand_path("../../helpers/util", __FILE__)
 require "mixpanel_client"
 require "active_support/core_ext"
 require 'json'
@@ -37,7 +38,8 @@ module Fetchers
         end
         
         # Case 2: get credentials from csv file
-        # Read from file
+        credentials = Util.hash_from_csv(credentials_source)
+        return credentials
       end
       
       def new_client(credential={})
@@ -92,8 +94,8 @@ module Fetchers
       end
       
       def check_changes(data, request_url)
-        url = MP::Event.format_params_string(request_url)
-        search_result = MP::Event.where(:params => url, :content => data).first
+        url = MP::Event.format_request_url(request_url)
+        search_result = MP::Event.where(:request_url => url, :content => data).first
         
         if search_result.blank?
           return true
@@ -201,12 +203,12 @@ module Fetchers
         # Detect data is empty or not
         is_empty = (data.blank? || data[RESPONSE_KEYS[:legend_size]].to_i <= 0)
         
-        # Format to raw data.
-        raw_data = data.to_json
+        # Format to JSON data.
+        json_data = data.to_json
         
         if !is_empty && params[:detect_changes]
           # Detect data were changed
-          should_save = check_changes(raw_data, currrent_url)
+          should_save = check_changes(json_data, currrent_url)
         elsif !is_empty
           should_save = true
         end
@@ -215,12 +217,14 @@ module Fetchers
           # insert data into database
           puts "===> insert data into database..."
           record = MP::Event.create!(
-            :content => raw_data, 
+            :content => json_data, 
+            :format => FORMATS[:json],
             :credential => credential[:api_key],
-            :params => currrent_url)
+            :request_url => currrent_url,
+          )
         end
         
-        return raw_data
+        return json_data
       end
       
       # Get the top events from the last day.

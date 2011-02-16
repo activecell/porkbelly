@@ -10,7 +10,8 @@ module Util
     end
      
     collection = rows.collect do |row|
-      Hash[*col_headers.zip(row.strip).flatten]
+      row.each{|cell| cell.strip!}
+      Hash[*col_headers.zip(row).flatten]
     end
     
     return collection
