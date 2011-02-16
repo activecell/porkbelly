@@ -68,6 +68,23 @@ namespace :site do
       puts "Result: #{data}"
     end
   end
+
+	############################################################
+	##-----ZENDESK RAKE TASK----##
+	############################################################
+	namespace :zendesk do
+		desc "Fetch Zendesk tickets using given agentemail and password"
+		task :tickets do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credentials = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			fetcher = Fetchers::TicketFetcher.new
+			fetcher.fetch_data
+			puts "Fetching all tickets"
+		end
+	end
 end
 
 namespace :db do
