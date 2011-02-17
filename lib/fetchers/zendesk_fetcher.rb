@@ -8,20 +8,34 @@ module Fetchers
 	module ZendeskFetcherBase
 		FORMAT = {:json => 'json', :xml => 'xml', :csv => 'csv'}
 		DEFAULT_LIMIT = 255
-		SITE = "http://tpltest.zendesk.com/users.xml"
-		AGENTEMAIL = "utwkidvn@gmail.com"
-		PASSWORD = "tpl123456"
 		
-		def self.request_url
-	  	RestClient::Resource.new(SITE, :user => AGENTEMAIL, :password => PASSWORD)
-		end				
+		def rest_request(credential, request_url)
+	  	RestClient::Resource.new(request_url, :user => credential[:agentemail], :password => credential[:password])
+		end
+				
+		def new_client(credential, request_url, format)
+			@credential = credential.to_options
+			@request_url = request_url
+			@format = format
+		end		
 	end
 
 	class TicketFetcher
 		include ZendeskFetcherBase
-		def fetch_data
-			data = ZendeskFetcherBase.request_url.get
-			Zendesk::Ticket.create(:params => "a", :content => data, :credential => "sax")
+		@@ticket_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@@ticket_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @@ticket_rest.get
+			puts @request_url +" " +  @credential.to_s
+			Zendesk::Ticket.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
 		end
 	end
 end
