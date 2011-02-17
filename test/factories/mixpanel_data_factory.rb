@@ -68,9 +68,9 @@ EVENTS = [:show, :login, :view_page, :test_api, :logout]
 
 EVENTS.each do |e|
   puts "===> Track event: #{e}, Token: #{TOKEN1}"
-  MixPanelDataFactory.track(e, {"token" => TOKEN1})
+  MixPanelDataFactory.track(e, {"token" => TOKEN1, "test_property" => "Just a test", "test_time" => Time.now.to_s})
   
   puts "===> Track event: #{e}, Token: #{TOKEN2}"
-  MixPanelDataFactory.track(e, {"token" => TOKEN2})
+  MixPanelDataFactory.track(e, {"token" => TOKEN2, "test_property" => "Just a test", "test_time" => Time.now.to_s})
 end
 
