@@ -26,4 +26,19 @@ module Zendesk
       "zendesk_tags"
     end
   end
+	class Forum < ActiveRecord::Base
+    def self.table_name
+      "zendesk_forums"
+    end
+  end
+	class TicketField < ActiveRecord::Base
+    def self.table_name
+      "zendesk_ticket_fields"
+    end
+  end
+	class Macro < ActiveRecord::Base
+    def self.table_name
+      "zendesk_macros"
+    end
+  end
 end

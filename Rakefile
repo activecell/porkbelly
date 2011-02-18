@@ -103,7 +103,7 @@ Options:
 	############################################################  
 	namespace :zendesk do
 		desc "Fetch Zendesk tickets using given agentemail and password"
-		#---------------  TICKET FETCH  ---------------#
+		#################  TICKET FETCH  #################
 		task :tickets do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
 			credential = {
@@ -114,9 +114,8 @@ Options:
 			format = "xml"
 			fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)						
 			fetcher.fetch_data
-		end
 
-		#---------------  ORGANIZATION FETCH  ---------------#
+		#################  ORGANIZATION FETCH  #################
 		desc "Fetch Zendesk organizations using given agentemail and password"
 		task :organizations do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
@@ -130,7 +129,7 @@ Options:
 			fetcher.fetch_data
 		end		
 
-		#---------------  GROUP FETCH  ---------------#
+		#################  GROUP FETCH  #################
 		desc "Fetch Zendesk groups using given agentemail and password"
 		task :groups do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
@@ -144,7 +143,7 @@ Options:
 			fetcher.fetch_data
 		end
 
-		#---------------  USER FETCH  ---------------#
+		#################  USER FETCH  #################
 		desc "Fetch Zendesk users using given agentemail and password"
 		task :users do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
@@ -158,7 +157,7 @@ Options:
 			fetcher.fetch_data
 		end
 
-		#---------------  TAG FETCH  ---------------#
+		#################  TAG FETCH  #################
 		desc "Fetch Zendesk tags using given agentemail and password"
 		task :tags do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
@@ -169,6 +168,48 @@ Options:
 			request_url = "http://tpltest.zendesk.com/tags.xml"
 			format = "xml"
 			fetcher = Fetchers::TagFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
+		end
+
+		#################  FORUM FETCH  #################
+		desc "Fetch Zendesk forums using given agentemail and password"
+		task :forums do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/forums.xml"
+			format = "xml"
+			fetcher = Fetchers::ForumFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
+		end
+
+		#################  TICKET FIELD FETCH  #################
+		desc "Fetch Zendesk ticket fields using given agentemail and password"
+		task :ticket_fields do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/ticket_fields.xml"
+			format = "xml"
+			fetcher = Fetchers::TicketFieldFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
+		end
+
+		#################  MACRO FETCH  #################
+		desc "Fetch Zendesk macros using given agentemail and password"
+		task :macros do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/macros.xml"
+			format = "xml"
+			fetcher = Fetchers::MacroFetcher.new(credential, request_url, format)						
 			fetcher.fetch_data
 		end
 	end

@@ -132,6 +132,69 @@ module Fetchers
 			end
 		end
 	end
+
+	class ForumFetcher
+		include ZendeskFetcherBase
+		@forum_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@forum_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @forum_rest.get.to_s
+			zendesk_forum =  Zendesk::Forum
+			if !check_existence_record(zendesk_forum, data) 
+				zendesk_forum.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
+		end
+	end
+
+	class TicketFieldFetcher
+		include ZendeskFetcherBase
+		@ticket_field_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@ticket_field_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @ticket_field_rest.get.to_s
+			zendesk_ticket_field =  Zendesk::TicketField
+			if !check_existence_record(zendesk_ticket_field, data) 
+				zendesk_ticket_field.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
+		end
+	end
+
+	class MacroFetcher
+		include ZendeskFetcherBase
+		@macro_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@macro_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @macro_rest.get.to_s
+			zendesk_macro =  Zendesk::Macro
+			if !check_existence_record(zendesk_macro, data) 
+				zendesk_macro.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
+		end
+	end
 end
 
 
