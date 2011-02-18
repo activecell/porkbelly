@@ -96,9 +96,7 @@ Options:
   
 	############################################################
 	##-----ZENDESK RAKE TASK----##
-	############################################################
-
-  
+	############################################################  
 	namespace :zendesk do
 		desc "Fetch Zendesk tickets using given agentemail and password"
 		#---------------  TICKET FETCH  ---------------#
@@ -108,14 +106,13 @@ Options:
 				:agentemail => "utwkidvn@gmail.com",
 				:password => "tpl123456",
 			}
-			request_url = "http://tpltest.zendesk.com/users.xml"
+			request_url = "http://tpltest.zendesk.com/tickets.xml"
 			format = "xml"
 			fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)						
 			fetcher.fetch_data
-			puts "Fetching all tickets"
 		end
 
-		#---------------  TICKET FETCH  ---------------#
+		#---------------  ORGANIZATION FETCH  ---------------#
 		desc "Fetch Zendesk organizations using given agentemail and password"
 		task :organizations do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
@@ -127,7 +124,48 @@ Options:
 			format = "xml"
 			fetcher = Fetchers::OrganizationFetcher.new(credential, request_url, format)						
 			fetcher.fetch_data
-			puts "Fetching all tickets"
+		end		
+
+		#---------------  GROUP FETCH  ---------------#
+		desc "Fetch Zendesk groups using given agentemail and password"
+		task :groups do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/groups.xml"
+			format = "xml"
+			fetcher = Fetchers::GroupFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
+		end
+
+		#---------------  USER FETCH  ---------------#
+		desc "Fetch Zendesk users using given agentemail and password"
+		task :users do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/users.xml"
+			format = "xml"
+			fetcher = Fetchers::UserFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
+		end
+
+		#---------------  TAG FETCH  ---------------#
+		desc "Fetch Zendesk tags using given agentemail and password"
+		task :tags do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/tags.xml"
+			format = "xml"
+			fetcher = Fetchers::TagFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
 		end
 	end
 end

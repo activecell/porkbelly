@@ -69,6 +69,69 @@ module Fetchers
 			end
 		end
 	end
+
+	class GroupFetcher
+		include ZendeskFetcherBase
+		@group_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@group_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @group_rest.get.to_s
+			zendesk_group =  Zendesk::Group
+			if !check_existence_record(zendesk_group, data) 
+				zendesk_group.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
+		end
+	end
+
+	class UserFetcher
+		include ZendeskFetcherBase
+		@user_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@user_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @user_rest.get.to_s
+			zendesk_user =  Zendesk::User
+			if !check_existence_record(zendesk_user, data) 
+				zendesk_user.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
+		end
+	end
+
+	class TagFetcher
+		include ZendeskFetcherBase
+		@tag_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@tag_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @tag_rest.get.to_s
+			zendesk_tag =  Zendesk::Tag
+			if !check_existence_record(zendesk_tag, data) 
+				zendesk_tag.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
+		end
+	end
 end
 
 
