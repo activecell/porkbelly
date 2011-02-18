@@ -13,10 +13,20 @@ module Fetchers
       FORMATS = {:json => 'json', :csv => 'csv'}
       TYPES = {:general => 'general', :unique => 'unique', :average => 'average' }
       UNITS = {:hour => 'hour', :day => 'day', :week => 'week', :month =>'month'}
+      
+      # Limit of the maximum number of values returned by the service.
       DEFAULT_LIMIT = 255
       
       # Keys word in the Mixpanel response
       RESPONSE_KEYS = {:legend_size => 'legend_size'}
+      
+      def self.support_methods        
+        class_variable_get("@@support_methods")
+      end
+      
+      def support_methods
+        self.class.class_variable_get("@@support_methods")
+      end
       
       def get_api_credentials(credentials_source)
         # Case 1: "api_key=<key>, api_secret=<secret>"
@@ -55,14 +65,13 @@ module Fetchers
       
       def client
         return @client
-      end
+      end    
       
-      def self.support_methods
-        @@support_methods ||= []
-      end
-      
-      def support_methods
-        @@support_methods ||= []
+      def is_method_supported?(method_name)
+        if method_name.blank?
+          return false
+        end
+        support_methods.include?(method_name.to_sym)
       end
       
       def currrent_url
@@ -99,10 +108,12 @@ module Fetchers
           params[:detect_changes] = true
         end
         
-        if !params.has_key?(:bucket)
-          # Auto detect changes          
-          params[:bucket] = nil
-        end
+        # Setup optional parameters.
+        [:event, :funnel, :name, :values, :bucket].each do |key|
+          if !params.has_key?(key)
+            params[key] = nil
+          end
+        end        
         
         return params
       end
@@ -175,7 +186,7 @@ module Fetchers
           fetcher = EventFetcher.new(credential)
           
           # Check supported method.
-          if !fetcher.support_methods.include?(method_name)
+          if !fetcher.is_method_supported?(method_name)
             method_name = :all_events
           end
           
@@ -192,8 +203,8 @@ module Fetchers
         begin
           fetcher = EventPropertyFetcher.new(credential)
           
-          # Check supported method.
-          if !fetcher.support_methods.include?(method_name)
+          # Check supported method.          
+          if !fetcher.is_method_supported?(method_name)
             method_name = :all_properties
           end
           
@@ -206,17 +217,18 @@ module Fetchers
       end
       
       def fetch_funnels(credential, params={}, method_name="all_funnels")
-        puts "Fetching funnels from Mixpanel..."
+        puts "Fetching funnels/#{method_name} from Mixpanel..."
         begin
           fetcher = FunnelFetcher.new(credential)
           
           # Check supported method.
-          if !fetcher.support_methods.include?(method_name)
+          if !fetcher.is_method_supported?(method_name)
             method_name = :all_funnels
           end
           
           # Call the method.
           data = fetcher.send(method_name, params)
+          
           return data
         rescue Exception => exception
           notify_exception(SITE, exception)
@@ -224,17 +236,18 @@ module Fetchers
       end
       
       def fetch_funnel_properties(credential, params={}, method_name="all_properties")
-        puts "Fetching funnel properties from Mixpanel..."
+        puts "Fetching funnel properties/#{method_name} from Mixpanel..."
         begin
           fetcher = FunnelPropertyFetcher.new(credential)
           
           # Check supported method.
-          if !fetcher.support_methods.include?(method_name)
+          if !fetcher.is_method_supported?(method_name)
             method_name = :all_properties
-          end
+          end          
           
           # Call the method.
           data = fetcher.send(method_name, params)
+          
           return data
         rescue Exception => exception
           notify_exception(SITE, exception)
@@ -248,7 +261,7 @@ module Fetchers
             
       def initialize(credential)
         new_client(credential)
-      end     
+      end
       
       # Get total, unique, or average data for a set of events over a time period.
       # Parameters:
@@ -274,8 +287,8 @@ module Fetchers
           event    event_names.to_s
           type     params[:type]
           unit     params[:unit]
-          format   params[:format]
           interval params[:interval]
+          format   params[:format]
           bucket   params[:bucket]
         end      
         
@@ -372,10 +385,11 @@ module Fetchers
         if save_to_db
           # Detect data is empty or not
           is_empty = (data.blank?)
+          json_data = data.to_json
           
           if !is_empty && params[:detect_changes]
             # Detect data were changed
-            should_save = check_changes(data.to_s, currrent_url)
+            should_save = check_changes(json_data, currrent_url)
           elsif !is_empty
             should_save = true
           end
@@ -384,7 +398,7 @@ module Fetchers
             # insert data into database
             puts "===> insert data into database..."
             record = MP::Event.create!({
-              :content => data, 
+              :content => json_data, 
               :format => FORMATS[:json],
               :credential => credential[:api_key],
               :request_url => currrent_url
@@ -450,9 +464,9 @@ module Fetchers
       
       def initialize(credential)
         new_client(credential)
-      end
+      end     
       
-      # Get total, unique, or average data from a single event property.
+      # Get total, unique, or average data from a single or an array event property.
       # Parameters:
       #   - params: parameters for the request.
       #   - save_to_db: determine to save the responded data to DB or not.
@@ -482,8 +496,8 @@ module Fetchers
             values   params[:values]
             type     params[:type]
             unit     params[:unit]
-            format   params[:format]
             interval params[:interval]
+            format   params[:format]
             bucket   params[:bucket]
           end
           
@@ -577,6 +591,64 @@ module Fetchers
       #   - save_to_db: determine to save the responded data to DB or not.
       def values(params={}, save_to_db=true)
         params = setup_params(params)
+        
+        property_names = []
+        if params[:name]
+          if params[:name].is_a?(Array)
+            property_names += params[:name]
+          else
+            property_names << params[:name]
+          end
+        end        
+        
+        property_data = []
+        
+        property_names.each do |proper_name|
+          data = client.request do
+            resource 'events/properties/values'
+            event    params[:event]
+            name     proper_name
+            type     params[:type]
+            unit     params[:unit]
+            interval params[:interval]
+            bucket   params[:bucket]
+          end
+          
+          property_data << {:request_url => currrent_url, :content => data}
+        end
+        
+        if save_to_db
+          MP::Event.transaction do            
+            property_data.each do |p_data|
+              should_save = false # Flag to save the data to DB or not.
+              
+              # Detect data is empty or not
+              is_empty = (p_data[:content].blank?)
+              
+              json_data = p_data[:content].to_json
+              
+              if !is_empty && params[:detect_changes]
+                # Detect data were changed
+                should_save = check_changes(json_data, p_data[:request_url])
+              elsif !is_empty
+                should_save = true
+              end
+              
+              if should_save
+                # insert data into database
+                puts "===> insert properties/values data into database..."            
+                record = MP::Event.create!({
+                  :content => json_data, 
+                  :format => FORMATS[:json],
+                  :credential => credential[:api_key],
+                  :request_url => p_data[:request_url]
+                })
+              end
+            end
+          end
+        end
+        
+        return property_data.to_json
       end
     end
     
@@ -589,15 +661,144 @@ module Fetchers
       end
       
       def all_funnels(params={}, save_to_db=true)
-      
+        params = setup_params(params)
+        
+        funnel_names = []
+        if params[:funnel]
+          if params[:funnel].is_a?(Array)
+            funnel_names += params[:funnel]
+          else
+            funnel_names << params[:funnel]
+          end
+        else
+          # Get names of funnels.        
+          funnel_names = self.names(params, false)
+        end
+        
+        data = client.request do
+          resource 'funnels'
+          funnel   funnel_names.to_s
+          unit     params[:unit]
+          interval params[:interval]
+        end      
+        
+        # Format to JSON data.
+        json_data = data.to_json       
+        
+        if save_to_db
+          should_save = false # Flag to save the data to DB or not.
+          
+          # Detect data is empty or not
+          is_empty = (data.blank?)
+          
+          if !is_empty && params[:detect_changes]
+            # Detect data were changed
+            should_save = check_changes(json_data, currrent_url)
+          elsif !is_empty
+            should_save = true
+          end
+          
+          if should_save
+            # insert data into database
+            puts "===> insert data into database..."
+            record = MP::Event.create!({
+              :content => json_data, 
+              :format => FORMATS[:json],
+              :credential => credential[:api_key],
+              :request_url => currrent_url
+            })
+          end
+        end
+        return json_data
       end
       
+      # Get the names of the funnels you are tracking. 
       def names(params={}, save_to_db=true)
-      
+        params = setup_params(params)
+        
+        # The 'unit' can only be 'week'. 
+        # Reference: http://mixpanel.com/api/docs/guides/api/v2#funnels-names
+        params[:unit] = 'week'
+        
+        data = client.request do
+          resource  'funnels/names'
+          unit      params[:unit]
+          interval  params[:interval]
+        end
+          
+        if save_to_db
+          # Detect data is empty or not
+          is_empty = (data.blank?)          
+          # Format to JSON data.
+          json_data = data.to_json
+          
+          if !is_empty && params[:detect_changes]
+            # Detect data were changed
+            should_save = check_changes(json_data, currrent_url)
+          elsif !is_empty
+            should_save = true
+          end
+          
+          if should_save
+            puts "===> insert data into database..."
+            record = MP::Event.create!({
+              :content => json_data, 
+              :format => FORMATS[:json],
+              :credential => credential[:api_key],
+              :request_url => currrent_url
+            })
+          end
+        end
+        
+        return data
       end
       
+      # Get the dates for which a set of funnels have data.
       def dates(params={}, save_to_db=true)
-      
+        params = setup_params(params)
+        
+        funnel_names = []
+        if params[:funnel]
+          if params[:funnel].is_a?(Array)
+            funnel_names += params[:funnel]
+          else
+            funnel_names << params[:funnel]
+          end
+        end
+        
+        data = client.request do
+          resource  'funnels/dates'
+          funnel    funnel_names.to_s
+          unit      params[:unit]
+          limit     params[:limit]
+        end
+        
+        # Format to JSON data.
+        json_data = data.to_json  
+        
+        if save_to_db
+          # Detect data is empty or not
+          is_empty = (data.blank?)
+          
+          if !is_empty && params[:detect_changes]
+            # Detect data were changed
+            should_save = check_changes(json_data, currrent_url)
+          elsif !is_empty
+            should_save = true
+          end
+          
+          if should_save
+            puts "===> insert data into database..."
+            record = MP::Event.create!({
+              :content => json_data, 
+              :format => FORMATS[:json],
+              :credential => credential[:api_key],
+              :request_url => currrent_url
+            })
+          end
+        end
+        
+        return data
       end
     end
     
@@ -609,12 +810,130 @@ module Fetchers
         new_client(credential)
       end
       
+      # Get unique, total, or average data for a funnel property.
       def all_properties(params={}, save_to_db=true)
-      
+        params = setup_params(params)
+        
+        property_names = []
+        if params[:name]
+          if params[:name].is_a?(Array)
+            property_names += params[:name]
+          else
+            property_names << params[:name]
+          end
+        else
+          # Get names of properties.        
+          json_property_names = self.names(params, false)
+          property_names = JSON.parse(json_property_names).keys
+        end        
+        
+        property_data = []
+        
+        property_names.each do |proper_name|
+          data = client.request do
+            resource 'funnels/properties'
+            funnel    params[:funnel]
+            name      proper_name
+            unit      params[:unit]
+            interval  params[:interval]
+            limit     params[:limit]
+          end
+          
+          property_data << {:request_url => currrent_url, :content => data}
+        end
+        
+        if save_to_db
+          MP::Event.transaction do            
+            property_data.each do |p_data|
+              should_save = false # Flag to save the data to DB or not.
+              
+              # Detect data is empty or not
+              is_empty = (p_data[:content].blank?)
+              
+              json_data = p_data[:content].to_json
+              
+              if !is_empty && params[:detect_changes]
+                # Detect data were changed
+                should_save = check_changes(json_data, p_data[:request_url])
+              elsif !is_empty
+                should_save = true
+              end
+              
+              if should_save
+                # insert data into database
+                puts "===> insert properties data into database..."            
+                record = MP::Event.create!({
+                  :content => json_data, 
+                  :format => FORMATS[:json],
+                  :credential => credential[:api_key],
+                  :request_url => p_data[:request_url]
+                })
+              end
+            end
+          end
+        end
+        
+        return property_data.to_json
       end
       
+      # Get the top properties for a single funnel or array of funnels. 
       def names(params={}, save_to_db=true)
-      
+        params = setup_params(params)
+        
+        funnel_names = []
+        if params[:funnel]
+          if params[:funnel].is_a?(Array)
+            funnel_names += params[:funnel]
+          else
+            funnel_names << params[:funnel]
+          end
+        end
+        
+        property_data = []
+        
+        funnel_names.each do |proper_name|
+          data = client.request do
+            resource  'funnels/properties/names'
+            funnel    params[:funnel]
+            unit      params[:unit]
+            interval  params[:interval]
+            limit     params[:limit]
+          end          
+          property_data << {:request_url => currrent_url, :content => data}
+        end
+          
+        if save_to_db
+          MP::Event.transaction do            
+            property_data.each do |p_data|
+              should_save = false # Flag to save the data to DB or not.
+              
+              # Detect data is empty or not
+              is_empty = (p_data[:content].blank?)
+              
+              json_data = p_data[:content].to_json
+              
+              if !is_empty && params[:detect_changes]
+                # Detect data were changed
+                should_save = check_changes(json_data, p_data[:request_url])
+              elsif !is_empty
+                should_save = true
+              end
+              
+              if should_save
+                # insert data into database
+                puts "===> insert funnels/properties data into database..."            
+                record = MP::Event.create!({
+                  :content => json_data, 
+                  :format => FORMATS[:json],
+                  :credential => credential[:api_key],
+                  :request_url => p_data[:request_url]
+                })
+              end
+            end
+          end
+        end
+        
+        return property_data.to_json
       end
     end
   end

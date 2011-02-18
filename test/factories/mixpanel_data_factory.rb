@@ -64,13 +64,45 @@ end
 TOKEN1 = "ef2a17494cd1210453b5b93722198250"
 TOKEN2 = "108c7638882f7037e9930c9fd692330d"
 
-EVENTS = [:show, :login, :view_page, :test_api, :logout]
+EVENTS = [:show, :login, :view_page, :logout]
+FUNNELS = ["View my blog"]
 
 EVENTS.each do |e|
   puts "===> Track event: #{e}, Token: #{TOKEN1}"
-  MixPanelDataFactory.track(e, {"token" => TOKEN1, "test_property" => "Just a test", "test_time" => Time.now.to_s})
+  properties = {
+    "token"         => TOKEN1, 
+    "test_property" => "Just a test", 
+    "test_time"     => Time.now.to_s,
+    "gender"        => "male",
+    "funnel"        => "View my blog",
+    "step"          => 2,
+    "goal"          => "Impression"
+  }
+  
+  MixPanelDataFactory.track(e, properties)
   
   puts "===> Track event: #{e}, Token: #{TOKEN2}"
-  MixPanelDataFactory.track(e, {"token" => TOKEN2, "test_property" => "Just a test", "test_time" => Time.now.to_s})
+  properties["token"] = TOKEN2
+  properties["test_time"] = Time.now.to_s
+  MixPanelDataFactory.track(e, properties)
 end
 
+FUNNELS.each do |f|
+  puts "===> Track funnel: #{f}, Token: #{TOKEN1}"
+  properties = {
+    "token"         => TOKEN1, 
+    "test_property" => "Just a test", 
+    "test_time"     => Time.now.to_s,
+    "gender"        => "male",
+    "funnel"        => f,
+    "step"          => 2,
+    "goal"          => "Impression"
+  }
+  
+  MixPanelDataFactory.track(f, properties)
+  
+  puts "===> Track funnel: #{f}, Token: #{TOKEN2}"
+  properties["token"] = TOKEN2
+  properties["test_time"] = Time.now.to_s
+  MixPanelDataFactory.track('mp_funnel', properties)
+end

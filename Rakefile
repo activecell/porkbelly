@@ -33,7 +33,11 @@ Options:
       key1, secret1
       key2, secret2
   params: see http://mixpanel.com/api/docs/guides/api for API reference.
-  method: one of the following methods: all_events, names, top, retention. Default is 'all_events'
+  method: 
+    events: all_events, names, top, retention. Default is 'all_events'
+    event_properties: all_properties, top, values. Default is 'all_properties'
+    funnels: all_funnels, names, dates. Default is 'all_funnels'
+    funnel_properties: all_properties, names. Default is 'all_properties'
       }
       
       # Setup params.
