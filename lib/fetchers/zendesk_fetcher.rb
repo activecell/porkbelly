@@ -22,20 +22,39 @@ module Fetchers
 
 	class TicketFetcher
 		include ZendeskFetcherBase
-		@@ticket_rest = nil
+		@ticket_rest = nil
 		def initialize(credential, request_url, format)
 			new_client(credential, request_url, format)		
 			create_rest_request(credential, request_url)
 		end
 
 		def create_rest_request(credential, request_url)
-			@@ticket_rest = rest_request(credential, request_url)
+			@ticket_rest = rest_request(credential, request_url)
 		end
 
 		def fetch_data			
-			data = @@ticket_rest.get
+			data = @ticket_rest.get
 			puts @request_url +" " +  @credential.to_s
 			Zendesk::Ticket.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+		end
+	end
+
+	class OrganizationFetcher
+		include ZendeskFetcherBase
+		@organization_rest = nil
+		def initialize(credential, request_url, format)
+			new_client(credential, request_url, format)		
+			create_rest_request(credential, request_url)
+		end
+
+		def create_rest_request(credential, request_url)
+			@organization_rest = rest_request(credential, request_url)
+		end
+
+		def fetch_data			
+			data = @organization_rest.get
+			puts @request_url +" " +  @credential.to_s
+			Zendesk::Organization.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
 		end
 	end
 end

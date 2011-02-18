@@ -98,9 +98,10 @@ Options:
 	##-----ZENDESK RAKE TASK----##
 	############################################################
 
-  #---------------  TICKET FETCH  ---------------#
+  
 	namespace :zendesk do
 		desc "Fetch Zendesk tickets using given agentemail and password"
+		#---------------  TICKET FETCH  ---------------#
 		task :tickets do
 			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
 			credential = {
@@ -110,6 +111,21 @@ Options:
 			request_url = "http://tpltest.zendesk.com/users.xml"
 			format = "xml"
 			fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)						
+			fetcher.fetch_data
+			puts "Fetching all tickets"
+		end
+
+		#---------------  TICKET FETCH  ---------------#
+		desc "Fetch Zendesk organizations using given agentemail and password"
+		task :organizations do
+			require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
+			credential = {
+				:agentemail => "utwkidvn@gmail.com",
+				:password => "tpl123456",
+			}
+			request_url = "http://tpltest.zendesk.com/organizations.xml"
+			format = "xml"
+			fetcher = Fetchers::OrganizationFetcher.new(credential, request_url, format)						
 			fetcher.fetch_data
 			puts "Fetching all tickets"
 		end

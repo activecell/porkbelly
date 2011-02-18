@@ -6,4 +6,9 @@ module Zendesk
       "zendesk_tickets"
     end
   end
+	class Organization < ActiveRecord::Base
+    def self.table_name
+      "zendesk_organizations"
+    end
+  end
 end
