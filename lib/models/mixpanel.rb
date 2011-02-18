@@ -47,4 +47,22 @@ module MP
       return uri.to_s
     end
   end
+  
+  class EventProperty < ActiveRecord::Base
+    def self.table_name
+      "mixpanel_event_properties"
+    end
+  end
+  
+  class Funnel < ActiveRecord::Base
+    def self.table_name
+      "mixpanel_funnels"
+    end
+  end
+  
+  class FunnelProperty < ActiveRecord::Base
+    def self.table_name
+      "mixpanel_funnel_properties"
+    end
+  end
 end

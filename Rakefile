@@ -114,7 +114,8 @@ Options:
 			format = "xml"
 			fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)						
 			fetcher.fetch_data
-
+    end
+    
 		#################  ORGANIZATION FETCH  #################
 		desc "Fetch Zendesk organizations using given agentemail and password"
 		task :organizations do
