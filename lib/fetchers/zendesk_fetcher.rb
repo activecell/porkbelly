@@ -17,7 +17,14 @@ module Fetchers
 			@credential = credential.to_options
 			@request_url = request_url
 			@format = format
-		end		
+		end
+		
+		def check_existence_record(entity, data)
+			if entity.where(:content => data).exists?
+				return true
+			else return false
+			end
+		end
 	end
 
 	class TicketFetcher
@@ -33,9 +40,12 @@ module Fetchers
 		end
 
 		def fetch_data			
-			data = @ticket_rest.get
-			puts @request_url +" " +  @credential.to_s
-			Zendesk::Ticket.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			data = @ticket_rest.get.to_s
+			zendesk_ticket = Zendesk::Ticket
+			if !check_existence_record(zendesk_ticket, data)			
+				zendesk_ticket.create(:request_url => @request_url, :content => data, :credential =>	
+@credential.to_s, :format => @format)
+			end
 		end
 	end
 
@@ -52,9 +62,11 @@ module Fetchers
 		end
 
 		def fetch_data			
-			data = @organization_rest.get
-			puts @request_url +" " +  @credential.to_s
-			Zendesk::Organization.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			data = @organization_rest.get.to_s
+			zendesk_organization =  Zendesk::Organization
+			if !check_existence_record(zendesk_organization, data) 
+				zendesk_organization.create(:request_url => @request_url, :content => data, :credential => @credential.to_s, :format => @format)
+			end
 		end
 	end
 end
