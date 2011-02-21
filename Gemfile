@@ -9,3 +9,4 @@ gem "whenever", :require => false
 gem "ruby-debug19"
 gem "rest-client"
 gem "mixpanel_client"
+gem "nokogiri"

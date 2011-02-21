@@ -42,6 +42,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     mixpanel_client (0.5.1)
+    nokogiri (1.4.4)
     pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -77,6 +78,7 @@ DEPENDENCIES
   activerecord
   activesupport
   mixpanel_client
+  nokogiri
   pg
   rest-client
   ruby-debug19

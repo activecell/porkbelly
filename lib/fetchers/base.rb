@@ -1,5 +1,7 @@
 require File.expand_path("../../mailers/exception_notification_mailer", __FILE__)
+require File.expand_path("../../../initializers/stage", __FILE__)
 require "logger"
+require "yaml"
 
 module Fetchers
   module Base
@@ -53,6 +55,12 @@ module Fetchers
     #   credential: 
     def existence_keys(credential)
       raise NotImplementedError.new("Implement this method to return a list of credential and key.")
+    end
+
+    def api_urls
+      apis = ::YAML::load(File.open(File.join(File.expand_path("../../../config", __FILE__), "apis.yml")))
+      logger.info "apis #{apis}"
+      apis[::STAGE]
     end
   end
 

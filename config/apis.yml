@@ -1,0 +1,7 @@
+development:
+  harvest:
+    base_url: "http://[SUBDOMAIN].harvestapp.com"
+    apis:
+      clients: "/clients"
+      contacts: "/contacts"
+    format: "xml"
