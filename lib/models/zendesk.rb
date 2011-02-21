@@ -6,37 +6,37 @@ module Zendesk
       "zendesk_tickets"
     end
   end
-	class Organization < ActiveRecord::Base
+  class Organization < ActiveRecord::Base
     def self.table_name
       "zendesk_organizations"
     end
   end
-	class Group < ActiveRecord::Base
+  class Group < ActiveRecord::Base
     def self.table_name
       "zendesk_groups"
     end
   end
-	class User < ActiveRecord::Base
+  class User < ActiveRecord::Base
     def self.table_name
       "zendesk_users"
     end
   end
-	class Tag < ActiveRecord::Base
+  class Tag < ActiveRecord::Base
     def self.table_name
       "zendesk_tags"
     end
   end
-	class Forum < ActiveRecord::Base
+  class Forum < ActiveRecord::Base
     def self.table_name
       "zendesk_forums"
     end
   end
-	class TicketField < ActiveRecord::Base
+  class TicketField < ActiveRecord::Base
     def self.table_name
       "zendesk_ticket_fields"
     end
   end
-	class Macro < ActiveRecord::Base
+  class Macro < ActiveRecord::Base
     def self.table_name
       "zendesk_macros"
     end
