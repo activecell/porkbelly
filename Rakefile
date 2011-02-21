@@ -100,7 +100,7 @@ Options:
 
   ############################################################
   ##-----ZENDESK RAKE TASK----##
-  ############################################################  
+  ############################################################
   namespace :zendesk do
     desc "Fetch Zendesk tickets using given agentemail and password"
     #################  TICKET FETCH  #################
@@ -112,7 +112,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/tickets.xml"
       format = "xml"
-      fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
 
@@ -126,7 +126,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/organizations.xml"
       format = "xml"
-      fetcher = Fetchers::OrganizationFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::OrganizationFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end		
 
@@ -140,7 +140,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/groups.xml"
       format = "xml"
-      fetcher = Fetchers::GroupFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::GroupFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
 
@@ -154,7 +154,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/users.xml"
       format = "xml"
-      fetcher = Fetchers::UserFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::UserFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
 
@@ -168,7 +168,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/tags.xml"
       format = "xml"
-      fetcher = Fetchers::TagFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::TagFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
 
@@ -182,7 +182,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/forums.xml"
       format = "xml"
-      fetcher = Fetchers::ForumFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::ForumFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
 
@@ -196,7 +196,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/ticket_fields.xml"
       format = "xml"
-      fetcher = Fetchers::TicketFieldFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::TicketFieldFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
 
@@ -210,7 +210,7 @@ Options:
       }
       request_url = "http://tpltest.zendesk.com/macros.xml"
       format = "xml"
-      fetcher = Fetchers::MacroFetcher.new(credential, request_url, format)						
+      fetcher = Fetchers::MacroFetcher.new(credential, request_url, format)
       fetcher.fetch_data
     end
   end
