@@ -5,6 +5,7 @@ class CreateZendeskOrganizations < ActiveRecord::Migration
       t.column :content, :string, :null => false
 			t.column :format, :string, :null => false
       t.column :credential, :string, :null => false
+	    t.column :target_id, :integer, :null => false
 			
       t.timestamps
     end
