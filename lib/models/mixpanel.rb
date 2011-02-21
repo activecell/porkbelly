@@ -5,26 +5,13 @@ require "active_support/core_ext"
 
 module MP
 
-=begin
-  'mixpanel_events' Tables's Schema:
-    id: int         int (primary key)
-    content:        string
-    request_url:    string
-    format:         string
-    credential:     string
-    created_at:     datetime
-    updated_at:     datetime  
-=end
-  class Event < ActiveRecord::Base
+  # Contains shared methods for Mixpanel models.
+  class MixpanelData < ActiveRecord::Base
     before_save :format_request_url
     before_create :format_request_url
     
-    def self.table_name
-      "mixpanel_events"
-    end
-    
     def format_request_url
-      self.request_url = Event.format_request_url(self.request_url)
+      self.request_url = self.class.format_request_url(self.request_url)
       return true # To not interrupt the saving process.
     end
     
@@ -37,7 +24,7 @@ module MP
       # Parse query string to hash.
       params_hash = CGI.parse(uri.query)
       
-      # Delete uncessary params.
+      # Delete unnecessary params.
       ["sig", "expire"].each do |key|
         params_hash.delete(key)
       end
@@ -47,20 +34,37 @@ module MP
       return uri.to_s
     end
   end
+   
+=begin
+  'mixpanel_events' Tables's Schema:
+    id: int         int (primary key)
+    target_id       string # unique ID from API services.
+    content:        string
+    request_url:    string
+    format:         string
+    credential:     string
+    created_at:     datetime
+    updated_at:     datetime  
+=end
+  class Event < MixpanelData
+    def self.table_name
+      "mixpanel_events"
+    end
+  end
   
-  class EventProperty < ActiveRecord::Base
+  class EventProperty < MixpanelData
     def self.table_name
       "mixpanel_event_properties"
     end
   end
   
-  class Funnel < ActiveRecord::Base
+  class Funnel < MixpanelData
     def self.table_name
       "mixpanel_funnels"
     end
   end
   
-  class FunnelProperty < ActiveRecord::Base
+  class FunnelProperty < MixpanelData
     def self.table_name
       "mixpanel_funnel_properties"
     end

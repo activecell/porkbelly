@@ -60,7 +60,7 @@ Options:
       puts "Data type= #{data_type}. Fetching data from Mixpanel with credentials: '#{ENV['credentials']}'..."
 
       # Begin fetching data.
-      fetcher = Fetchers::MpFetchers::MixpanelFetcher.new     
+      fetcher = Fetchers::Mixpanel::MixpanelFetcher.new     
 
       credentials = fetcher.get_api_credentials(ENV["credentials"])
 

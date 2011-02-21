@@ -1,6 +1,7 @@
 class CreateMixpanelEventProperties < ActiveRecord::Migration
   def self.up
     create_table :mixpanel_event_properties do |t|
+      t.column :target_id , :string, :null => false
       t.column :content, :text, :null => false      
       t.column :credential, :string, :null => false
       t.column :format, :string
