@@ -30,6 +30,7 @@ require 'fetcher/mixpanel/all'
 #ZENDEK
 require 'fetcher/zendesk/base'
 require 'fetcher/zendesk/organization'
+require 'fetcher/zendesk/group'
 require 'fetcher/zendesk/all'
 
 module Fetcher

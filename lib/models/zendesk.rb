@@ -6,4 +6,9 @@ module Zendesk
       "zendesk_organizations"
     end
   end
+  class Group < ActiveRecord::Base
+    def self.table_name
+      "zendesk_groups"
+    end
+  end
 end

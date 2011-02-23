@@ -2,6 +2,7 @@ module Fetcher
   module Zendesk
     class All
       include Fetcher::Zendesk::Organization
+      include Fetcher::Zendesk::Group
 
       def initialize(credential)
         super(credential)
