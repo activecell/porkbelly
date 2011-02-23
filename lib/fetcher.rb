@@ -31,6 +31,11 @@ require 'fetcher/mixpanel/all'
 require 'fetcher/zendesk/base'
 require 'fetcher/zendesk/organization'
 require 'fetcher/zendesk/group'
+require 'fetcher/zendesk/user'
+require 'fetcher/zendesk/tag'
+require 'fetcher/zendesk/forum'
+require 'fetcher/zendesk/ticket_field'
+require 'fetcher/zendesk/macro'
 require 'fetcher/zendesk/all'
 
 module Fetcher

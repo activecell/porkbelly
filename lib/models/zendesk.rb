@@ -11,4 +11,29 @@ module Zendesk
       "zendesk_groups"
     end
   end
+  class User < ActiveRecord::Base
+    def self.table_name
+      "zendesk_users"
+    end
+  end
+  class Tag < ActiveRecord::Base
+    def self.table_name
+      "zendesk_tags"
+    end
+  end
+  class Forum < ActiveRecord::Base
+    def self.table_name
+      "zendesk_forums"
+    end
+  end
+  class TicketField < ActiveRecord::Base
+    def self.table_name
+      "zendesk_ticket_fields"
+    end
+  end
+  class Macro < ActiveRecord::Base
+    def self.table_name
+      "zendesk_ticket_macros"
+    end
+  end
 end

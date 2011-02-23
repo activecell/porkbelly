@@ -53,7 +53,7 @@ namespace :site do
           Get all data of the Mixpanel site
         Usage: 
           rake site:mixpanel credentials=<path_to_credentials_csv_file> #=> get all data with many credentials
-          rake site:harvest credential="<api_key>:<api_secret> #=> get all data with the given credential
+          rake site:harvest credential="<api_key>:<api_secret>" #=> get all data with the given credential
           Replace variable in <> with actual params
         **************************
       }
