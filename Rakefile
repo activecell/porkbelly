@@ -1,16 +1,39 @@
 require "rubygems"
-require "bundler/setup"
+require File.expand_path(File.join(File.dirname(__FILE__), "config", "boot"))
+require File.expand_path(File.join(File.dirname(__FILE__), "lib", "fetcher"))
 require "active_record"
 require "yaml"
 require "sqlite3"
-require File.expand_path("../initializers/stage", __FILE__)
-require File.expand_path("../lib/helpers/util", __FILE__)
 
 PROJECT_DIR = File.dirname(__FILE__)
-DB_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
-DB_FILE = File.join(PROJECT_DIR, DB_CONFIG[STAGE]["database"])
+DATABASE_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
+DB_FILE = File.join(PROJECT_DIR, DATABASE_CONFIG[STAGE]["database"])
 
 namespace :site do
+  task :harvest => :"harvest:all" # default fetch all data
+  namespace :harvest do
+    desc "Fetch all harvest data"
+    task :all do
+      usage = %q{
+        ***************************
+        Description:
+          Get all data of the Harvest site
+        Usage: 
+          rake site:harvest credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
+          rake site:harvest credential=<username>:<password> #=> get all data of the given credential
+          Replace variable in <> with actual params
+        **************************
+      }
+      # validate arguments
+      unless ENV.include?("credentials") or ENV.include?("credential")
+        #raise usage
+      end
+      client = Fetcher::Harvest::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456", :subdomain => "tpltest"})
+      client.fetch_all
+    end
+  end
+
+task :pivotal => :"pivotal:all" # default fetch all data
   namespace :pivotal do
     desc "Fetch all Pivotal Tracker data for the given credentials (single/multiple)"
 
@@ -19,233 +42,78 @@ namespace :site do
     end
   end
 
+  task :mixpanel => :"mixpanel:all" # default fetch all data
   namespace :mixpanel do
     desc "Fetch all Mixpanel events for the given credentials (single/multiple)"
 
     def fetch_mixpanel_data(data_type)
-      usage = %q{Usage: rake site:mixpanel:events credentials=<your credentials> [params="a=query&b=string"] [method=""]
-Options:
-  credentials: with two options:
-        "api_key=f0aa346688cee071cd85d857285a3464, api_secret=adna346688cee071cd85d857285a3464"
-    Or: "/etc/mixpanel_credentials.csv"
-    The CSV must be formatted as the following:
-      api_key, api_secret
-      key1, secret1
-      key2, secret2
-  params: see http://mixpanel.com/api/docs/guides/api for API reference.
-  method: 
-    events: all_events, names, top, retention. Default is 'all_events'
-    event_properties: all_properties, top, values. Default is 'all_properties'
-    funnels: all_funnels, names, dates. Default is 'all_funnels'
-    funnel_properties: all_properties, names. Default is 'all_properties'
+      usage = %q{    
+        ***************************
+        Description:
+          Get all data of the Mixpanel site
+        Usage: 
+          rake site:mixpanel credentials=<path_to_credentials_csv_file> #=> get all data with many credentials
+          rake site:harvest credential="<api_key>:<api_secret> #=> get all data with the given credential
+          Replace variable in <> with actual params
+        **************************
       }
 
       # Setup params.
-      unless ENV.include?("credentials")
+      unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-
+      
+      credential_source = ENV["credentials"] || ENV["credential"]
+      
       method = ENV["method"]
 
       @params = {}
 
       if ENV.include?("params")
-        @params = Util.hash_from_query_string!(ENV["params"])
+        @params = Helpers::Util.hash_from_query_string!(ENV["params"])
         if @params == nil || @params.empty?
           raise usage
         end
       end
 
-      require File.expand_path("../lib/fetchers/mixpanel_fetcher", __FILE__)
-      puts "Data type= #{data_type}. Fetching data from Mixpanel with credentials: '#{ENV['credentials']}'..."
+      puts "Data type= #{data_type}. Fetching data from Mixpanel with credentials: '#{credential_source}'..."
 
       # Begin fetching data.
-      fetcher = Fetchers::Mixpanel::MixpanelFetcher.new     
+      fetcher = Fetcher::Mixpanel::All.new(credential_source)
 
-      credentials = fetcher.get_api_credentials(ENV["credentials"])
-
-      if credentials.is_a?(Array) # from CSV file.
-        credentials.each do |credent|
-          puts "=== #{Time.now}: Fetching data ..."
-          fetcher.fetch_data(credent, data_type, @params, method)
-          puts "=== #{Time.now}: Finished ==="
-        end        
-      else # params from command line.
-        puts "=== #{Time.now}: Fetching data ..."
-        fetcher.fetch_data(credentials, data_type, @params, method)
-        puts "=== #{Time.now}: Finished ==="
-      end 
+      puts "=== #{Time.now}: Fetching events and funnels data..."
+      
+      fetcher.fetch_data('fetch_all', @params)
+      
+      puts "=== #{Time.now}: Finished fetching events and funnels data."
     end
 
     task :all do
       fetch_mixpanel_data(:all)
     end
-
-    task :events do
-      fetch_mixpanel_data(:events)
-    end
-
-    task :event_properties do
-      fetch_mixpanel_data(:event_properties)
-    end
-
-    task :funnels do
-      fetch_mixpanel_data(:funnels)
-    end
-
-    task :funnel_properties do
-      fetch_mixpanel_data(:funnel_properties)
-    end
-  end 
-
-  ############################################################
-  ##-----ZENDESK RAKE TASK----##
-  ############################################################
-  namespace :zendesk do
-    desc "Fetch Zendesk tickets using given agentemail and password"
-    #################  TICKET FETCH  #################
-    task :tickets do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/tickets.xml"
-      format = "xml"
-      fetcher = Fetchers::TicketFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
-
-    #################  ORGANIZATION FETCH  #################
-    desc "Fetch Zendesk organizations using given agentemail and password"
-    task :organizations do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/organizations.xml"
-      format = "xml"
-      fetcher = Fetchers::OrganizationFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end		
-
-    #################  GROUP FETCH  #################
-    desc "Fetch Zendesk groups using given agentemail and password"
-    task :groups do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/groups.xml"
-      format = "xml"
-      fetcher = Fetchers::GroupFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
-
-    #################  USER FETCH  #################
-    desc "Fetch Zendesk users using given agentemail and password"
-    task :users do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/users.xml"
-      format = "xml"
-      fetcher = Fetchers::UserFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
-
-    #################  TAG FETCH  #################
-    desc "Fetch Zendesk tags using given agentemail and password"
-    task :tags do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/tags.xml"
-      format = "xml"
-      fetcher = Fetchers::TagFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
-
-    #################  FORUM FETCH  #################
-    desc "Fetch Zendesk forums using given agentemail and password"
-    task :forums do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/forums.xml"
-      format = "xml"
-      fetcher = Fetchers::ForumFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
-
-    #################  TICKET FIELD FETCH  #################
-    desc "Fetch Zendesk ticket fields using given agentemail and password"
-    task :ticket_fields do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/ticket_fields.xml"
-      format = "xml"
-      fetcher = Fetchers::TicketFieldFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
-
-    #################  MACRO FETCH  #################
-    desc "Fetch Zendesk macros using given agentemail and password"
-    task :macros do
-      require File.expand_path("../lib/fetchers/zendesk_fetcher", __FILE__)
-      credential = {
-        :agentemail => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.zendesk.com/macros.xml"
-      format = "xml"
-      fetcher = Fetchers::MacroFetcher.new(credential, request_url, format)
-      fetcher.fetch_data
-    end
   end
 
-  task :harvest => :"harvest:all" # default fetch all data
-  namespace :harvest do
-    desc "Fetch all harvest data"
+  task :zendesk => :"zendesk:all" # default fetch all data
+  namespace :zendesk do
+    desc "Fetch all zendesk data"
     task :all do
-      # validate arguments
       usage = %q{
-        ********************************************************************************************************
+        ***************************
         Description:
-          Get all data of the Harvest site
+          Get all data of the Zendesk site
         Usage: 
-          rake site:harvest credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
-          rake site:harvest credential=<username>:<password> #=> get all data of the given credential
+          rake site:zendesk credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
+          rake site:zendesk credential=<username>:<password> #=> get all data of the given credential
           Replace variable in <> with actual params
-        ********************************************************************************************************
+        **************************
       }
+      # validate arguments
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-
-      require File.expand_path("../lib/fetchers/harvest_fetcher", __FILE__)
-
-      credential = {
-        :email => "utwkidvn@gmail.com",
-        :password => "tpl123456",
-      }
-      request_url = "http://tpltest.harvestapp.com/clients"
-      format = "xml"
-      fetcher = Fetchers::HarvestFetcher::ClientFetcher.new(credential, request_url, format)	
-      fetcher.fetch_data
+      client = Fetcher::Zendesk::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456", :subdomain => "tpltest"})
+      client.fetch_all
     end
-
   end
 end
 

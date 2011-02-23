@@ -1,9 +1,8 @@
-require File.expand_path("../../../initializers/mailer", __FILE__)
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "config", "mailer"))
 
 module Mailers
   class ExceptionNotificationMailer < ActionMailer::Base  
     # send email when exception ocurred
-    # TODO: add stacktrace to email body (Hoang)
     def exception_notification(site, exception)
       @site = site
       @exception = exception

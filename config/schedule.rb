@@ -5,11 +5,7 @@
 
 # Example:
 #
-set :output, File.expand_path("../../log/cron.log", __FILE__)
-
-every 1.minutes do
-  rake "site:mixpanel:events"
-end
+# set :output, "/path/to/my/cron_log.log"
 #
 # every 2.hours do
 #   command "/usr/bin/some_great_command"

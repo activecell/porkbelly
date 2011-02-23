@@ -1,9 +1,9 @@
-require File.expand_path("../../../initializers/database", __FILE__)
+require File.expand_path(File.join(File.dirname(__FILE__), "..", '..', 'config', 'database'))
 require 'cgi'
 require 'uri'
 require "active_support/core_ext"
 
-module MP
+module Mixpanel
 
   # Contains shared methods for Mixpanel models.
   class MixpanelData < ActiveRecord::Base
@@ -19,10 +19,10 @@ module MP
     def self.format_request_url(full_url="")
       # Not save 'expire' and 'sig' params to DB, 
       # because they are always different and not important params.
-      uri = URI.parse(full_url)
+      uri = ::URI.parse(full_url)
       
       # Parse query string to hash.
-      params_hash = CGI.parse(uri.query)
+      params_hash = ::CGI.parse(uri.query)
       
       # Delete unnecessary params.
       ["sig", "expire"].each do |key|

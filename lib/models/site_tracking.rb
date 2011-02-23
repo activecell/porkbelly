@@ -1,7 +1,7 @@
-require File.expand_path("../../../initializers/database", __FILE__)
+require File.expand_path(File.join(File.dirname(__FILE__), "..", '..', 'config', 'database'))
 
 class SiteTracking < ActiveRecord::Base
   def self.table_name
-    "site_tracking"
+    "site_trackings"
   end
 end

@@ -5,3 +5,18 @@ development:
       clients: "/clients"
       contacts: "/contacts"
     format: "xml"
+  zendesk:
+    base_url: "http://[SUBDOMAIN].zendesk.com"
+    apis:
+      organizations: "/organizations"
+      groups: "/groups"
+      tickets: "/tickets"
+      attachments: "/attachments"
+      users: "/users"
+      groups: "/groups"
+      tags: "/tags"
+      forums: "/forums"
+      entries: "/entries"
+      ticket_fields: "/ticket-fields"
+      macros: "/macros"
+    format: "xml"

@@ -1,4 +1,4 @@
-require File.expand_path("../../../initializers/database", __FILE__)
+require File.expand_path(File.join(File.dirname(__FILE__), "..", '..', 'config', 'database'))
 
 module Harvest
   class Client < ActiveRecord::Base
