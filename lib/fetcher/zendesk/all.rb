@@ -6,7 +6,6 @@ module Fetcher
       def initialize(credential)
         super(credential)
         raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
-        puts credential
       end
 
       def fetch
