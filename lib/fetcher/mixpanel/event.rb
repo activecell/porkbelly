@@ -28,8 +28,9 @@ module Fetcher
         end
         
         # Get events data.
+        method_url = get_method_url('events')
         event_data = client.request do
-          resource 'events'
+          resource method_url #'events'
           event    event_names.to_s
           type     params[:type]
           unit     params[:unit]
@@ -106,8 +107,9 @@ module Fetcher
         params = setup_params(params)
         self.model_class = ::Mixpanel::Event
         
+        method_url = get_method_url('events', 'top')
         data = client.request do
-          resource 'events/top'
+          resource method_url#'events/top'
           type     params[:type]
           limit    params[:limit]
           bucket   params[:bucket]
@@ -156,8 +158,9 @@ module Fetcher
         params = setup_params(params)
         self.model_class = ::Mixpanel::Event
         
+        method_url = get_method_url('events', 'names')
         data = client.request do
-          resource  'events/names'
+          resource  method_url #'events/names'
           type      params[:type]
           unit      params[:unit]
           interval  params[:interval]
@@ -212,11 +215,12 @@ module Fetcher
           # Get names of events.
           event_names = self.fetch_event_names(params, false)
         end
-               
+        
+        method_url = get_method_url('events', 'retention')
         data = client.request do
-          resource 'events/retention'
+          resource method_url #'events/retention'
           event    event_names.to_s
-          unit     params[:unit]          
+          unit     params[:unit]
           interval params[:interval]
           format   params[:format]
           bucket   params[:bucket]

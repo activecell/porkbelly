@@ -7,13 +7,7 @@ module Fetcher
       include Fetcher::Mixpanel::FunnelProperty      
       
       def initialize(credential)
-        # Detect inline credential or CSV file.
-        tmp_credential = self.get_api_credentials(credential)  
-
-        if single_fetch? && (tmp_credential[:api_key].blank? || tmp_credential[:api_secret].blank?)
-          raise ArgumentError, "This site required api_key and api_secret" 
-        end
-        
+        tmp_credential = normalize_credential!(credential)        
         super(tmp_credential)
       end
       

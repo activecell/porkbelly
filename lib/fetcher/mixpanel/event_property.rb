@@ -29,9 +29,10 @@ module Fetcher
         
         property_data = []
         
+        method_url = get_method_url('events_properties')        
         property_names.each do |proper_name|
           data = client.request do
-            resource 'events/properties'
+            resource method_url #'events/properties'
             event    params[:event]
             name     proper_name
             values   params[:values]
@@ -91,8 +92,9 @@ module Fetcher
         params = setup_params(params)
         self.model_class = ::Mixpanel::EventProperty
         
+        method_url = get_method_url('events_properties', 'top')
         data = client.request do
-          resource 'events/properties/top'
+          resource method_url # 'events/properties/top'
           event    params[:event]
           type     params[:type]
           unit     params[:unit]
@@ -150,9 +152,10 @@ module Fetcher
         
         property_data = []
         
+        method_url = get_method_url('events_properties', 'values')
         property_names.each do |property_name|
           data = client.request do
-            resource 'events/properties/values'
+            resource method_url #'events/properties/values'
             event    params[:event]
             name     property_name
             type     params[:type]

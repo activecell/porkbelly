@@ -20,3 +20,18 @@ development:
       ticket_fields: "/ticket-fields"
       macros: "/macros"
     format: "xml"
+  
+  mixpanel:
+    base_url: "http://mixpanel.com/api"
+    version: "2.0"
+    apis:
+      events: "events"
+      events_properties: "events/properties"
+      funnels: "funnels"
+      funnels_properties: "funnels/properties"
+    params:
+      type: "general"
+      unit: "day"
+      interval: 1
+      format: "json"
+      limit: 255      

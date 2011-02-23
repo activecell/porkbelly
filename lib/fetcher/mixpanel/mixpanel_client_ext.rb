@@ -18,6 +18,16 @@ module Fetcher
           end
         end
       end
+      
+      # Config the base URI of the Mixpanel API.
+      def self.set_base_uri(base_uri)
+        class_eval "::Mixpanel::BASE_URI = \"#{base_uri}\""
+      end
+      
+      # Config the version of the Mixpanel API.
+      def self.set_api_version(version)
+        class_eval "::Mixpanel::VERSION = \"#{version}\""
+      end
     end
   end
 end

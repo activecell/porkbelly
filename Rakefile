@@ -33,7 +33,7 @@ namespace :site do
     end
   end
 
-task :pivotal => :"pivotal:all" # default fetch all data
+  task :pivotal => :"pivotal:all" # default fetch all data
   namespace :pivotal do
     desc "Fetch all Pivotal Tracker data for the given credentials (single/multiple)"
 

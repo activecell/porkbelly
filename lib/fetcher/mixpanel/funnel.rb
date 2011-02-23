@@ -20,8 +20,9 @@ module Fetcher
           funnel_names = self.fetch_funnel_names(params, false)
         end
         
+        method_url = get_method_url('funnels')   
         data = client.request do
-          resource 'funnels'
+          resource method_url #'funnels'
           funnel   funnel_names.to_s
           unit     params[:unit]
           interval params[:interval]
@@ -68,8 +69,9 @@ module Fetcher
         # Reference: http://mixpanel.com/api/docs/guides/api/v2#funnels-names
         params[:unit] = 'week'
         
+        method_url = get_method_url('funnels', 'names')
         data = client.request do
-          resource  'funnels/names'
+          resource  method_url #'funnels/names'
           unit      params[:unit]
           interval  params[:interval]
         end
@@ -117,8 +119,9 @@ module Fetcher
           end
         end
         
+        method_url = get_method_url('funnels', 'dates')
         data = client.request do
-          resource  'funnels/dates'
+          resource  method_url #'funnels/dates'
           funnel    funnel_names.to_s
           unit      params[:unit]
           limit     params[:limit]

@@ -29,9 +29,10 @@ module Fetcher
         
         property_data = []
         
+        method_url = get_method_url('funnels_properties')
         property_names.each do |property_name|
           data = client.request do
-            resource 'funnels/properties'
+            resource  method_url #'funnels/properties'
             funnel    funnel_name
             name      property_name
             unit      params[:unit]
@@ -96,9 +97,10 @@ module Fetcher
         
         property_data = []
         
+        method_url = get_method_url('funnels_properties', 'names')
         funnel_names.each do |funnel_name|
           data = client.request do
-            resource  'funnels/properties/names'
+            resource  method_url #'funnels/properties/names'
             funnel    funnel_name
             unit      params[:unit]
             interval  params[:interval]

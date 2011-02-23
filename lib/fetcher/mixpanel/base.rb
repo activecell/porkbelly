@@ -21,8 +21,18 @@ module Fetcher
       # Limit of the maximum number of values returned by the service.
       DEFAULT_LIMIT = 255
       
+      DEFAULT_INTERVAL = 1
+      
       # Keys word in the Mixpanel response
       RESPONSE_KEYS = {:legend_size => 'legend_size'}
+      
+      # Default API URLs
+      DEFAULT_API_URLS = {
+        'events' => 'events', 
+        'events_properties' => 'events/properties',
+        'funnels' => 'funnels',
+        'funnels_properties' => 'funnels/properties'
+      }
       
       #------ Implemetation of abstract Base class ------#
       
@@ -73,6 +83,15 @@ module Fetcher
       
       def new_client(credential={})
         @credential = credential.to_options
+        
+        # Config api URL and version.
+        if !MIXPANEL_CONFIG['base_url'].blank?
+          MixpanelClientExt.set_base_uri(MIXPANEL_CONFIG['base_url'])
+        end
+        if !MIXPANEL_CONFIG['version'].blank?
+          MixpanelClientExt.set_api_version(MIXPANEL_CONFIG['version'])
+        end
+        
         @client = MixpanelClientExt.new( 'api_key' => @credential[:api_key], 
                                       'api_secret' => @credential[:api_secret])
       end
@@ -98,23 +117,23 @@ module Fetcher
         
         # Set default params.
         if params[:type].blank?
-          params[:type] = TYPES[:general]
+          params[:type] = MIXPANEL_CONFIG['params']['type'] || TYPES[:general]
         end
         
         if params[:unit].blank?
-          params[:unit] = UNITS[:day]
+          params[:unit] = MIXPANEL_CONFIG['params']['unit'] || UNITS[:day]
         end
         
         if params[:interval].blank?
-          params[:interval] = 1
+          params[:interval] = MIXPANEL_CONFIG['params']['interval'] || DEFAULT_INTERVAL
         end
         
         if params[:format].blank?
-          params[:format] = FORMATS[:json]
+          params[:format] = MIXPANEL_CONFIG['params']['format'] || FORMATS[:json]
         end
         
         if params[:limit].blank? || params[:limit].to_i <= 0
-          params[:limit] = DEFAULT_LIMIT
+          params[:limit] = MIXPANEL_CONFIG['params']['limit'] || DEFAULT_LIMIT
         end
         
         if !params.has_key?(:detect_changes)
@@ -142,7 +161,38 @@ module Fetcher
         end
         
         return false
-      end     
+      end
+      
+      # Normalize credential, this will raise an ArgumentError if the credential is invalid.
+      def normalize_credential!(credential)
+        tmp_credential = credential
+        if(tmp_credential.is_a?(String))
+          begin
+            # Detect inline credential or CSV file.
+            tmp_credential = self.get_api_credentials(credential)  
+          rescue Exception
+            raise ArgumentError, "Credential must be in following formats: '<api_key>:<api_secret>' or '<path to a CSV file>'" 
+          end
+        end
+        
+        if tmp_credential.is_a?(Hash)
+          tmp_credential.to_options # Require active_support/core_ext
+          if (tmp_credential[:api_key].blank? || tmp_credential[:api_secret].blank?)
+            raise ArgumentError, "This site required api_key and api_secret" 
+          end
+        end
+        
+        return tmp_credential
+      end
+      
+      def get_method_url(parent, method='')
+        parent = parent.to_s
+        method = method.to_s
+        if MIXPANEL_CONFIG['apis'][parent].blank?
+          return File.join([DEFAULT_API_URLS[parent], method])
+        end
+        return File.join([MIXPANEL_CONFIG['apis'][parent], method])
+      end
     end
   end
 end
