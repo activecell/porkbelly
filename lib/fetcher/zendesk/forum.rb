@@ -20,12 +20,7 @@ module Fetcher
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-          puts data
-          #if !check_existence_record(zendesk_organization, data)
-          #  puts "ORG data not duplicated"
             zendesk_forum.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
-          #else puts "ORG data DUPLICATED"
-          #end 
         end
       end
 

@@ -26,6 +26,11 @@ module Zendesk
       "zendesk_forums"
     end
   end
+  class Entry < ActiveRecord::Base
+    def self.table_name
+      "zendesk_entries"
+    end
+  end
   class TicketField < ActiveRecord::Base
     def self.table_name
       "zendesk_ticket_fields"
