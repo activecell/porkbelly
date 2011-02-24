@@ -34,4 +34,42 @@ development:
       unit: "day"
       interval: 1
       format: "json"
-      limit: 255      
+      limit: 255
+
+test:
+  harvest:
+    base_url: "http://[SUBDOMAIN].harvestapp.com"
+    apis:
+      clients: "/clients"
+      contacts: "/contacts"
+    format: "xml"
+  zendesk:
+    base_url: "http://[SUBDOMAIN].zendesk.com"
+    apis:
+      organizations: "/organizations"
+      groups: "/groups"
+      tickets: "/tickets"
+      attachments: "/attachments"
+      users: "/users"
+      groups: "/groups"
+      tags: "/tags"
+      forums: "/forums"
+      entries: "/entries"
+      ticket_fields: "/ticket-fields"
+      macros: "/macros"
+    format: "xml"
+  
+  mixpanel:
+    base_url: "http://mixpanel.com/api"
+    version: "2.0"
+    apis:
+      events: "events"
+      events_properties: "events/properties"
+      funnels: "funnels"
+      funnels_properties: "funnels/properties"
+    params:
+      type: "general"
+      unit: "day"
+      interval: 1
+      format: "json"
+      limit: 255

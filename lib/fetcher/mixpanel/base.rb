@@ -98,13 +98,6 @@ module Fetcher
       
       def client
         return @client
-      end    
-      
-      def is_method_supported?(supported_methods, method_name)
-        if method_name.blank?
-          return false
-        end
-        return supported_methods.include?(method_name.to_sym)
       end
       
       def currrent_url

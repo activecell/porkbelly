@@ -1,3 +1,5 @@
+ENV["STAGE_ENV"] ||= "test"
+require File.expand_path(File.join(File.dirname(__FILE__), "..", "config", "boot"))
 require "rspec"
 
 Rspec.configure do |c|

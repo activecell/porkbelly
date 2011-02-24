@@ -55,12 +55,12 @@ describe "Mixpanel Methods " do
         @all.stub_chain(:client, :request).and_return(events)
         
         # Should insert the real DB?
-        #@all.stub_chain(:model_class).and_return(::Mixpanel::Event)
-        #@all.stub_chain(:model_class, :create!).and_return(true)
+        @all.stub_chain(:model_class).and_return(::Mixpanel::Event)
+        @all.stub_chain(:model_class, :create!).and_return(true)
         
-        #returned_events = @all.fetch_all_events
+        returned_events = @all.fetch_all_events
         
-        #(returned_events == events).should be_true
+        (returned_events == events).should be_true
       end
     end
   end
