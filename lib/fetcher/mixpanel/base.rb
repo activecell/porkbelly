@@ -79,7 +79,7 @@ module Fetcher
         # Case 2: get credentials from csv file
         credentials = ::Helpers::Util.hash_from_csv(credentials_source)
         return credentials
-      end  
+      end
       
       def new_client(credential={})
         @credential = credential.to_options

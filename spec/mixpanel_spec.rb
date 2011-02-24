@@ -11,8 +11,54 @@ module Mixpanel
   end
 end
 
-describe "Mixpanel Methods " do
-  describe "initialize" do
+describe "Mixpanel Methods" do
+  describe "Fetcher::Mixpanel::Base: base module for all Mixpanel fetchers" do
+    describe "Method: existence_keys(credential) method" do
+      it "should return nothing if the table is empty" do
+        
+      end
+      
+      it "should return an array of target_id if the table has data" do
+        
+      end
+    end
+    
+    describe "Method: get_api_credentials(credentials_source)" do
+      it "should return a hash of {:api_key => 'key', :api_secret => 'secret'} if the param is in format 'api_key:api_secret'" do
+      
+      end
+      
+      it "should return an array of hashes {:api_key => 'key', :api_secret => 'secret'} if the param is the path to CSV file (ex: mixpanel.csv)" do
+      
+      end
+      
+      it "should return empty hash if the params is ':api_key' or 'api_key:'" do
+      
+      end
+      
+      it "should raise exception if the param is an invalid string" do
+      
+      end
+    end
+    
+    describe "Method: new_client(credential={})" do
+      it "should create an MixpanelClientExt object with the valid api_key and api_secret" do
+      
+      end
+      
+      it "should raise error if the api_key or api_secret is missing" do
+        
+      end
+    end
+    
+    describe "Method:  setup_params(params={})" do
+      it "should setup default value for missing paramters" do
+      
+      end
+    end
+  end
+  
+  describe "Fetcher::Mixpanel::All.initialize(): constructor method" do
     it "should raise exception if credential is invalid" do
       lambda { Fetcher::Mixpanel::All.new([]) }.should raise_error(ArgumentError)
       lambda { Fetcher::Mixpanel::All.new({}) }.should raise_error(ArgumentError)
@@ -61,6 +107,14 @@ describe "Mixpanel Methods " do
         returned_events = @all.fetch_all_events
         
         (returned_events == events).should be_true
+      end
+      
+      it "Case 2: with params[:event]='login' --> should get only data related to that event." do
+        
+      end
+      
+      it "Case 3: with params[:event]='login' --> should get only data related to that event." do
+        
       end
     end
   end
