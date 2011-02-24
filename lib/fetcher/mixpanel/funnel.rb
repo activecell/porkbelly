@@ -30,22 +30,43 @@ module Fetcher
         
         if save_to_db && !data.blank?
           self.model_class.transaction do
+            # Detect data were changed
+            target_ids = nil
+            if params[:detect_changes]
+              target_ids = self.existence_keys(self.credential[:api_key])
+            end
+            
             data.keys.each do |funnel_name|
               should_save = false # Flag to save the data to DB or not.
+              should_update = false # Flag to update the record or not.
               
               # Detect data is empty or not
               is_empty = (data[funnel_name].blank?)
               json_data = {funnel_name => data[funnel_name]}.to_json
               
-              if !is_empty && params[:detect_changes]
-                # Detect data were changed
-                should_save = check_changes(json_data, currrent_url, funnel_name)
+              if !is_empty && params[:detect_changes] && !target_ids.blank?
+                if target_ids.include?(funnel_name)
+                  # Detect data were changed
+                  should_save = check_changes(json_data, currrent_url, funnel_name)
+                  should_update = true
+                else
+                  should_save = true
+                end
               elsif !is_empty
                 should_save = true
               end
               
-              if should_save
-                logger.info "===> Insert data of funnels ..." 
+              if should_save && should_update && params[:update]
+                  logger.info "===> Update Mixpanel funnel '#{funnel_name}'..."
+                  self.model_class.update_all(
+                    { :content => json_data, 
+                      :format => FORMATS[:json],
+                      :request_url => currrent_url
+                    },
+                    ["target_id = ? AND credential = ?", funnel_name, credential[:api_key]]
+                  )
+              elsif should_save
+                logger.info "===> Insert new Mixpanel funnel '#{funnel_name}' ..." 
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => funnel_name,
@@ -77,13 +98,19 @@ module Fetcher
         end
           
         if save_to_db && !data.blank?
+          # Get existing key in DB.
+          target_ids = nil
+          if params[:detect_changes]
+            target_ids = self.existence_keys(self.credential[:api_key])
+          end
+            
           self.model_class.transaction do
             data.each do |funnel_name|
               should_save = false # Flag to save the data to DB or not.
               
-              if params[:detect_changes]
+              if params[:detect_changes] && !target_ids.blank?
                 # Detect data were changed
-                should_save = check_changes(json_data, currrent_url, funnel_name)
+                should_save = !target_ids.include?(funnel_name)
               elsif !is_empty
                 should_save = true
               end
@@ -129,20 +156,43 @@ module Fetcher
                 
         if save_to_db && !data.blank?
           self.model_class.transaction do
+            # Get existing key in DB.
+            target_ids = nil
+            if params[:detect_changes]
+              target_ids = self.existence_keys(self.credential[:api_key])
+            end
+            
             data.keys.each do |funnel_name|
               # Detect data is empty or not
               is_empty = (data[funnel_name].blank?)
               json_data = {funnel_name => data[funnel_name]}.to_json
               
-              if !is_empty && params[:detect_changes]
-                # Detect data were changed
-                should_save = check_changes(json_data, currrent_url, funnel_name)
+              should_save = false
+              should_update = false
+              
+              if !is_empty && params[:detect_changes] && !target_ids.blank?
+                if target_ids.include? funnel_name
+                  # Detect data were changed
+                  should_save = check_changes(json_data, currrent_url, funnel_name)
+                  should_update = true
+                else
+                  should_save = true
+                end
               elsif !is_empty
                 should_save = true
               end
               
-              if should_save
-                logger.info "===> Insert data of funnels/dates ..." 
+              if should_save && should_update && params[:update]
+                logger.info "===> Update Mixpanel funnels/dates  '#{funnel_name}'..."
+                self.model_class.update_all(
+                  { :content => json_data, 
+                    :format => FORMATS[:json],
+                    :request_url => currrent_url
+                  },
+                  ["target_id = ? AND credential = ?", funnel_name, credential[:api_key]]
+                )
+              elsif should_save
+                logger.info "===> Insert new Mixpanel funnels/dates '#{funnel_name}'..." 
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => funnel_name,

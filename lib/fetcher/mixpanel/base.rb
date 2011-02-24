@@ -134,6 +134,12 @@ module Fetcher
           params[:detect_changes] = true
         end
         
+        if !params.has_key?(:update)
+          # Default mode is to update existing record in DB.
+          # If this value is false. it means that new record will be inserted instead of being updated.
+          params[:update] = true
+        end
+        
         # Setup optional parameters.
         [:event, :funnel, :name, :values, :bucket].each do |key|
           if !params.has_key?(key)

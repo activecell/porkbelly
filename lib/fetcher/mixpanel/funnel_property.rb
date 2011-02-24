@@ -47,25 +47,46 @@ module Fetcher
           }
         end
         
-        if save_to_db
-          self.model_class.transaction do            
+        if save_to_db && !property_data.blank?
+          self.model_class.transaction do
+            # Get existing key in DB.
+            target_ids = nil
+            if params[:detect_changes]
+              target_ids = self.existence_keys(self.credential[:api_key])
+            end
+            
             property_data.each do |p_data|
               should_save = false # Flag to save the data to DB or not.
+              should_update = false # Flag to update the record or not.
               
               # Detect data is empty or not
               is_empty = (p_data[:content].blank?)
               
               json_data = p_data[:content].to_json
               
-              if !is_empty && params[:detect_changes]
-                # Detect data were changed
-                should_save = check_changes(json_data, p_data[:request_url],  p_data[:target_id])
+              if !is_empty && params[:detect_changes] && !target_ids.blank?
+                if target_ids.include? p_data[:target_id]
+                  # Detect data were changed
+                  should_save = check_changes(json_data, p_data[:request_url],  p_data[:target_id])
+                  should_update = true
+                else
+                  should_save = true
+                end
               elsif !is_empty
                 should_save = true
               end
               
-              if should_save
-                logger.info "===> Insert data of funnels/properties ..." 
+              if should_save && should_update && params[:update]
+                logger.info "===> Update Mixpanel funnels/properties '#{p_data[:target_id]}'..."
+                self.model_class.update_all(
+                  { :content => json_data, 
+                    :format => FORMATS[:json],
+                    :request_url =>  p_data[:request_url]
+                  },
+                  ["target_id = ? AND credential = ?", p_data[:target_id], credential[:api_key]]
+                )
+              elsif should_save
+                logger.info "===> Insert new Mixpanel funnels/properties ..." 
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id =>  p_data[:target_id],
@@ -113,25 +134,46 @@ module Fetcher
           }
         end
           
-        if save_to_db
-          self.model_class.transaction do            
+        if save_to_db && !property_data.blank?
+          self.model_class.transaction do
+            # Get existing keys from DB.
+            target_ids = nil
+            if params[:detect_changes]
+              target_ids = self.existence_keys(self.credential[:api_key])
+            end
+            
             property_data.each do |p_data|
               should_save = false # Flag to save the data to DB or not.
+              should_update = false
               
               # Detect data is empty or not
               is_empty = (p_data[:content].blank?)
               
               json_data = p_data[:content].to_json
               
-              if !is_empty && params[:detect_changes]
-                # Detect data were changed
-                should_save = check_changes(json_data, p_data[:request_url], p_data[:target_id])
+              if !is_empty && params[:detect_changes] & !target_ids.blank?
+                if target_ids.include p_data[:target_id]
+                  # Detect data were changed
+                  should_save = check_changes(json_data, p_data[:request_url], p_data[:target_id])
+                  should_update = true
+                else
+                  should_save = true
+                end
               elsif !is_empty
                 should_save = true
               end
               
-              if should_save
-                logger.info "===> Insert data of funnels/properties/names ..."            
+              if should_save && should_update && params[:update]
+                logger.info "===> Update Mixpanel funnels/properties/names '#{p_data[:target_id]}'..."
+                self.model_class.update_all(
+                  { :content => json_data, 
+                    :format => FORMATS[:json],
+                    :request_url => p_data[:request_url]
+                  },
+                  ["target_id = ? AND credential = ?", p_data[:target_id], credential[:api_key]]
+                )
+              elsif should_save
+                logger.info "===> Insert new Mixpanel funnels/properties/names ..."            
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => p_data[:target_id],
