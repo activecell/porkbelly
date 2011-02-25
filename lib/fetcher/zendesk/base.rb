@@ -38,14 +38,6 @@ module Fetcher
         extracted_keys
       end
 
-      #checking for existing record
-      def check_existence_record(entity, data)
-        if entity.where(:content => data).exists?
-          return true
-        else return false
-        end
-      end
-
     end
   end
 end

@@ -16,15 +16,12 @@ module Fetcher
 
       #save data to database after checking for existing record
       def save_organization_data(content_keys, request_url_param, format_param, credential)
-        zendesk_organization =  ::Zendesk::Organization
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-          #if !check_existence_record(zendesk_organization, data)
-          #  puts "ORG data not duplicated"
-            zendesk_organization.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
-          #else puts "ORG data DUPLICATED"
-          #end 
+          zendesk_organization =  ::Zendesk::Organization.find_or_initialize_by_target_id(extracted_key)
+          logger.info zendesk_organization.inspect
+          zendesk_organization.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
         end
       end
 

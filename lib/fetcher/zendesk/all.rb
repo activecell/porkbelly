@@ -17,14 +17,14 @@ module Fetcher
 
       def fetch_all
         if single_fetch?
-#          fetch_organization(credential)
-#          fetch_group(credential)
-#          fetch_user(credential)
-#          fetch_tag(credential)
+          fetch_organization(credential)
+          fetch_group(credential)
+          fetch_user(credential)
+          fetch_tag(credential)
           fetch_forum(credential)
           fetch_entry(credential)
-#          fetch_ticket_field(credential)
-#          fetch_macro(credential)
+          fetch_ticket_field(credential)
+          fetch_macro(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|

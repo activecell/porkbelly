@@ -15,11 +15,12 @@ module Fetcher
       end
 
       def save_macro_data(content_keys, request_url_param, format_param, credential)
-        zendesk_macro =  ::Zendesk::Macro
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-            zendesk_macro.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
+          zendesk_macro =  ::Zendesk::Macro.find_or_initialize_by_target_id(extracted_key)
+          logger.info zendesk_macro.inspect
+          zendesk_macro.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
         end
       end
 

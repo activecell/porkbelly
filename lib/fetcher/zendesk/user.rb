@@ -16,11 +16,11 @@ module Fetcher
 
       #save data to database after checking for existing record
       def save_user_data(content_keys, request_url_param, format_param, credential)
-        zendesk_user =  ::Zendesk::User
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-            zendesk_user.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
+          zendesk_user =  ::Zendesk::User.find_or_initialize_by_target_id(extracted_key)
+            zendesk_user.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
         end
       end
 

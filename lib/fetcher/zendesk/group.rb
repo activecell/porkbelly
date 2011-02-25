@@ -16,15 +16,12 @@ module Fetcher
 
       #save data to database after checking for existing record
       def save_group_data(content_keys, request_url_param, format_param, credential)
-        zendesk_group =  ::Zendesk::Group
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-          #if !check_existence_record(zendesk_group, data)
-          #  puts "GROUP data not duplicated"
-            zendesk_group.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
-          #else puts "GROUP data DUPLICATED"
-          #end
+          zendesk_group =  ::Zendesk::Group.find_or_initialize_by_target_id(extracted_key)
+          logger.info zendesk_group.inspect
+          zendesk_group.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
         end
       end
 

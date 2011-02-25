@@ -15,11 +15,12 @@ module Fetcher
       end
 
       def save_tag_data(content_keys, request_url_param, format_param, credential)
-        zendesk_tag =  ::Zendesk::Tag
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-            zendesk_tag.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
+          zendesk_tag =  ::Zendesk::Tag.find_or_initialize_by_target_id(extracted_key)
+          logger.info zendesk_tag.inspect
+          zendesk_tag.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
         end
       end
 

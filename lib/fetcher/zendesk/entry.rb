@@ -25,11 +25,12 @@ module Fetcher
 
       #save data to database after checking for existing record
       def save_entry_data(content_keys, request_url_param, format_param, credential, forum_id)
-        zendesk_entry =  ::Zendesk::Entry
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-            zendesk_entry.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key, :forum_id => forum_id)
+          zendesk_entry =  ::Zendesk::Entry.find_or_initialize_by_target_id(extracted_key)
+          logger.info zendesk_entry.inspect
+          zendesk_entry.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key, :forum_id => forum_id})
         end
       end
 

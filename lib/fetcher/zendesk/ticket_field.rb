@@ -16,11 +16,12 @@ module Fetcher
 
       #save data to database after checking for existing record
       def save_ticket_field_data(content_keys, request_url_param, format_param, credential)
-        zendesk_ticket_field =  ::Zendesk::TicketField
         content_keys.each do |content_key|
           data = content_key.values[0]
           extracted_key = content_key.keys[0]
-            zendesk_ticket_field.create(:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key)
+          zendesk_ticket_field =  ::Zendesk::TicketField.find_or_initialize_by_target_id(extracted_key)
+          logger.info zendesk_ticket_field.inspect
+          zendesk_ticket_field.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
         end
       end
 
