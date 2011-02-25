@@ -23,6 +23,7 @@ require 'fetcher/harvest/expense_category'
 require 'fetcher/harvest/expense'
 require 'fetcher/harvest/invoice'
 require 'fetcher/harvest/invoice_category'
+require 'fetcher/harvest/invoice_message'
 require 'fetcher/harvest/all'
 
 # MIXPANEL

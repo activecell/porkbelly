@@ -10,6 +10,7 @@ module Fetcher
       include Fetcher::Harvest::Expense
       include Fetcher::Harvest::Invoice
       include Fetcher::Harvest::InvoiceCategory
+      include Fetcher::Harvest::InvoiceMessage
 
       def initialize(credential)
         super(credential)
@@ -25,7 +26,9 @@ module Fetcher
           fetch_people(credential)
           fetch_expense_categories(credential)
           fetch_expenses(credential)
-          fetch_invoices(credential)
+          invoice_ids = fetch_invoices(credential)
+          logger.info "Invoice ids #{invoice_ids}"
+          fetch_invoice_messages(credential, invoice_ids)
           fetch_invoice_categories(credential)
         else
           logger.info "multi fetch"
@@ -37,7 +40,8 @@ module Fetcher
             fetch_people(cd)
             fetch_expense_categories(cd)
             fetch_expenses(cd)
-            fetch_invoices(cd)
+            invoice_ids = fetch_invoices(cd)
+            fetch_invoice_messages(cd, invoice_ids)
             fetch_invoice_categories(cd)
           end
         end

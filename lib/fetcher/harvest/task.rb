@@ -15,7 +15,7 @@ module Fetcher
           end
           content_keys
         end
-        fetch("Task", ::Harvest::Task, credential, HARVEST_CONFIG["apis"]["tasks"], response_parse_logic)
+        fetch(::Harvest::Task, credential, HARVEST_CONFIG["apis"]["tasks"], response_parse_logic)
       end
     end
   end

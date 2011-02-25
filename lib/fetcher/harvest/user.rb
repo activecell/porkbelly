@@ -12,7 +12,7 @@ module Fetcher
           end
           return content_keys
         }
-        fetch("User", ::Harvest::User, credential, HARVEST_CONFIG["apis"]["people"], response_parse_logic)
+        fetch(::Harvest::User, credential, HARVEST_CONFIG["apis"]["people"], response_parse_logic)
       end
     end
   end

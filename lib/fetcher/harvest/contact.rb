@@ -15,7 +15,7 @@ module Fetcher
           end
           return content_keys
         }
-        fetch("Contact", ::Harvest::Contact, credential, HARVEST_CONFIG["apis"]["contacts"], response_parse_logic)
+        fetch(::Harvest::Contact, credential, HARVEST_CONFIG["apis"]["contacts"], response_parse_logic)
       end
     end
   end
