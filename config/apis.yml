@@ -4,6 +4,13 @@ development:
     apis:
       clients: "/clients"
       contacts: "/contacts"
+      projects: "/projects"
+      tasks: "/tasks"
+      people: "/people"
+      expense_categories: "/expense_categories"
+      expenses: "/expenses"
+      invoices: "/invoices"
+      invoice_categories: "/invoice_item_categories"
     format: "xml"
   zendesk:
     base_url: "http://[SUBDOMAIN].zendesk.com"

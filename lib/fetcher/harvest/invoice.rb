@@ -3,19 +3,19 @@ include REXML
 
 module Fetcher
   module Harvest
-    module Client
+    module Invoice
       include Fetcher::Harvest::Base
 
-      def fetch_clients(credential)
+      def fetch_invoices(credential)
         response_parse_logic = Proc.new do |response|
           content_keys = {}
           doc = Document.new(response)
-          doc.elements.each("clients/client") do |client| 
-            content_keys["#{client.elements["id"].text}"] = client.to_s
+          doc.elements.each("invoices/invoice") do |invoice| 
+            content_keys["#{invoice.elements["id"].text}"] = invoice.to_s
           end
           content_keys
         end
-        fetch("Client", ::Harvest::Client, credential, HARVEST_CONFIG["apis"]["clients"], response_parse_logic)
+        fetch("Invoice", ::Harvest::Invoice, credential, HARVEST_CONFIG["apis"]["invoices"], response_parse_logic)
       end
     end
   end
