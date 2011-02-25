@@ -11,8 +11,8 @@ module Mixpanel
   end
 end
 
-describe "Mixpanel Methods" do
-  describe "Fetcher::Mixpanel::Base: base module for all Mixpanel fetchers" do
+describe "Module: Fetcher::Mixpanel" do
+  describe "::Base: base module for all Mixpanel fetchers" do
     describe "Method: existence_keys(credential) method" do
       it "should return nothing if the table is empty" do
         
@@ -55,37 +55,76 @@ describe "Mixpanel Methods" do
       it "should setup default value for missing paramters" do
       
       end
-    end
-  end
-  
-  describe "Fetcher::Mixpanel::All.initialize(): constructor method" do
-    it "should raise exception if credential is invalid" do
-      lambda { Fetcher::Mixpanel::All.new([]) }.should raise_error(ArgumentError)
-      lambda { Fetcher::Mixpanel::All.new({}) }.should raise_error(ArgumentError)
-      lambda { Fetcher::Mixpanel::All.new("abc") }.should raise_error(ArgumentError)
-      lambda { 
-        Fetcher::Mixpanel::All.new({:api_key => "09c68382ae8f86cdc568e1cd4bfe58ab"}) 
-      }.should raise_error(ArgumentError)
       
-      lambda { 
-        Fetcher::Mixpanel::All.new({:api_secret => "09c68382ae8f86cdc568e1cd4bfe58ab"}) 
-      }.should raise_error(ArgumentError)
+      it "should not set value for parameters available in the hash 'params'" do
+      
+      end
     end
     
-    it "should not raise exception if credential is valid" do
-      Fetcher::Mixpanel::All.new({
-        :api_key => "09c68382ae8f86cdc568e1cd4bfe58ab", 
-        :api_secret => "bf93660dc571137a9b8453c15ba46b79"
-      })
+    describe "Method: check_changes(data, request_url, target_id)" do
+      it "should return true if data was changed" do
+        
+      end
       
-      Fetcher::Mixpanel::All.new("09c68382ae8f86cdc568e1cd4bfe58ab:bf93660dc571137a9b8453c15ba46b79")
+      it "should return false if data was not changed" do
+        
+      end
+    end
+    
+    describe "Method: normalize_credential!(credential)" do
+      it "should raise ArgumentError if the argument 'credential' is invalid" do
+        
+      end
       
-      csv_file = File.join([File.dirname(__FILE__), "fixtures/mixpanel/mixpanel.csv"])
-      Fetcher::Mixpanel::All.new(csv_file)
+      it "should raise ArgumentError if one of the pair 'api_key' and 'api_secret' was missed" do
+        
+      end
+      
+      it "should return an Array or Hash if the param 'credential' is valid" do
+      
+      end
+    end
+    
+    describe "Method: get_method_url(parent, method='')" do
+      it "should return default API URL if the url was not found in the config file" do
+      
+      end
+      
+      it "should return the demanded API URL if the url was found in the config file" do
+      
+      end
     end
   end
   
-  describe "test fetch methods" do
+  describe "Class: ::All: container class including other fetcher modules." do
+    describe "Class: ::All.initialize(): constructor method" do
+      it "should raise exception if credential is invalid" do
+        lambda { Fetcher::Mixpanel::All.new([]) }.should raise_error(ArgumentError)
+        lambda { Fetcher::Mixpanel::All.new({}) }.should raise_error(ArgumentError)
+        lambda { Fetcher::Mixpanel::All.new("abc") }.should raise_error(ArgumentError)
+        lambda { 
+          Fetcher::Mixpanel::All.new({:api_key => "09c68382ae8f86cdc568e1cd4bfe58ab"}) 
+        }.should raise_error(ArgumentError)
+        
+        lambda { 
+          Fetcher::Mixpanel::All.new({:api_secret => "09c68382ae8f86cdc568e1cd4bfe58ab"}) 
+        }.should raise_error(ArgumentError)
+      end
+      
+      it "should not raise exception if credential is valid" do
+        Fetcher::Mixpanel::All.new({
+          :api_key => "09c68382ae8f86cdc568e1cd4bfe58ab", 
+          :api_secret => "bf93660dc571137a9b8453c15ba46b79"
+        })
+        
+        Fetcher::Mixpanel::All.new("09c68382ae8f86cdc568e1cd4bfe58ab:bf93660dc571137a9b8453c15ba46b79")
+        
+        csv_file = File.join([File.dirname(__FILE__), "fixtures/mixpanel/mixpanel.csv"])
+        Fetcher::Mixpanel::All.new(csv_file)
+      end
+    end
+  end
+  describe "Module: Event" do
     before(:each) do
       @all = Fetcher::Mixpanel::All.new('4d9b20366fda6e248d8d282946fc988a:b58997c62b91b19fe039b017ccb6b668')
     end
@@ -117,5 +156,17 @@ describe "Mixpanel Methods" do
         
       end
     end
+  end
+  
+  describe "Module: EventProperty" do
+  
+  end
+  
+  describe "Module: Funnel" do
+  
+  end
+  
+  describe "Module: FunnelProperty" do
+  
   end
 end
