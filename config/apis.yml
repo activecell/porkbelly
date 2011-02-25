@@ -11,6 +11,7 @@ development:
       expenses: "/expenses"
       invoices: "/invoices"
       invoice_categories: "/invoice_item_categories"
+      invoice_messages: "/invoices/[INVOICE_ID]/messages"
     format: "xml"
   zendesk:
     base_url: "http://[SUBDOMAIN].zendesk.com"

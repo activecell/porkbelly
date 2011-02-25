@@ -15,7 +15,7 @@ module Fetcher
           end
           content_keys
         end
-        fetch("Client", ::Harvest::Client, credential, HARVEST_CONFIG["apis"]["clients"], response_parse_logic)
+        fetch(::Harvest::Client, credential, HARVEST_CONFIG["apis"]["clients"], response_parse_logic)
       end
     end
   end

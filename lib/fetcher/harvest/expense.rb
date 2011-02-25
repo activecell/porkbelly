@@ -15,7 +15,7 @@ module Fetcher
           end
           return content_keys
         }
-        fetch("Expense", ::Harvest::Expense, credential, HARVEST_CONFIG["apis"]["expenses"], response_parse_logic)
+        fetch(::Harvest::Expense, credential, HARVEST_CONFIG["apis"]["expenses"], response_parse_logic)
       end
     end
   end

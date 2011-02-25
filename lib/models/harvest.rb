@@ -54,4 +54,10 @@ module Harvest
       "harvest_invoice_categories"
     end
   end
+
+  class InvoiceMessage < ActiveRecord::Base
+    def self.table_name
+      "harvest_invoice_messages"
+    end
+  end
 end

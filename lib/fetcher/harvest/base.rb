@@ -29,14 +29,15 @@ module Fetcher
         RestClient::Resource.new(request_url, options)
       end
 
-      def fetch(target, model_class, credential, target_api, response_parse_logic)
+      def fetch(model_class, credential, target_api, response_parse_logic, support_timestamp = true, additional_attrs = {})
+        target = model_class.to_s.split("::").last
         logger.info "Fetching #{target} ..."
         target_ids = []
-        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, target)
+        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, target) if support_timestamp
         begin
           base_url = HARVEST_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + target_api
           params = {}
-          params[:updated_since] = tracking.last_request.strftime("%Y-%m-%d %H:%M") if tracking and tracking.last_request
+          params[:updated_since] = tracking.last_request.strftime("%Y-%m-%d %H:%M") if support_timestamp and tracking and tracking.last_request
           response = create_request(credential, base_url, params).get.to_s
           logger.info "Response #{response}"
           content_keys = response_parse_logic.call(response)
@@ -45,12 +46,19 @@ module Fetcher
               target_ids << key
               target_entity = model_class.find_or_initialize_by_target_id(key)
               # insert of update target
-              target_entity.update_attributes({
+              attrs = {
                 :request_url => base_url, 
                 :content => content, 
                 :credential => Hash[*credential.sort.flatten].to_s, 
                 :format => HARVEST_CONFIG["format"]
-              })
+              }
+              attrs.merge!(additional_attrs)
+              updated = target_entity.update_attributes(attrs)
+              if updated
+                logger.info "Persisted #{target} with key #{key} to database."
+              else
+                raise "Fails to persisted #{target} with key #{key} to database."
+              end
             end
           end
         rescue Exception => exception
@@ -59,7 +67,7 @@ module Fetcher
           notify_exception(SITE, exception)
         ensure
           # update tracking record for the next fetch
-          tracking.update_attributes({:last_request => Time.now})
+          tracking.update_attributes({:last_request => Time.now}) if support_timestamp
         end
         logger.info "Fetched #{target}."
         return target_ids
