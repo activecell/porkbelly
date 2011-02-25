@@ -17,12 +17,16 @@ module Fetcher
       end
 
       def create_request(credential, request_url, params = {})
-        RestClient::Resource.new(request_url, 
-                                 :user => credential[:username], 
-                                 :password => credential[:password],
-                                 :content_type => :xml, 
-                                 :accept => :xml,
-                                 :params => {})
+        options = {
+          :user => credential[:username], 
+          :password => credential[:password],
+          :content_type => :xml, 
+          :accept => :xml
+        }
+        # convert params hash to request param string
+        request_url = request_url + "?" + hash_to_param_string(params) unless params.empty?
+        logger.info "Create request for url #{request_url}"
+        RestClient::Resource.new(request_url, options)
       end
 
     end

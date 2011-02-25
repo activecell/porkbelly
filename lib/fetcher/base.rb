@@ -1,3 +1,5 @@
+require "cgi"
+
 module Fetcher
   # this module contains a list of common methods that will be used in all fetchers
   module Base
@@ -36,6 +38,14 @@ module Fetcher
     #   credential: 
     def existence_keys(credential)
       raise NotImplementedError.new("Implement this method to return a list of credential and key.")
+    end
+
+    def hash_to_param_string(param_hash)
+      arr_param = []
+      param_hash.each do |key, value|
+        arr_param << (CGI::escape(key.to_s) + "=" + CGI::escape(value))
+      end
+      arr_param.join("&")
     end
 
     # base class for all loggers
