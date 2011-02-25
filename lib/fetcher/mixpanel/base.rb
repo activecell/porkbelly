@@ -14,6 +14,7 @@ module Fetcher
       MIXPANEL_CONFIG = APIS_CONFIG['mixpanel']
       SITE = "MIXPANEL"
       
+      # Supported format of returned data of the Mixpanel service.
       FORMATS = {:json => 'json', :csv => 'csv'}
       TYPES = {:general => 'general', :unique => 'unique', :average => 'average' }
       UNITS = {:hour => 'hour', :day => 'day', :week => 'week', :month =>'month'}
@@ -44,7 +45,7 @@ module Fetcher
       
       # Get a list of existence keys from db based on the given credential
       # params:
-      #   credential: 
+      #   credential: the value of api_key.
       def existence_keys(credential)
         keys = self.model_class.where("credential = ?", credential).select(:target_id).all
         if(!keys.blank?)
@@ -63,6 +64,15 @@ module Fetcher
       #------  End abstract class implementation. --------#
       
       # Get identification info (such as: api_key, token or username:password)
+      # == Parameters:
+      #   + credentials_source: a string that contains:
+      #       - Path to an CSV file.
+      #       - Or, the string with the format: "<api_key>:<api_secret>"  
+      # == Returned value:
+      #   + If the params 'credentials_source' is formated as "<api_key>:<api_secret>",
+      #     the returned value will be a hash of {:api_key => "<api_key>". :api_secret => "<api_secret>"}
+      #   + If the params is a path to a CSV file,
+      #     the returned value will be an array of hashes {:api_key => "<api_key>". :api_secret => "<api_secret>"}
       def get_api_credentials(credentials_source)
         # Case 1: "<api_key>:<api_secret>"
         if(credentials_source.include?(':'))
@@ -70,8 +80,11 @@ module Fetcher
           
           if(keys.length == 2)
             api_key = keys[0].strip
-            api_secret = keys[1].strip          
-            return {:api_key => api_key, :api_secret => api_secret}
+            api_secret = keys[1].strip
+            
+            if(api_key.strip != '' && api_secret.strip != '')
+              return {:api_key => api_key, :api_secret => api_secret}
+            end
           end
           return {} # Return nothing.
         end
@@ -81,8 +94,16 @@ module Fetcher
         return credentials
       end
       
+      # Create new Mixpanel client.
+      # The API URL and API version will be automactically set.
+      # == Paramaters:
+      #   + credential = {:api_key => "<api_key>", :api_secret => "<api_secret>"}
+      # == Returned value:
+      #   An instance of MixpanelClientExt.
       def new_client(credential={})
-        @credential = credential.to_options
+        if !credential.blank?
+          @credential = credential.to_options
+        end
         
         # Config api URL and version.
         if !MIXPANEL_CONFIG['base_url'].blank?
@@ -96,15 +117,25 @@ module Fetcher
                                       'api_secret' => @credential[:api_secret])
       end
       
+      # Return the currrent Mixpanel client.
       def client
         return @client
       end
       
-      def currrent_url
+      
+      # Return the currrent request URL was send by the Mixpanel client.
+      def current_url
         # Track the URL and params.
         @url = client.instance_variable_get(:@uri)
       end
-        
+      
+      
+      # Setup and prepare default (required) parameters for 
+      # the request to Mixpanel API service.
+      # == Parameters:
+      #   + params: hash containing your optional parameters need preparing.
+      # == Returned value:
+      #   The formated params hash.
       def setup_params(params={})
         params.to_options!
         
@@ -150,6 +181,12 @@ module Fetcher
         return params
       end
       
+      # Check data associate with the 'target_id' and 'request_url' was changed or not.
+      # This method will compare the passed 'data' to the existing data in DB.
+      # == Parameters:
+      #   + data: data (is usually a string in JSON or CSV).
+      #   + request_url: The URL that was sent to get the data.
+      #   + target_id: a key to identify the data (such as event's id or event's name, etc.)
       def check_changes(data, request_url, target_id)
         url = self.model_class.format_request_url(request_url)
         search_result = self.model_class.where(:target_id => target_id, 
@@ -163,6 +200,14 @@ module Fetcher
       end
       
       # Normalize credential, this will raise an ArgumentError if the credential is invalid.
+      # == Parameters:
+      #   + credential can be: 
+      #       - A string that contains path to an CSV file.
+      #       - Or, the string with the format: "<api_key>:<api_secret>"
+      #       - Or, a hash with the format {:api_key => "<api_key>", :api_secret => "<api_secret>"}
+      # == Returned value:
+      #   + A hash of {:api_key => "<api_key>". :api_secret => "<api_secret>"}.
+      #   + Or, an array of hashes {:api_key => "<api_key>". :api_secret => "<api_secret>"}
       def normalize_credential!(credential)
         tmp_credential = credential
         if(tmp_credential.is_a?(String))
@@ -184,6 +229,15 @@ module Fetcher
         return tmp_credential
       end
       
+      # Get the url to the API method.
+      # == Parameters:
+      #   + parent: the API event point name(such as events, events_properties,...)
+      #       Currenct supported endpoint's name are: events, events_properties, funnels and funnels_properties.
+      #    + method: the sub method of the endpoint.
+      # == Examples:
+      #   get_method_url('events', 'top') #=> events/top
+      # It sounds silly! But the purpose of this method is 
+      # to deal with the changing of API's URL.
       def get_method_url(parent, method='')
         parent = parent.to_s
         method = method.to_s

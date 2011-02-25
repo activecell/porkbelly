@@ -1,10 +1,31 @@
 module Fetcher
   module Mixpanel
+    # FunnelProperty module contains methods to interact with 
+    # the API endpoint http://mixpanel.com/api/2.0/funnels/properties of Mixpanel.
     module FunnelProperty
-      include Fetcher::Mixpanel::Base     
+      include Fetcher::Mixpanel::Base    
+      
+      # List of supported methods in this module.
       @@funnel_property_support_methods = [:fetch_all_funnel_properties, :fetch_funnel_property_names]
       
       # Get unique, total, or average data for a funnel property.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#funnel-properties-default
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       - params[:name]: single or array of funnel properties to fetch. If no properties is specified.
+      #           The method will automatically get all properties (within a time interval)
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   An array of hash object parsed from the returned data of Mixpanel service.
       def fetch_all_funnel_properties(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::FunnelProperty
@@ -42,7 +63,7 @@ module Fetcher
           
           property_data << {
             :target_id => property_name, 
-            :request_url => currrent_url,
+            :request_url => current_url,
             :content => data
           }
         end
@@ -90,6 +111,7 @@ module Fetcher
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id =>  p_data[:target_id],
+                  :funnel_name => params[:funnel],
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
                   :request_url => p_data[:request_url]
@@ -102,7 +124,24 @@ module Fetcher
         return property_data
       end
       
-      # Get the top properties for a single funnel or array of funnels. 
+      # Get the top properties for a single funnel or array of funnels.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#funnel-properties-names
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       - params[:name]: single or array of funnel properties to fetch. If no properties is specified.
+      #           The method will automatically get all properties (within a time interval)
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   An array of hash object parsed from the returned data of Mixpanel service.
       def fetch_funnel_property_names(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::FunnelProperty
@@ -129,7 +168,7 @@ module Fetcher
           end          
           property_data << {
             :target_id => funnel_name, 
-            :request_url => currrent_url, 
+            :request_url => current_url, 
             :content => data
           }
         end
@@ -177,6 +216,7 @@ module Fetcher
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => p_data[:target_id],
+                  :funnel_name => params[:funnel],
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
                   :request_url => p_data[:request_url]

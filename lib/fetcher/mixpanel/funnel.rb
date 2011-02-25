@@ -1,9 +1,31 @@
 module Fetcher
   module Mixpanel
+    # Funnel module contains methods to interact with 
+    # the API endpoint http://mixpanel.com/api/2.0/funnels of Mixpanel
     module Funnel
       include Fetcher::Mixpanel::Base
+      
+      # List of supported methods in this module.
       @@funnel_support_methods = [:fetch_all_funnels, :fetch_funnel_dates, :fetch_funnel_names]
       
+      # Get data for a set of funnels. 
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#funnels-default
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       - params[:funnel]: single or array of funnels to fetch. If no funnel is specified.
+      #           The method will automatically get all funnels (within a time interval)
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   A hash object parsed from the returned data of Mixpanel service.
       def fetch_all_funnels(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::Funnel
@@ -47,7 +69,7 @@ module Fetcher
               if !is_empty && params[:detect_changes] && !target_ids.blank?
                 if target_ids.include?(funnel_name)
                   # Detect data were changed
-                  should_save = check_changes(json_data, currrent_url, funnel_name)
+                  should_save = check_changes(json_data, current_url, funnel_name)
                   should_update = true
                 else
                   should_save = true
@@ -61,7 +83,7 @@ module Fetcher
                   self.model_class.update_all(
                     { :content => json_data, 
                       :format => FORMATS[:json],
-                      :request_url => currrent_url
+                      :request_url => current_url
                     },
                     ["target_id = ? AND credential = ?", funnel_name, credential[:api_key]]
                   )
@@ -72,7 +94,7 @@ module Fetcher
                   :target_id => funnel_name,
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
-                  :request_url => currrent_url
+                  :request_url => current_url
                 })
               end
             end
@@ -81,7 +103,22 @@ module Fetcher
         return data
       end
       
-      # Get the names of the funnels you are tracking. 
+      # Get the names of the funnels you are tracking.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#funnels-names
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   An array containing names of funnels.
       def fetch_funnel_names(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::Funnel
@@ -122,7 +159,7 @@ module Fetcher
                   :target_id => funnel_name,
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
-                  :request_url => currrent_url
+                  :request_url => current_url
                 })
               end
             end
@@ -133,6 +170,22 @@ module Fetcher
       end
       
       # Get the dates for which a set of funnels have data.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#funnels-dates
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       - params[:funnel]: single or array of funnels to fetch.
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   A hash object parsed from the returned data of Mixpanel service.
       def fetch_funnel_dates(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::Funnel
@@ -173,7 +226,7 @@ module Fetcher
               if !is_empty && params[:detect_changes] && !target_ids.blank?
                 if target_ids.include? funnel_name
                   # Detect data were changed
-                  should_save = check_changes(json_data, currrent_url, funnel_name)
+                  should_save = check_changes(json_data, current_url, funnel_name)
                   should_update = true
                 else
                   should_save = true
@@ -187,7 +240,7 @@ module Fetcher
                 self.model_class.update_all(
                   { :content => json_data, 
                     :format => FORMATS[:json],
-                    :request_url => currrent_url
+                    :request_url => current_url
                   },
                   ["target_id = ? AND credential = ?", funnel_name, credential[:api_key]]
                 )
@@ -198,7 +251,7 @@ module Fetcher
                   :target_id => funnel_name,
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
-                  :request_url => currrent_url
+                  :request_url => current_url
                 })
               end
             end

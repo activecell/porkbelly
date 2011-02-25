@@ -1,15 +1,32 @@
 module Fetcher
   module Mixpanel
+    # EventProperty module contains methods to interact with 
+    # the API endpoint http://mixpanel.com/api/2.0/events/properties of Mixpanel
     module EventProperty
       include Fetcher::Mixpanel::Base
       
+      # List of supported methods in this module.
       @@event_property_supported_methods = [
         :fetch_all_properties, :fetch_top_properties, :fetch_top_property_values]
-      
+            
       # Get total, unique, or average data from a single or an array event property.
-      # Parameters:
-      #   - params: parameters for the request.
-      #   - save_to_db: determine to save the responded data to DB or not.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#event-properties-default
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       - params[:name]: single or array of properties to fetch. If no property is specified.
+      #           The method will automatically get all properties (within a time interval)
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   An array of hash object parsed from the returned data of Mixpanel service.
       def fetch_all_properties(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::EventProperty
@@ -45,7 +62,7 @@ module Fetcher
           
           property_data << {
             :target_id => proper_name, 
-            :request_url => currrent_url, 
+            :request_url => current_url, 
             :content => data
           }
         end
@@ -93,6 +110,7 @@ module Fetcher
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => p_data[:target_id],
+                  :event_name => params[:event],
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
                   :request_url => p_data[:request_url]
@@ -106,9 +124,21 @@ module Fetcher
       end
       
       # Get the top properties for an event.
-      # Parameters:
-      #   - params: parameters for the request.
-      #   - save_to_db: determine to save the responded data to DB or not.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#event-properties-top
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   A hash object parsed from the returned data of Mixpanel service.
       def fetch_top_properties(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::EventProperty
@@ -140,7 +170,7 @@ module Fetcher
               if params[:detect_changes] && !target_ids.blank?
                 if target_ids.include?(property_name)
                   # Detect data were changed
-                  should_save = check_changes(json_data, currrent_url, property_name)
+                  should_save = check_changes(json_data, current_url, property_name)
                   should_update = true
                 else
                   should_save = true # Insert new record.
@@ -154,7 +184,7 @@ module Fetcher
                 self.model_class.update_all(
                   { :content => json_data, 
                     :format => FORMATS[:json],
-                    :request_url => currrent_url
+                    :request_url => current_url
                   },
                   ["target_id = ? AND credential = ?", property_name, credential[:api_key]]
                 )
@@ -163,9 +193,10 @@ module Fetcher
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => property_name,
+                  :event_name => params[:event],
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
-                  :request_url => currrent_url
+                  :request_url => current_url
                 })
               end
             end
@@ -175,9 +206,22 @@ module Fetcher
       end
       
       # Get the top values for a single event property.
-      # Parameters:
-      #   - params: parameters for the request.
-      #   - save_to_db: determine to save the responded data to DB or not.
+      # == API reference:
+      #   http://mixpanel.com/api/docs/guides/api/v2#event-properties-values
+      # == Parameters:
+      #   + params: hash of parameters for the request.
+      #       - params[:name]: single or array of properties to fetch.
+      #       Two special parameters: 
+      #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
+      #         - params[:update]: specify to update the existing record or insert the new one. 
+      #             set 'true' to update existing record and 'false' for insert new record (anyway).
+      #             Default value is 'true'
+      #             This param can combine with params[:detect_changes] to just insert 
+      #             or update data if there is change
+      #   + save_to_db: determine to save the responded data to DB or not.
+      #                 Default value is 'true'
+      # == Returned value:
+      #   An array of hash object parsed from the returned data of Mixpanel service.
       def fetch_top_property_values(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::EventProperty
@@ -206,7 +250,7 @@ module Fetcher
           end
           
           property_data << {:target_id => property_name, 
-            :request_url => currrent_url, :content => data}
+            :request_url => current_url, :content => data}
         end
         
         if save_to_db && !property_data.blank?
@@ -252,6 +296,7 @@ module Fetcher
                 record = self.model_class.create!({
                   :content => json_data, 
                   :target_id => p_data[:target_id],
+                  :event_name => params[:event],
                   :format => FORMATS[:json],
                   :credential => credential[:api_key],
                   :request_url => p_data[:request_url]
