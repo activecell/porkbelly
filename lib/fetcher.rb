@@ -15,7 +15,14 @@ require 'fetcher/base'
 # HARVEST
 require 'fetcher/harvest/base'
 require 'fetcher/harvest/client'
+require 'fetcher/harvest/contact'
 require 'fetcher/harvest/project'
+require 'fetcher/harvest/task'
+require 'fetcher/harvest/user'
+require 'fetcher/harvest/expense_category'
+require 'fetcher/harvest/expense'
+require 'fetcher/harvest/invoice'
+require 'fetcher/harvest/invoice_category'
 require 'fetcher/harvest/all'
 
 # MIXPANEL

@@ -1,6 +1,6 @@
-class CreateHarvestClients < ActiveRecord::Migration
+class CreateHarvestContacts < ActiveRecord::Migration
   def self.up
-    create_table :harvest_clients do |t|
+    create_table :harvest_contacts do |t|
       t.column :target_id , :string, :null => false
       t.column :content, :text, :null => false
       t.column :credential, :string, :null => false      
@@ -11,6 +11,6 @@ class CreateHarvestClients < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :harvest_clients
+    drop_table :harvest_contacts
   end
 end
