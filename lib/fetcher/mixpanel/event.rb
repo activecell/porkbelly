@@ -151,16 +151,19 @@ module Fetcher
           type     params[:type]
           limit    params[:limit]
           bucket   params[:bucket]
-        end       
+        end
         
-        is_empty = (data.blank? || data['event'].blank?)
+        puts "====== Top event data: #{data} === data class :#{data.class}"
+        is_empty = (data.blank? || data['events'].blank?)
         if save_to_db && !is_empty
           target_ids = nil
           if params[:detect_changes]
             target_ids = self.existence_keys(self.credential[:api_key])
           end
           
+          
           self.model_class.transaction do
+            puts "====== data['events']=#{data["events"]}, #{data["events"].class}"
             data['events'].each do |event|
               target_id = event['event']
               # Format to JSON data.
@@ -239,7 +242,9 @@ module Fetcher
           interval  params[:interval]
           limit     params[:limit]
           bucket    params[:bucket]
-        end       
+        end
+        
+        puts "========== Event names: #{data}, save = #{save_to_db} ========"
         
         if save_to_db && !data.blank?
           self.model_class.transaction do
@@ -252,7 +257,7 @@ module Fetcher
               should_save = false
               if params[:detect_changes] && !target_ids.blank?
                 should_save = !target_ids.include?(name)
-              elsif !is_empty
+              else
                 should_save = true
               end
               
@@ -329,7 +334,7 @@ module Fetcher
           
           if !is_empty && params[:detect_changes]
             # Detect data were changed
-            should_save = check_changes(json_data, current_url)
+            should_save = check_changes(json_data, current_url, current_url)
           elsif !is_empty
             should_save = true
           end
