@@ -60,4 +60,29 @@ module Harvest
       "harvest_invoice_messages"
     end
   end
+
+  class InvoicePayment < ActiveRecord::Base
+    def self.table_name
+      "harvest_invoice_payments"
+    end
+  end
+
+  class UserAssignment < ActiveRecord::Base
+    def self.table_name
+      "harvest_user_assignments"
+    end
+  end
+
+  class TaskAssignment < ActiveRecord::Base
+    def self.table_name
+      "harvest_task_assignments"
+    end
+  end
+
+  class Timesheet < ActiveRecord::Base
+    def self.table_name
+      "harvest_timesheets"
+    end
+  end
+
 end

@@ -3,21 +3,21 @@ include REXML
 
 module Fetcher
   module Harvest
-    module InvoiceMessage
+    module UserAssignment
       include Fetcher::Harvest::Base
 
-      def fetch_invoice_messages(credential, invoice_ids)
+      def fetch_user_assignments(credential, project_ids)
         response_parse_logic = lambda do |response|
           content_keys = {}
           doc = Document.new(response)
-          doc.elements.each("invoice-message/invoice-message") do |ec| 
+          doc.elements.each("user-assignments/user-assignment") do |ec| 
             content_keys["#{ec.elements["id"].text}"] = ec.to_s
           end
           content_keys
         end
 
-        invoice_ids.each do |inv_id|
-          fetch(::Harvest::InvoiceMessage, credential, HARVEST_CONFIG["apis"]["invoice_messages"].gsub("[INVOICE_ID]", inv_id), response_parse_logic, false, {:invoice_id => inv_id})
+        project_ids.each do |pid|
+          fetch(::Harvest::UserAssignment, credential, HARVEST_CONFIG["apis"]["user_assignments"].gsub("[PROJECT_ID]", pid), response_parse_logic, true, {:project_id => pid})
         end
       end
     end

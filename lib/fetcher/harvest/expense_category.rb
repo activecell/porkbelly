@@ -7,7 +7,7 @@ module Fetcher
       include Fetcher::Harvest::Base
 
       def fetch_expense_categories(credential)
-        response_parse_logic = Proc.new do |response|
+        response_parse_logic = lambda do |response|
           content_keys = {}
           doc = Document.new(response)
           doc.elements.each("expense-categories/expense-category") do |ec| 

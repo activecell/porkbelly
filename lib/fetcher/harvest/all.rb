@@ -11,6 +11,10 @@ module Fetcher
       include Fetcher::Harvest::Invoice
       include Fetcher::Harvest::InvoiceCategory
       include Fetcher::Harvest::InvoiceMessage
+      include Fetcher::Harvest::InvoicePayment
+      include Fetcher::Harvest::UserAssignment
+      include Fetcher::Harvest::TaskAssignment
+      include Fetcher::Harvest::Timesheet
 
       def initialize(credential)
         super(credential)
@@ -21,28 +25,43 @@ module Fetcher
         if single_fetch?
           fetch_clients(credential)
           fetch_contacts(credential)
-          fetch_projects(credential)
+
+          project_ids = fetch_projects(credential)
+          fetch_user_assignments(credential, project_ids)
+          fetch_task_assignments(credential, project_ids)
+
           fetch_tasks(credential)
           fetch_people(credential)
           fetch_expense_categories(credential)
           fetch_expenses(credential)
+
           invoice_ids = fetch_invoices(credential)
-          logger.info "Invoice ids #{invoice_ids}"
           fetch_invoice_messages(credential, invoice_ids)
+          fetch_invoice_payments(credential, invoice_ids)
+
           fetch_invoice_categories(credential)
+          fetch_timesheets(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|
             fetch_client(cd)
             fetch_contact(cd)
-            fetch_projects(cd)
+
+            project_ids = fetch_projects(cd)
+            fetch_user_assignments(cd, project_ids)
+            fetch_task_assignments(cd, project_ids)
+
             fetch_tasks(cd)
             fetch_people(cd)
             fetch_expense_categories(cd)
             fetch_expenses(cd)
+
             invoice_ids = fetch_invoices(cd)
             fetch_invoice_messages(cd, invoice_ids)
+            fetch_invoice_payments(cd, invoice_ids)
+
             fetch_invoice_categories(cd)
+            fetch_timesheets(cd)
           end
         end
       end

@@ -9,9 +9,13 @@ development:
       people: "/people"
       expense_categories: "/expense_categories"
       expenses: "/expenses"
+      user_assignments: "/projects/[PROJECT_ID]/user_assignments"
+      task_assignments: "/projects/[PROJECT_ID]/task_assignments"
       invoices: "/invoices"
       invoice_categories: "/invoice_item_categories"
       invoice_messages: "/invoices/[INVOICE_ID]/messages"
+      invoice_payments: "/invoices/[INVOICE_ID]/payments"
+      timesheets: "/daily/[DAY_OF_YEAR]/[YEAR]"
     format: "xml"
   zendesk:
     base_url: "http://[SUBDOMAIN].zendesk.com"

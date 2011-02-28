@@ -24,6 +24,10 @@ require 'fetcher/harvest/expense'
 require 'fetcher/harvest/invoice'
 require 'fetcher/harvest/invoice_category'
 require 'fetcher/harvest/invoice_message'
+require 'fetcher/harvest/invoice_payment'
+require 'fetcher/harvest/user_assignment'
+require 'fetcher/harvest/task_assignment'
+require 'fetcher/harvest/timesheet'
 require 'fetcher/harvest/all'
 
 # MIXPANEL
