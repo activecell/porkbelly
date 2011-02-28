@@ -23,8 +23,12 @@ module Fetcher
             else
               # Multiple fetch.
               self.credential.each do |creden|
-                new_client(creden)
-                data = send(method, params)
+                begin
+                  new_client(creden)
+                  data = send(method, params)
+                rescue Exception => exc
+                  logger.error "Error when run method '#{method}' with params='#{params}'"
+                end
               end
             end
           else

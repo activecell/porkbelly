@@ -153,7 +153,6 @@ module Fetcher
           bucket   params[:bucket]
         end
         
-        puts "====== Top event data: #{data} === data class :#{data.class}"
         is_empty = (data.blank? || data['events'].blank?)
         if save_to_db && !is_empty
           target_ids = nil
@@ -163,7 +162,6 @@ module Fetcher
           
           
           self.model_class.transaction do
-            puts "====== data['events']=#{data["events"]}, #{data["events"].class}"
             data['events'].each do |event|
               target_id = event['event']
               # Format to JSON data.
@@ -243,8 +241,6 @@ module Fetcher
           limit     params[:limit]
           bucket    params[:bucket]
         end
-        
-        puts "========== Event names: #{data}, save = #{save_to_db} ========"
         
         if save_to_db && !data.blank?
           self.model_class.transaction do

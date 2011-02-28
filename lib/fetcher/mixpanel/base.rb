@@ -66,13 +66,16 @@ module Fetcher
       # Get identification info (such as: api_key, token or username:password)
       # == Parameters:
       #   + credentials_source: a string that contains:
-      #       - Path to an CSV file.
+      #       - Path to an CSV file. The CSV file must be in this format:
+      #         api_key,  api_secret
+      #         key1,     secret1
+      #         key2,     secret2
       #       - Or, the string with the format: "<api_key>:<api_secret>"  
       # == Returned value:
       #   + If the params 'credentials_source' is formated as "<api_key>:<api_secret>",
       #     the returned value will be a hash of {:api_key => "<api_key>". :api_secret => "<api_secret>"}
       #   + If the params is a path to a CSV file,
-      #     the returned value will be an array of hashes {:api_key => "<api_key>". :api_secret => "<api_secret>"}
+      #     the returned value will be an array of hashes {:api_key => "<api_key>", :api_secret => "<api_secret>"}
       def get_api_credentials(credentials_source)
         # Case 1: "<api_key>:<api_secret>"
         if(credentials_source.include?(':'))

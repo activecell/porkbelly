@@ -133,7 +133,7 @@ module Fetcher
           unit      params[:unit]
           interval  params[:interval]
         end
-          
+
         if save_to_db && !data.blank?
           # Get existing key in DB.
           target_ids = nil

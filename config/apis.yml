@@ -17,6 +17,7 @@ development:
       invoice_payments: "/invoices/[INVOICE_ID]/payments"
       timesheets: "/daily/[DAY_OF_YEAR]/[YEAR]"
     format: "xml"
+
   zendesk:
     base_url: "http://[SUBDOMAIN].zendesk.com"
     apis:
@@ -48,6 +49,11 @@ development:
       format: "json"
       limit: 255
 
+  pivotal_tracker:
+    base_url: "https://www.pivotaltracker.com/services/v3"
+    apis:
+    format: "xml"
+    
 test:
   harvest:
     base_url: "http://[SUBDOMAIN].harvestapp.com"

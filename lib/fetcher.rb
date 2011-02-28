@@ -51,6 +51,9 @@ require 'fetcher/zendesk/ticket_field'
 require 'fetcher/zendesk/macro'
 require 'fetcher/zendesk/all'
 
+# PIVOTAL TRACKER
+require 'fetcher/pivotal_tracker/base'
+
 module Fetcher
   VERSION = "1.0.0"
 end
