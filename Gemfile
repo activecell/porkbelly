@@ -9,6 +9,7 @@ gem "whenever", :require => false
 gem "rest-client"
 gem "mixpanel_client"
 gem "nokogiri"
+gem 'garb'
 
 group :development, :test do
   gem "ruby-debug19"

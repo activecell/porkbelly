@@ -8,6 +8,7 @@ require 'models/harvest'
 require 'models/mixpanel'
 require 'models/zendesk'
 require 'models/pivotal_tracker'
+require 'models/ga'
 
 # base fetcher
 require 'fetcher/base'
@@ -62,6 +63,10 @@ require 'fetcher/pivotal_tracker/story'
 require 'fetcher/pivotal_tracker/task'
 require 'fetcher/pivotal_tracker/note'
 require 'fetcher/pivotal_tracker/all'
+#GOOGLE ANALYTIC
+require 'fetcher/ga/base'
+require 'fetcher/ga/profile'
+require 'fetcher/ga/all'
 
 module Fetcher
   VERSION = "1.0.0"

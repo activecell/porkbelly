@@ -111,7 +111,30 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::Zendesk::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456", :subdomain => "tpltest"})
+      client = Fetcher::Zendesk::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456"})
+      client.fetch_all
+    end
+  end
+
+  task :ga => :"ga:all"
+  namespace :ga do
+    desc "Fetch all google analytic feed"
+    task :all do
+      usage = %q{
+        ***************************
+        Description:
+          Get all data of the GoogleAnalytic site
+        Usage: 
+          rake site:ga credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
+          rake site:ga credential=<username>:<password> #=> get all data of the given credential
+          Replace variable in <> with actual params
+        **************************
+      }
+      # validate arguments
+      unless ENV.include?("credentials") or ENV.include?("credential")
+        raise usage
+      end
+      client = Fetcher::GA::All.new({:username => "tinn988@gmail.com", :password => "pedigree"})
       client.fetch_all
     end
   end
