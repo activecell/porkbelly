@@ -7,6 +7,7 @@ require 'models/site_tracking'
 require 'models/harvest'
 require 'models/mixpanel'
 require 'models/zendesk'
+require 'models/pivotal_tracker'
 
 # base fetcher
 require 'fetcher/base'
@@ -53,6 +54,14 @@ require 'fetcher/zendesk/all'
 
 # PIVOTAL TRACKER
 require 'fetcher/pivotal_tracker/base'
+require 'fetcher/pivotal_tracker/project'
+require 'fetcher/pivotal_tracker/activity'
+require 'fetcher/pivotal_tracker/membership'
+require 'fetcher/pivotal_tracker/iteration'
+require 'fetcher/pivotal_tracker/story'
+require 'fetcher/pivotal_tracker/task'
+require 'fetcher/pivotal_tracker/note'
+require 'fetcher/pivotal_tracker/all'
 
 module Fetcher
   VERSION = "1.0.0"

@@ -61,6 +61,7 @@ test:
       clients: "/clients"
       contacts: "/contacts"
     format: "xml"
+
   zendesk:
     base_url: "http://[SUBDOMAIN].zendesk.com"
     apis:
@@ -91,3 +92,8 @@ test:
       interval: 1
       format: "json"
       limit: 255
+  
+  pivotal_tracker:
+    base_url: "https://www.pivotaltracker.com/services/v3"
+    apis:
+    format: "xml"

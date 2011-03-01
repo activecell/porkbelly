@@ -17,5 +17,10 @@ module SpecHelper
       end
       return data
     end
+    
+    # Get full path of the fixture file.
+    def self.get_fixture_path(fixture_file)
+      File.join([File.dirname(__FILE__), "fixtures", fixture_file])
+    end
   end
 end

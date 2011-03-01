@@ -8,6 +8,7 @@ gem "actionmailer"
 gem "whenever", :require => false
 gem "rest-client"
 gem "mixpanel_client"
+gem "nokogiri"
 
 group :development, :test do
   gem "ruby-debug19"

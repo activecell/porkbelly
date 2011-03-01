@@ -125,13 +125,11 @@ module Fetcher
         return @client
       end
       
-      
       # Return the currrent request URL was send by the Mixpanel client.
       def current_url
         # Track the URL and params.
         @url = client.instance_variable_get(:@uri)
       end
-      
       
       # Setup and prepare default (required) parameters for 
       # the request to Mixpanel API service.
