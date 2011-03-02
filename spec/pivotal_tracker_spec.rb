@@ -14,6 +14,8 @@ module Pivotal
   end
 end
 
+DATE_FORMAT = Fetcher::PivotalTracker::Base::DATE_TIME_FORMAT
+
 describe "Module: Fetcher::PivotalTracker" do
   before (:each) do
     @username = "utwkidvn@gmail.com"
@@ -47,10 +49,9 @@ describe "Module: Fetcher::PivotalTracker" do
     describe "encode_options(options)" do
       it "should format options as params string" do
         options = {:project_id => 123456, :story_id => 654321}
-        result = '?filter=["project_id%3A123456", "story_id%3A654321"]'
-        param_string = @all.encode_options(options)
-        
-        (result == param_string).should be_true
+        expected = "?filter=project_id%3A123456%20story_id%3A654321"
+        actual = @all.encode_options(options)
+        (actual == expected).should be_true
       end
       
       it "should return nil if options is not hash or empty" do
@@ -205,10 +206,34 @@ describe "Module: Fetcher::PivotalTracker" do
         (url == "/pt/project/test").should be_true
       end
     end
+      
+    describe "format_project_url(origin_url, project_id)" do
+      it "should replace [PROJECT_ID] by the input project id" do
+        url = "/test/project/[PROJECT_ID]/stories"
+        project_id = 1234
+        expected = "/test/project/#{project_id}/stories"
+        
+        actual = @all.format_project_url(url, project_id)
+        
+        (actual == expected).should be_true
+      end
+    end
+    
+    describe "format_story_url(origin_url, story_id)" do
+      it "should replace [STORY_ID] by the input story id" do
+        url = "/test/project/1234/stories/[STORY_ID]/notes"
+        story_id = 4321
+        expected = "/test/project/1234/stories/#{story_id}/notes"
+        
+        actual = @all.format_story_url(url, story_id)
+        
+        (actual == expected).should be_true
+      end
+    end
   end  
 
   describe "::Project: project fetcher" do
-    describe "def fetch_projects(token)" do
+    describe "fetch_projects(token)" do
       before (:each) do
         @xml = Pivotal::Util.load_fixture("projects")
         @response = mock("Reponse")
@@ -223,10 +248,16 @@ describe "Module: Fetcher::PivotalTracker" do
         @all.stub_chain(:create_request).with(@token, url, {}).and_return(@client)
         
         result = @all.fetch_projects(@token)
-        (result[0] == '1' && result[1] == '2').should be_true
+        
+        r1 = ::PivotalTracker::Project.find_by_target_id('1')
+        r2 = ::PivotalTracker::Project.find_by_target_id('2')
+        (result[0] == '1' && result[1] == '2' && 
+          r1 != nil && r2 != nil).should be_true
       end      
     end
-    
+  end
+  
+  describe "::Activity: activities fetcher" do
     describe "fetch_activities(token, params)" do
       before (:each) do
         @xml = Pivotal::Util.load_fixture("activities")
@@ -239,13 +270,188 @@ describe "Module: Fetcher::PivotalTracker" do
       it "should fetch all activities of project" do
         project_id = 111
         url = @all.combine_url(@all.get_api_url('activities'))        
-        url = url.gsub('[PROJECT_ID]', project_id.to_s)
-        @all.stub_chain(:create_request).with(@token, url, {}).and_return(@client)
+        url = @all.format_project_url(url, project_id)
+        
+        # Get last update time.
+        target = "Activity"
+        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(
+          Fetcher::PivotalTracker::Base::SITE, target)
+        
+        params = {}
+        if tracking and tracking.last_request
+          last_request = tracking.last_request.strftime(DATE_FORMAT)
+          params[:occurred_since_date] = last_request
+        end
+        
+        @all.stub_chain(:create_request).with(@token, url, params).and_return(@client)
         
         result = @all.fetch_activities(@token, {:project_id => project_id})
         
-        puts "======== Fetch result: #{result} ======"
-        (result[0] == '59596685' && result[1] == '59596663').should be_true
+        r1 = ::PivotalTracker::Activity.find_by_target_id('59596685')
+        r2 = ::PivotalTracker::Activity.find_by_target_id('59596663')
+        
+        (result[0] == '59596685' && result[1] == '59596663' && 
+          r1 != nil && r2 != nil).should be_true
+      end
+    end
+  end
+  
+  describe "::Membership: memberships fetcher" do
+    describe "fetch_memberships(token, params)" do
+      before (:each) do
+        @xml = Pivotal::Util.load_fixture("memberships")
+        @response = mock("Reponse")
+        @response.stub!(:body).and_return(@xml)
+        @client = mock("Connection")
+        @client.stub!(:get).and_return(@response)
+      end
+      
+      it "should fetch all project's memberships" do
+        project_id = 111
+        url = @all.combine_url(@all.get_api_url('memberships'))        
+        url = @all.format_project_url(url, project_id)
+        
+        params = {}
+        @all.stub_chain(:create_request).with(@token, url, params).and_return(@client)
+        
+        result = @all.fetch_memberships(@token, {:project_id => project_id})
+        puts "===== Membership result: #{result} ====="
+        
+        r1 = ::PivotalTracker::Membership.find_by_target_id('1')
+        r2 = ::PivotalTracker::Membership.find_by_target_id('2')
+        (result[0] == '1' && result[1] == '2' &&
+          r1 != nil && r2 != nil).should be_true
+      end
+    end
+  end
+  
+  describe "::Iteration: iterations fetcher" do
+    describe "fetch_iterations(token, params)" do
+      before (:each) do
+        @xml = Pivotal::Util.load_fixture("iterations")
+        @response = mock("Reponse")
+        @response.stub!(:body).and_return(@xml)
+        @client = mock("Connection")
+        @client.stub!(:get).and_return(@response)
+      end
+      
+      it "should fetch all project's iterations" do
+        project_id = 111
+        url = @all.combine_url(@all.get_api_url('iterations'))        
+        url = @all.format_project_url(url, project_id)
+        
+        params = {}
+        @all.stub_chain(:create_request).with(@token, url, params).and_return(@client)
+        
+        result = @all.fetch_iterations(@token, {:project_id => project_id})
+        puts "===== Iterations result: #{result} ====="
+        
+        r1 = ::PivotalTracker::Iteration.find_by_target_id('1')
+        r2 = ::PivotalTracker::Iteration.find_by_target_id('2')
+        (result[0] == '1' && result[1] == '2' &&
+          r1 != nil && r2 != nil).should be_true
+      end
+    end
+  end
+  
+  describe "::Story: stories fetcher" do
+    describe "fetch_stories(token, params)" do
+      before (:each) do
+        @xml = Pivotal::Util.load_fixture("stories")
+        @response = mock("Reponse")
+        @response.stub!(:body).and_return(@xml)
+        @client = mock("Connection")
+        @client.stub!(:get).and_return(@response)
+      end
+      
+      it "should fetch all project's stories" do
+        project_id = 111
+        url = @all.combine_url(@all.get_api_url('stories'))        
+        url = @all.format_project_url(url, project_id)
+        
+        # Get last update time.
+        target = "Story"
+        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(
+          Fetcher::PivotalTracker::Base::SITE, target)
+        
+        params = {}
+        if tracking and tracking.last_request
+          last_request = tracking.last_request.strftime(DATE_FORMAT)
+          params[:modified_since] = last_request
+        end
+        
+        @all.stub_chain(:create_request).with(@token, url, params).and_return(@client)
+        
+        result = @all.fetch_stories(@token, {:project_id => project_id})
+        puts "===== Current URL: #{@all.current_url} ====="
+        puts "===== Stories result: #{result} ====="
+        
+        r1 = ::PivotalTracker::Story.find_by_target_id('6256883')
+        r2 = ::PivotalTracker::Story.find_by_target_id('6500875')
+        (result[0] == '6256883' && result[1] == '6500875' &&
+          r1 != nil && r2 != nil).should be_true
+      end
+    end
+  end
+  
+  describe "::Note: story's notes fetcher" do
+    describe "fetch_notes(token, params)" do
+      before (:each) do
+        @xml = Pivotal::Util.load_fixture("notes")
+        @response = mock("Reponse")
+        @response.stub!(:body).and_return(@xml)
+        @client = mock("Connection")
+        @client.stub!(:get).and_return(@response)
+      end
+      
+      it "should fetch all story's notes" do
+        project_id = 111
+        story_id = 222
+        url = @all.combine_url(@all.get_api_url('notes'))        
+        url = @all.format_project_url(url, project_id)
+        url = @all.format_story_url(url, story_id)
+        
+        params = {}
+        @all.stub_chain(:create_request).with(@token, url, params).and_return(@client)
+        
+        result = @all.fetch_notes(@token, {:project_id => project_id, :story_id => story_id})
+        puts "===== Notes result: #{result} ====="
+        
+        r1 = ::PivotalTracker::Note.find_by_target_id('3092837')
+        r2 = ::PivotalTracker::Note.find_by_target_id('3849657')
+        (result[0] == '3092837' && result[1] == '3849657' &&
+          r1 != nil && r2 != nil).should be_true
+      end
+    end
+  end
+  
+  describe "::Task: story's tasks fetcher" do
+    describe "fetch_tasks(token, params)" do
+      before (:each) do
+        @xml = Pivotal::Util.load_fixture("tasks")
+        @response = mock("Reponse")
+        @response.stub!(:body).and_return(@xml)
+        @client = mock("Connection")
+        @client.stub!(:get).and_return(@response)
+      end
+      
+      it "should fetch all story's tasks" do
+        project_id = 111
+        story_id = 222
+        url = @all.combine_url(@all.get_api_url('tasks'))        
+        url = @all.format_project_url(url, project_id)
+        url = @all.format_story_url(url, story_id)
+        
+        params = {}
+        @all.stub_chain(:create_request).with(@token, url, params).and_return(@client)
+        
+        result = @all.fetch_tasks(@token, {:project_id => project_id, :story_id => story_id})
+        puts "===== Tasks result: #{result} ====="
+        
+        r1 = ::PivotalTracker::Task.find_by_target_id('1')
+        r2 = ::PivotalTracker::Task.find_by_target_id('2')
+        (result[0] == '1' && result[1] == '2' &&
+          r1 != nil && r2 != nil).should be_true
       end
     end
   end

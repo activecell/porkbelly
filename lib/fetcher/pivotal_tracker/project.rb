@@ -4,6 +4,10 @@ module Fetcher
       include Fetcher::PivotalTracker::Base
       
       def fetch_projects(token)
+        setup_params_logic = lambda do |last_request, params|
+          # Do nothing.
+        end
+        
         response_parse_logic = lambda do |response|        
           content_keys = {}
           doc = Nokogiri::XML(response.body)
@@ -14,12 +18,8 @@ module Fetcher
           end
           
           content_keys
-        end
-        
-        setup_params_logic = lambda do |last_request, params|
-          # Do nothing.
-        end
-        
+        end     
+
         fetch(::PivotalTracker::Project, token, get_api_url('projects'), 
           response_parse_logic, setup_params_logic, false)
       end

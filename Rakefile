@@ -33,12 +33,42 @@ namespace :site do
     end
   end
 
-  task :pivotal => :"pivotal:all" # default fetch all data
-  namespace :pivotal do
+  task :pt => :"pt:all" # default fetch all data
+  namespace :pt do
     desc "Fetch all Pivotal Tracker data for the given credentials (single/multiple)"
+    
+    def fetch_pivotal_tracker_data
+      usage = %q{    
+        ***************************
+        Description:
+          Get all data of the Pivotal Tracker site
+        Usage: 
+          rake site:pt credentials=<path_to_credentials_csv_file> #=> get all data with many credentials
+          rake site:pt credential="<username>:<password>"  #=> get all data with the given username and password
+          rake site:pt credential="<token>"  #=> get all data with the given API token
+          Replace variable in <> with actual params
+        **************************
+      }
 
+      # Setup params.
+      unless ENV.include?("credentials") or ENV.include?("credential")
+        raise usage
+      end
+      
+      credential_source = ENV["credentials"] || ENV["credential"]
+
+      # Begin fetching data.
+      fetcher = Fetcher::PivotalTracker::All.new(credential_source)
+
+      puts "=== #{Time.now}: Fetching data from Pivotal Tracker with credential(s): '#{credential_source}'..."
+      
+      fetcher.fetch_all
+      
+      puts "=== #{Time.now}: Finished fetching data from Pivotal Tracker."
+    end
+    
     task :all do
-      puts "Fetching all data..."
+      fetch_pivotal_tracker_data
     end
   end
 

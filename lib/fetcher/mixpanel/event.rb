@@ -48,7 +48,7 @@ module Fetcher
         method_url = get_method_url('events')
         event_data = client.request do
           resource method_url #'events'
-          event    event_names.to_s
+          event    event_names.to_json
           type     params[:type]
           unit     params[:unit]
           interval params[:interval]
@@ -312,7 +312,7 @@ module Fetcher
         method_url = get_method_url('events', 'retention')
         data = client.request do
           resource method_url #'events/retention'
-          event    event_names.to_s
+          event    event_names.to_json
           unit     params[:unit]
           interval params[:interval]
           format   params[:format]

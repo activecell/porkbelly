@@ -242,7 +242,7 @@ module Fetcher
       def get_method_url(parent, method='')
         parent = parent.to_s
         method = method.to_s
-        if MIXPANEL_CONFIG['apis'][parent].blank?
+        if MIXPANEL_CONFIG['apis'].blank? || MIXPANEL_CONFIG['apis'][parent].blank?
           return File.join([DEFAULT_API_URLS[parent], method])
         end
         return File.join([MIXPANEL_CONFIG['apis'][parent], method])

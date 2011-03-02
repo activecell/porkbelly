@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iterations type="array">
+  <iteration>
+    <id type="integer">1</id>
+    <number type="integer">1</number>
+    <start type="datetime">2010/10/31 17:00:00 UTC</start>
+    <finish type="datetime">2010/11/07 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">2</id>
+    <number type="integer">2</number>
+    <start type="datetime">2010/11/07 17:00:00 UTC</start>
+    <finish type="datetime">2010/11/14 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">3</id>
+    <number type="integer">3</number>
+    <start type="datetime">2010/11/14 17:00:00 UTC</start>
+    <finish type="datetime">2010/11/21 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">4</id>
+    <number type="integer">4</number>
+    <start type="datetime">2010/11/21 17:00:00 UTC</start>
+    <finish type="datetime">2010/11/28 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">5</id>
+    <number type="integer">5</number>
+    <start type="datetime">2010/11/28 17:00:00 UTC</start>
+    <finish type="datetime">2010/12/05 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">6</id>
+    <number type="integer">6</number>
+    <start type="datetime">2010/12/05 17:00:00 UTC</start>
+    <finish type="datetime">2010/12/12 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">7</id>
+    <number type="integer">7</number>
+    <start type="datetime">2010/12/12 17:00:00 UTC</start>
+    <finish type="datetime">2010/12/19 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">8</id>
+    <number type="integer">8</number>
+    <start type="datetime">2010/12/19 17:00:00 UTC</start>
+    <finish type="datetime">2010/12/26 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">9</id>
+    <number type="integer">9</number>
+    <start type="datetime">2010/12/26 17:00:00 UTC</start>
+    <finish type="datetime">2011/01/02 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">10</id>
+    <number type="integer">10</number>
+    <start type="datetime">2011/01/02 17:00:00 UTC</start>
+    <finish type="datetime">2011/01/09 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">11</id>
+    <number type="integer">11</number>
+    <start type="datetime">2011/01/09 17:00:00 UTC</start>
+    <finish type="datetime">2011/01/16 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">12</id>
+    <number type="integer">12</number>
+    <start type="datetime">2011/01/16 17:00:00 UTC</start>
+    <finish type="datetime">2011/01/23 17:00:00 UTC</finish>
+    <stories type="array">
+      <story>
+        <id type="integer">6256883</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>release</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6256883</url>
+        <current_state>accepted</current_state>
+        <description>test desc</description>
+        <name>no2</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <created_at type="datetime">2010/11/11 10:00:46 UTC</created_at>
+        <updated_at type="datetime">2011/01/24 03:17:34 UTC</updated_at>
+        <accepted_at type="datetime">2011/01/21 05:00:00 UTC</accepted_at>
+        <labels>original,project,test,test label,testing</labels>
+        <notes type="array">
+          <note>
+            <id type="integer">3309731</id>
+            <text>test comment</text>
+            <author>Le Trong TIn</author>
+            <noted_at type="datetime">2010/11/27 18:23:15 UTC</noted_at>
+          </note>
+          <note>
+            <id type="integer">3340251</id>
+            <text>add new comment</text>
+            <author>Le Trong TIn</author>
+            <noted_at type="datetime">2010/11/30 05:10:42 UTC</noted_at>
+          </note>
+          <note>
+            <id type="integer">3341345</id>
+            <text>test add new comment</text>
+            <author>Le Trong TIn</author>
+            <noted_at type="datetime">2010/11/30 07:30:38 UTC</noted_at>
+          </note>
+        </notes>
+      </story>
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">13</id>
+    <number type="integer">13</number>
+    <start type="datetime">2011/01/23 17:00:00 UTC</start>
+    <finish type="datetime">2011/01/30 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">14</id>
+    <number type="integer">14</number>
+    <start type="datetime">2011/01/30 17:00:00 UTC</start>
+    <finish type="datetime">2011/02/06 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">15</id>
+    <number type="integer">15</number>
+    <start type="datetime">2011/02/06 17:00:00 UTC</start>
+    <finish type="datetime">2011/02/13 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">16</id>
+    <number type="integer">16</number>
+    <start type="datetime">2011/02/13 17:00:00 UTC</start>
+    <finish type="datetime">2011/02/20 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">17</id>
+    <number type="integer">17</number>
+    <start type="datetime">2011/02/20 17:00:00 UTC</start>
+    <finish type="datetime">2011/02/27 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+  <iteration>
+    <id type="integer">18</id>
+    <number type="integer">18</number>
+    <start type="datetime">2011/02/27 17:00:00 UTC</start>
+    <finish type="datetime">2011/03/06 17:00:00 UTC</finish>
+    <stories type="array">
+      <story>
+        <id type="integer">6500875</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6500875</url>
+        <estimate type="integer">1</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>test backlog 1</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/11/18 02:20:27 UTC</created_at>
+        <updated_at type="datetime">2011/01/14 02:54:38 UTC</updated_at>
+        <notes type="array">
+          <note>
+            <id type="integer">4358289</id>
+            <text>My Comment here</text>
+            <author>Man Vuong</author>
+            <noted_at type="datetime">2011/01/19 09:01:52 UTC</noted_at>
+          </note>
+          <note>
+            <id type="integer">4358395</id>
+            <text>My another comment.</text>
+            <author>Man Vuong</author>
+            <noted_at type="datetime">2011/01/19 09:06:28 UTC</noted_at>
+          </note>
+        </notes>
+      </story>
+      <story>
+        <id type="integer">6256943</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>bug</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6256943</url>
+        <current_state>finished</current_state>
+        <description></description>
+        <name>no4</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Ho Hoang Anh</owned_by>
+        <created_at type="datetime">2010/11/11 10:03:19 UTC</created_at>
+        <updated_at type="datetime">2011/01/14 11:08:15 UTC</updated_at>
+        <labels>changed,project</labels>
+        <notes type="array">
+          <note>
+            <id type="integer">3092921</id>
+            <text>test comment 2</text>
+            <author>Le Trong TIn</author>
+            <noted_at type="datetime">2010/11/16 07:25:59 UTC</noted_at>
+          </note>
+          <note>
+            <id type="integer">4358407</id>
+            <text>Test comment 3</text>
+            <author>Man Vuong</author>
+            <noted_at type="datetime">2011/01/19 09:07:03 UTC</noted_at>
+          </note>
+        </notes>
+      </story>
+      <story>
+        <id type="integer">6820017</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6820017</url>
+        <estimate type="integer">1</estimate>
+        <current_state>finished</current_state>
+        <description>New update</description>
+        <name>test activities: Need to update?</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/11/29 04:21:22 UTC</created_at>
+        <updated_at type="datetime">2011/01/18 04:14:09 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">6823571</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6823571</url>
+        <estimate type="integer">2</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>test add story</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <created_at type="datetime">2010/11/29 08:02:14 UTC</created_at>
+        <updated_at type="datetime">2010/12/07 04:27:17 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">7111417</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/7111417</url>
+        <estimate type="integer">2</estimate>
+        <current_state>delivered</current_state>
+        <description></description>
+        <name>Move project timesheet to report page</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Man Vuong</owned_by>
+        <created_at type="datetime">2010/12/07 04:27:01 UTC</created_at>
+        <updated_at type="datetime">2011/01/11 09:16:13 UTC</updated_at>
+        <labels>project</labels>
+      </story>
+      <story>
+        <id type="integer">7427711</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>release</story_type>
+        <url>http://www.pivotaltracker.com/story/show/7427711</url>
+        <current_state>unstarted</current_state>
+        <description></description>
+        <name>I've just created new story!</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Man Vuong</owned_by>
+        <created_at type="datetime">2010/12/14 09:45:08 UTC</created_at>
+        <updated_at type="datetime">2011/01/18 04:30:48 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">6822185</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6822185</url>
+        <estimate type="integer">1</estimate>
+        <current_state>rejected</current_state>
+        <description></description>
+        <name>test new story</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/11/29 06:38:06 UTC</created_at>
+        <updated_at type="datetime">2011/02/22 04:06:03 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">6819839</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6819839</url>
+        <estimate type="integer">1</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>test updated</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/11/29 04:03:24 UTC</created_at>
+        <updated_at type="datetime">2010/12/15 02:11:25 UTC</updated_at>
+        <labels>original</labels>
+      </story>
+      <story>
+        <id type="integer">7482367</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/7482367</url>
+        <estimate type="integer">3</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>new story for sync</name>
+        <requested_by>Man Vuong</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/12/15 08:23:27 UTC</created_at>
+        <updated_at type="datetime">2010/12/15 08:25:34 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">7429001</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/7429001</url>
+        <estimate type="integer">3</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>test optimization story 4</name>
+        <requested_by>Man Vuong</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/12/14 10:25:49 UTC</created_at>
+        <updated_at type="datetime">2010/12/20 08:07:58 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">6619137</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>bug</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6619137</url>
+        <current_state>started</current_state>
+        <description>test desc</description>
+        <name>test me</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <created_at type="datetime">2010/11/22 10:17:40 UTC</created_at>
+        <updated_at type="datetime">2011/01/13 10:49:34 UTC</updated_at>
+        <labels>original,test</labels>
+        <notes type="array">
+          <note>
+            <id type="integer">3309717</id>
+            <text>My comment</text>
+            <author>Le Trong TIn</author>
+            <noted_at type="datetime">2010/11/27 18:22:18 UTC</noted_at>
+          </note>
+          <note>
+            <id type="integer">3309721</id>
+            <text>Nothing comment</text>
+            <author>Le Trong TIn</author>
+            <noted_at type="datetime">2010/11/27 18:22:25 UTC</noted_at>
+          </note>
+          <note>
+            <id type="integer">4240715</id>
+            <text>test desc</text>
+            <author>Man Vuong</author>
+            <noted_at type="datetime">2011/01/13 10:35:34 UTC</noted_at>
+          </note>
+        </notes>
+      </story>
+      <story>
+        <id type="integer">6708289</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6708289</url>
+        <estimate type="integer">1</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>Test story</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/11/24 07:47:37 UTC</created_at>
+        <updated_at type="datetime">2011/01/14 02:59:03 UTC</updated_at>
+        <labels>change</labels>
+      </story>
+      <story>
+        <id type="integer">7763815</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/7763815</url>
+        <estimate type="integer">1</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>ss</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <created_at type="datetime">2010/12/22 07:50:38 UTC</created_at>
+        <updated_at type="datetime">2011/01/14 02:59:42 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">6500611</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>feature</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6500611</url>
+        <estimate type="integer">3</estimate>
+        <current_state>started</current_state>
+        <description></description>
+        <name>story abc</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Man Vuong</owned_by>
+        <created_at type="datetime">2010/11/18 02:10:51 UTC</created_at>
+        <updated_at type="datetime">2011/01/14 11:00:30 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">6256841</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>bug</story_type>
+        <url>http://www.pivotaltracker.com/story/show/6256841</url>
+        <current_state>started</current_state>
+        <description></description>
+        <name>no1</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <owned_by>Le Trong TIn</owned_by>
+        <created_at type="datetime">2010/11/11 09:59:02 UTC</created_at>
+        <updated_at type="datetime">2011/01/14 11:07:42 UTC</updated_at>
+      </story>
+      <story>
+        <id type="integer">9099431</id>
+        <project_id type="integer">141589</project_id>
+        <story_type>release</story_type>
+        <url>http://www.pivotaltracker.com/story/show/9099431</url>
+        <current_state>unstarted</current_state>
+        <description>null</description>
+        <name>sync stories for project</name>
+        <requested_by>Le Trong TIn</requested_by>
+        <created_at type="datetime">2011/01/24 10:02:37 UTC</created_at>
+        <updated_at type="datetime">2011/02/14 08:51:34 UTC</updated_at>
+      </story>
+    </stories>
+  </iteration>
+</iterations>

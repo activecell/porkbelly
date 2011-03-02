@@ -45,7 +45,7 @@ module Fetcher
         method_url = get_method_url('funnels')   
         data = client.request do
           resource method_url #'funnels'
-          funnel   funnel_names.to_s
+          funnel   funnel_names.to_json
           unit     params[:unit]
           interval params[:interval]
         end    
@@ -202,7 +202,7 @@ module Fetcher
         method_url = get_method_url('funnels', 'dates')
         data = client.request do
           resource  method_url #'funnels/dates'
-          funnel    funnel_names.to_s
+          funnel    funnel_names.to_json
           unit      params[:unit]
           limit     params[:limit]
         end

@@ -26,15 +26,13 @@ module Fetcher
             id = act.search('id').first.inner_html
             content_keys[id] = act.to_s
           end
-          
           content_keys
         end
         
-        url = get_api_url('activities').gsub('[PROJECT_ID]', params[:project_id].to_s)
+        url = format_project_url(get_api_url('activities'), params[:project_id])
         fetch(::PivotalTracker::Activity, token, url, 
           response_parse_logic, setup_params_logic, true)
       end
     end
   end
-end
-  
+end  

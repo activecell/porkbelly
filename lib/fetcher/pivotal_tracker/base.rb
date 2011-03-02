@@ -24,7 +24,11 @@ module Fetcher
       
       CONTENT_TYPE = "application/xml"
       FORMAT = "xml"
+      DATE_TIME_FORMAT = "%Y/%m/%d"
+      
       attr_accessor :token
+      attr_accessor :model_class
+      attr_accessor :current_url
       
       @@logger = BaseLogger.new(File.join(File.dirname(__FILE__), "..", "..", "..", "log", "pivotal_tracker.log"))
       def logger
@@ -94,7 +98,8 @@ module Fetcher
       def create_request(token, request_url, params = {})
         # convert params hash to request param string
         options = encode_options(params)
-        request_url << options
+        request_url << options       
+        
         logger.info "Create request #{request_url}"       
         
         RestClient::Resource.new(request_url, 
@@ -114,7 +119,7 @@ module Fetcher
       # Inspired from Pivotal Tracker gem 
       # by Justin Smestad (https://github.com/jsmestad/pivotal-tracker)
       def encode_options(options)
-        return nil if options.blank? || !options.is_a?(Hash)
+        return '' if !options.is_a?(Hash) || options.empty?
         options_strings = []
         # remove options which are not filters, and encode them as such
         [:limit, :offset].each do |o|
@@ -124,7 +129,7 @@ module Fetcher
         filters_string = options.map do |key, value|
           [value].flatten.map {|v| "#{CGI.escape(key.to_s)}%3A#{CGI.escape(v.to_s)}"}.join('&filter=')
         end
-        options_strings << "filter=#{filters_string}" unless filters_string.empty?
+        options_strings << "filter=#{filters_string.join('%20')}" unless filters_string.empty?
         return "?#{options_strings.join('&')}"
       end
       
@@ -165,6 +170,7 @@ module Fetcher
       def fetch(model_class, token, target_api, response_parse_logic, 
                 setup_params_logic, support_timestamp = true,
                 additional_attrs = {})
+        self.model_class = model_class
         
         target = model_class.to_s.split("::").last
         logger.info "Fetching #{target} ..."
@@ -181,16 +187,21 @@ module Fetcher
           
           last_request = nil
           if support_timestamp and tracking and tracking.last_request
-            last_request = tracking.last_request.strftime("%Y-%m-%d %H:%M")
-            # Call the delegate code to setup time tracking param.
+            last_request = tracking.last_request.strftime(DATE_TIME_FORMAT)
           end
           
+          # Call the delegate code to setup time tracking param.
           setup_params_logic.call(last_request, params)
           
           # Send request to Pivotal Tracker.
-          logger.info "Send request url: #{url}"
+          logger.info "Basic request URL: #{url}"
+          
+          self.current_url = url
           
           response = create_request(token, url, params).get
+          
+          logger.info "====== Full request URL: #{url} ====="
+          puts "====== Full request URL: #{url} ====="
           
           # Call the delegate code to parse the responded data.
           content_keys = response_parse_logic.call(response)
@@ -216,15 +227,13 @@ module Fetcher
               end
             end
           end
-        rescue Exception => exception
-          logger.error exception
-          logger.error exception.backtrace
-          notify_exception(SITE, exception)
-        ensure
+          
           # update tracking record for the next fetch
           if support_timestamp
             tracking.update_attributes({:last_request => Time.now})
           end
+        rescue Exception => exception
+          raise exception
         end
         
         logger.info "Finish fetching #{target}."
@@ -236,12 +245,19 @@ module Fetcher
       end
       
       def get_api_url(name)
-        sub_url = PT_CONFIG['apis'][name]
-        if sub_url.blank?
-          sub_url = DEFAULT_API_URLS[name]
+        if PT_CONFIG['apis'].blank? || PT_CONFIG['apis'][name].blank?
+          return DEFAULT_API_URLS[name]
         end
         
-        return sub_url
+        return PT_CONFIG['apis'][name]
+      end
+      
+      def format_project_url(origin_url, project_id)
+        return origin_url.gsub('[PROJECT_ID]', project_id.to_s)
+      end
+      
+      def format_story_url(origin_url, story_id)
+        return origin_url.gsub('[STORY_ID]', story_id.to_s)
       end
     end
   end

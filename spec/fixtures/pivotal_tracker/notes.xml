@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notes type="array">
+  <note>
+    <id type="integer">3092837</id>
+    <text>My Comment</text>
+    <author>Man Vuong</author>
+    <noted_at type="datetime">2010/11/16 07:14:56 UTC</noted_at>
+  </note>
+  <note>
+    <id type="integer">3849657</id>
+    <text>test</text>
+    <author>Man Vuong</author>
+    <noted_at type="datetime">2010/12/28 11:02:10 UTC</noted_at>
+  </note>
+</notes>
