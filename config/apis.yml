@@ -53,7 +53,13 @@ development:
     base_url: "https://www.pivotaltracker.com/services/v3"
     apis:
     format: "xml"
-    
+
+  ga:
+    auth_url: "https://www.google.com/accounts/ClientLogin?accountType=GOOGLE&Email=[EMAIL]&Passwd=[PASSWORD]&service=analytics&source=Gulp-CalCulp-1.05"
+    base_url: "https://www.google.com/analytics/feeds/datasources/ga"
+    apis:
+      accounts: "/accounts"
+
 test:
   harvest:
     base_url: "http://[SUBDOMAIN].harvestapp.com"
