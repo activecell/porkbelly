@@ -6,4 +6,9 @@ module GA
       "ga_accounts"
     end
   end
+  class WebProperty < ActiveRecord::Base
+    def self.table_name
+      "ga_webproperties"
+    end
+  end
 end

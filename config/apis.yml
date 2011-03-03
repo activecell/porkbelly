@@ -59,6 +59,7 @@ development:
     base_url: "https://www.google.com/analytics/feeds/datasources/ga"
     apis:
       accounts: "/accounts"
+      webproperties: "/webproperties"
 
 test:
   harvest:

@@ -66,6 +66,7 @@ require 'fetcher/pivotal_tracker/all'
 #GOOGLE ANALYTIC
 require 'fetcher/ga/base'
 require 'fetcher/ga/account'
+require 'fetcher/ga/webproperty'
 require 'fetcher/ga/all'
 
 module Fetcher

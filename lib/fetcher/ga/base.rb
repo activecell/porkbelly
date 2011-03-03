@@ -11,7 +11,6 @@ module Fetcher
 
       GA_CONFIG = APIS_CONFIG['ga']
       SITE = "GA"
-        @site  = nil
         @@logger = BaseLogger.new(File.join(File.dirname(__FILE__), "..", "..", "..", "log", "ga.log"))
       def logger
         @@logger
@@ -27,6 +26,7 @@ module Fetcher
       end
 
       def create_request(auth_key, request_url, params = {})
+        @@auth_key = auth_key
         RestClient.get request_url, :authorization => "GoogleLogin auth=#{auth_key}"
       end
 
