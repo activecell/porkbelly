@@ -1,4 +1,4 @@
-class CreateGaProfiles < ActiveRecord::Migration
+class CreateGaAccounts < ActiveRecord::Migration
   def self.up
     create_table :ga_profiles do |t|
       t.column :account_id, :integer, :null => false

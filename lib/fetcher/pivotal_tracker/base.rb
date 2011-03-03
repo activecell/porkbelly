@@ -196,12 +196,10 @@ module Fetcher
           # Send request to Pivotal Tracker.
           logger.info "Basic request URL: #{url}"
           
-          self.current_url = url
-          
+          self.current_url = url          
           response = create_request(token, url, params).get
           
           logger.info "====== Full request URL: #{url} ====="
-          puts "====== Full request URL: #{url} ====="
           
           # Call the delegate code to parse the responded data.
           content_keys = response_parse_logic.call(response)
@@ -220,18 +218,19 @@ module Fetcher
               attrs.merge!(additional_attrs)
               updated = target_entity.update_attributes(attrs)
               
-              if updated
+              if updated                
                 logger.info "Finish save #{target} with key #{key} to database."
               else
                 raise "Fails to save #{target} with key #{key} to database."
               end
             end
+            
+            # update tracking record for the next fetch
+            if support_timestamp
+              tracking.update_attributes({:last_request => Time.now})
+            end
           end
           
-          # update tracking record for the next fetch
-          if support_timestamp
-            tracking.update_attributes({:last_request => Time.now})
-          end
         rescue Exception => exception
           raise exception
         end

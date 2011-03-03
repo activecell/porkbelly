@@ -12,8 +12,6 @@ module Fetcher
       def initialize(credential)
         tmp_credential = normalize_credential!(credential)        
         super(tmp_credential)
-        
-        puts "====== Credential = #{self.credential} ===="
       end
       
       def fetch_all
