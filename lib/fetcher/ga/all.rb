@@ -1,7 +1,7 @@
 module Fetcher
   module GA
     class All
-      include Fetcher::GA::Profile
+      include Fetcher::GA::Account
 
       def initialize(credential)
         super(credential)
@@ -10,11 +10,11 @@ module Fetcher
 
       def fetch_all
         if single_fetch?
-          fetch_profile(credential)
+          fetch_account(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|
-            fetch_profile(credential)
+            fetch_account(credential)
           end
         end
       end

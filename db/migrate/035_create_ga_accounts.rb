@@ -1,8 +1,7 @@
 class CreateGaAccounts < ActiveRecord::Migration
   def self.up
-    create_table :ga_profiles do |t|
+    create_table :ga_accounts do |t|
       t.column :account_id, :integer, :null => false
-      t.column :account_name, :string, :null => false
       t.column :content, :text
       t.column :credential, :string, :null => false
       t.column :request_url, :string
@@ -13,6 +12,6 @@ class CreateGaAccounts < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :ga_profiles
+    drop_table :ga_accounts
   end
 end
