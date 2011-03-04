@@ -11,9 +11,9 @@ module Fetcher
       def fetch_webproperty(credential)
         load_account_ids
         @accounts.each do |a|
-          a_id = a.account_id
+          account_id = a.account_id
           request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
-"/" + a_id.to_s + GA_CONFIG["apis"]["webproperties"]
+"/" + account_id.to_s + GA_CONFIG["apis"]["webproperties"]
           response = create_request(@@auth_key, request_url)
           contents = extract_web_property_contents(response)
           save_webproperty(response, contents, credential, request_url)
@@ -26,7 +26,7 @@ module Fetcher
         wp_ids = contents[2]
         ga_web_property =  ::GA::WebProperty
         i = 0
-        for i in (i..contents.size - 1) do
+        for i in (i..entries.size - 1) do
           entry = entries[i]
           a_id = a_ids[i]
           wp_id = wp_ids[i]

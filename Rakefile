@@ -164,7 +164,7 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::GA::All.new({:username => "tinn988@gmail.com", :password => "pedigree"})
+      client = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456"})
       client.fetch_all
     end
   end
