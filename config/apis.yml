@@ -60,6 +60,7 @@ development:
     apis:
       accounts: "/accounts"
       webproperties: "/webproperties"
+      profiles: "/profiles"
 
 test:
   harvest:

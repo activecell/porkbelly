@@ -67,6 +67,7 @@ require 'fetcher/pivotal_tracker/all'
 require 'fetcher/ga/base'
 require 'fetcher/ga/account'
 require 'fetcher/ga/webproperty'
+require 'fetcher/ga/profile'
 require 'fetcher/ga/all'
 
 module Fetcher

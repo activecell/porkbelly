@@ -11,4 +11,10 @@ module GA
       "ga_web_properties"
     end
   end
+  class Profile < ActiveRecord::Base
+    def self.table_name
+      "ga_profiles"
+    end
+  end
+
 end

@@ -3,6 +3,7 @@ module Fetcher
     class All
       include Fetcher::GA::Account
       include Fetcher::GA::WebProperty
+      include Fetcher::GA::Profile
 
       def initialize(credential)
         super(credential)
@@ -13,6 +14,7 @@ module Fetcher
         if single_fetch?
           fetch_account(credential)
           fetch_webproperty(credential)
+          fetch_profile(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|
@@ -23,3 +25,4 @@ module Fetcher
     end
   end
 end
+
