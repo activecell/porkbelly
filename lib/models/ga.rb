@@ -8,7 +8,7 @@ module GA
   end
   class WebProperty < ActiveRecord::Base
     def self.table_name
-      "ga_webproperties"
+      "ga_web_properties"
     end
   end
 end

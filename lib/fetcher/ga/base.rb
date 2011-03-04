@@ -36,6 +36,29 @@ module Fetcher
         account_id
       end
 
+      def extract_web_property_contents(response)
+        entry = Nokogiri::XML(response).search("entry")
+        entries = Array.new
+        a_ids = Array.new
+        wp_ids = Array.new
+        contents = Array.new
+        i = 0
+        for i in (i..entry.xpath("//dxp:property").size - 1) do
+          if (i%2 == 0)
+            a_id = entry.xpath("//dxp:property")[i].attribute('value').value.to_i
+            a_ids << a_id
+          else
+            wp_id = entry.xpath("//dxp:property")[i].attribute('value').value.to_s
+            wp_ids << wp_id
+          end
+        end
+        entry.each do |e|
+          entries << e
+        end
+        contents = [entries, a_ids, wp_ids]
+        contents
+      end
+
     end
   end
 end

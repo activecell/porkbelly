@@ -2,7 +2,8 @@ class CreateGaWebProperties < ActiveRecord::Migration
   def self.up
     create_table :ga_web_properties do |t|
       t.column :account_id, :integer, :null => false
-      t.column :web_property, :string, :null => false
+      t.column :web_property_id, :string, :null => false
+      t.column :entry, :text, :null => false
       t.column :content, :text
       t.column :credential, :string, :null => false
       t.column :request_url, :string
