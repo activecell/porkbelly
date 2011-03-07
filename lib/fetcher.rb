@@ -63,6 +63,7 @@ require 'fetcher/pivotal_tracker/story'
 require 'fetcher/pivotal_tracker/task'
 require 'fetcher/pivotal_tracker/note'
 require 'fetcher/pivotal_tracker/all'
+
 #GOOGLE ANALYTIC
 require 'fetcher/ga/base'
 require 'fetcher/ga/account'
