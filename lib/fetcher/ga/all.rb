@@ -4,6 +4,7 @@ module Fetcher
       include Fetcher::GA::Account
       include Fetcher::GA::WebProperty
       include Fetcher::GA::Profile
+      include Fetcher::GA::Goal
 
       def initialize(credential)
         super(credential)
@@ -15,6 +16,7 @@ module Fetcher
           fetch_account(credential)
           fetch_webproperty(credential)
           fetch_profile(credential)
+          fetch_goal(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|

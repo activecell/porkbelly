@@ -61,6 +61,7 @@ development:
       accounts: "/accounts"
       webproperties: "/webproperties"
       profiles: "/profiles"
+      goals: "/goals"
 
 test:
   harvest:

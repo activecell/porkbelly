@@ -67,26 +67,41 @@ module Fetcher
         profile_ids = Array.new
         dxp_table_ids = Array.new
         contents = Array.new
-          i = 0
-          for i in (i..entries.xpath("//dxp:property").size - 1) do
-            if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:accountId"
-              a_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_i
-            end
-            if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:webPropertyId"
-              wp_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_s
-            end
-            if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:profileName"
-              profile_names << entries.xpath("//dxp:property")[i].attribute('value').value.to_s
-            end
-            if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:profileId"
-              profile_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_i
-            end
-            if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "dxp:tableId"
-              dxp_table_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_s
-            end
+        i = 0
+        for i in (i..entries.xpath("//dxp:property").size - 1) do
+          if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:accountId"
+            a_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_i
           end
+          if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:webPropertyId"
+            wp_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_s
+          end
+          if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:profileName"
+            profile_names << entries.xpath("//dxp:property")[i].attribute('value').value.to_s
+          end
+          if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "ga:profileId"
+            profile_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_i
+          end
+          if entries.xpath("//dxp:property")[i].attribute('name').value.to_s.eql? "dxp:tableId"
+            dxp_table_ids << entries.xpath("//dxp:property")[i].attribute('value').value.to_s
+          end
+        end
         contents = [entries, a_ids, wp_ids, profile_names, profile_ids, dxp_table_ids]
       end
+
+      def extract_goal(response)
+        entries = Nokogiri::XML(response).search("entry")
+        profile_ids = Array.new
+        goal_names = Array.new
+        contents = Array.new
+        entries.xpath("//ga:goal").each do |goal|
+          goal_names << goal.attribute('name').value
+        end
+        entries.xpath("//dxp:property").each do |dxp_prop|
+          profile_ids << dxp_prop.attribute('value').value
+        end
+        contents = [entries, profile_ids, goal_names]
+      end
+
     end
   end
 end

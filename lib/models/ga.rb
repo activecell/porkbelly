@@ -16,5 +16,10 @@ module GA
       "ga_profiles"
     end
   end
+  class Goal < ActiveRecord::Base
+    def self.table_name
+      "ga_goals"
+    end
+  end
 
 end
