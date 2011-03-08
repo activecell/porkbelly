@@ -16,14 +16,14 @@ module Fetcher
           wp_id = profile.web_property_id
           request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
 "/" + account_id.to_s + GA_CONFIG["apis"]["webproperties"] + "/" + wp_id.to_s + 
-"/" + GA_CONFIG["apis"]["profiles"] + "/" + profile_id.to_s + GA_CONFIG["apis"]["goals"]
+GA_CONFIG["apis"]["profiles"] + "/" + profile_id.to_s + GA_CONFIG["apis"]["goals"]
           response = create_request(@@auth_key, request_url)
           contents = extract_goal(response)
-          save_profile(response, contents, credential, request_url)
+          save_goal(response, contents, credential, request_url)
         end
       end
 
-      def save_profile(response, contents, credential, request_url)
+      def save_goal(response, contents, credential, request_url)
         entries = contents[0]
         profile_ids = contents[1]
         goal_names = contents[2]
