@@ -63,7 +63,14 @@ development:
       profiles: "/profiles"
       goals: "/goals"
       segments: "/segments"
-
+      
+  salesforce:
+    # [VERSION] will be replaced by the value of :version attribute.
+    login_url: "https://login.salesforce.com/services/Soap/u/[VERSION]"
+    version: "21.0"
+    # Format can be 'json' or 'xml'
+    format: 'json'
+  
 test:
   harvest:
     base_url: "http://[SUBDOMAIN].harvestapp.com"
@@ -107,3 +114,9 @@ test:
     base_url: "https://www.pivotaltracker.com/services/v3"
     apis:
     format: "xml"
+
+  salesforce:
+    login_url: "https://login.salesforce.com/services/Soap/u/21.0"
+    version: "21.0"
+    # Format can be 'json' or 'xml'
+    format: 'json'

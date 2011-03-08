@@ -9,6 +9,7 @@ require 'models/mixpanel'
 require 'models/zendesk'
 require 'models/pivotal_tracker'
 require 'models/ga'
+require 'models/salesforce'
 
 # base fetcher
 require 'fetcher/base'
@@ -72,6 +73,12 @@ require 'fetcher/ga/profile'
 require 'fetcher/ga/goal'
 require 'fetcher/ga/segment'
 require 'fetcher/ga/all'
+
+# SALESFORCE
+require 'fetcher/salesforce/base'
+require 'fetcher/salesforce/object_metadata'
+require 'fetcher/salesforce/object_data'
+require 'fetcher/salesforce/all'
 
 module Fetcher
   VERSION = "1.0.0"

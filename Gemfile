@@ -10,6 +10,7 @@ gem "rest-client"
 gem "mixpanel_client"
 gem "nokogiri"
 gem 'garb'
+gem 'rforce' # For Salesforce fetcher.
 
 group :development, :test do
   gem "ruby-debug19"

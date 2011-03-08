@@ -8,14 +8,14 @@ module PivotalTracker
   
 =begin
   'mixpanel_events' Tables's Schema:
-  id: int         int (primary key)
-  target_id       string # unique ID from API services.
-  content:        text
-  request_url:    string
-  format:         string
-  credential:     string
-  created_at:     datetime
-  updated_at:     datetime  
+    id:             int (primary key)
+    target_id:      string # unique ID from API services.
+    content:        text
+    request_url:    string
+    format:         string
+    credential:     string
+    created_at:     datetime
+    updated_at:     datetime  
 =end
   class Project < PivotalTrackerData
     def self.table_name

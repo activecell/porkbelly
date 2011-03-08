@@ -196,8 +196,9 @@ module Fetcher
           # Send request to Pivotal Tracker.
           logger.info "Basic request URL: #{url}"
           
-          self.current_url = url          
           response = create_request(token, url, params).get
+          
+          self.current_url = url
           
           logger.info "====== Full request URL: #{url} ====="
           
