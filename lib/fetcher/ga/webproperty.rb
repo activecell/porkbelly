@@ -30,9 +30,12 @@ module Fetcher
           entry = entries[i]
           a_id = a_ids[i]
           wp_id = wp_ids[i]
-          ga_web_property.create(:account_id => a_id, :web_property_id => wp_id, 
-:entry => entry.to_s, :content => response.to_s, :credential => credential, 
-:request_url => request_url, :format => "xml")
+          ga_web_property.create(:account_id => a_id,
+                                 :web_property_id => wp_id,
+                                 :entry => entry.to_s,
+                                 :content => response.to_s,
+                                 :credential => credential,
+                                 :request_url => request_url, :format => "xml")
         end
       end
 

@@ -38,15 +38,15 @@ module Fetcher
           profile_id = profile_ids[i]
           dxp_table_id = dxp_table_ids[i]
           ga_profile.create(:account_id => a_id, 
-                                 :web_property_id => wp_id, 
-                                 :entry => entry.to_s, 
-                                 :profile_name => profile_name.to_s, 
-                                 :profile_id => profile_id,
-                                 :dxp_table_id => dxp_table_id, 
-                                 :content => response.to_s, 
-                                 :credential => credential, 
-                                 :request_url => request_url, 
-                                 :format => "xml")
+                            :web_property_id => wp_id, 
+                            :entry => entry.to_s, 
+                            :profile_name => profile_name.to_s, 
+                            :profile_id => profile_id,
+                            :dxp_table_id => dxp_table_id, 
+                            :content => response.to_s, 
+                            :credential => credential, 
+                            :request_url => request_url, 
+                            :format => "xml")
         end
       end
 

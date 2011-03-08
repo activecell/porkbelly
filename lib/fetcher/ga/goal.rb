@@ -17,7 +17,6 @@ module Fetcher
           request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
 "/" + account_id.to_s + GA_CONFIG["apis"]["webproperties"] + "/" + wp_id.to_s + 
 "/" + GA_CONFIG["apis"]["profiles"] + "/" + profile_id.to_s + GA_CONFIG["apis"]["goals"]
-          puts request_url
           response = create_request(@@auth_key, request_url)
           contents = extract_goal(response)
           save_profile(response, contents, credential, request_url)

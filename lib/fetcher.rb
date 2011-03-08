@@ -70,6 +70,7 @@ require 'fetcher/ga/account'
 require 'fetcher/ga/webproperty'
 require 'fetcher/ga/profile'
 require 'fetcher/ga/goal'
+require 'fetcher/ga/segment'
 require 'fetcher/ga/all'
 
 module Fetcher

@@ -5,7 +5,6 @@ module Fetcher
 
       def fetch_account(credential)
         request_login_url =  GA_CONFIG["auth_url"].gsub(/\[EMAIL\]/, credential[:username]).gsub(/\[PASSWORD\]/, credential[:password])
-        #puts request_url
         response_login = create_login_request(credential, request_login_url).get.to_s
         auth_key = response_login.split("Auth=").last
         request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"]

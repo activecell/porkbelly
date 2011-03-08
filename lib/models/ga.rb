@@ -21,5 +21,11 @@ module GA
       "ga_goals"
     end
   end
+  class Segment < ActiveRecord::Base
+    def self.table_name
+      "ga_segments"
+    end
+  end
+
 
 end
