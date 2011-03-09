@@ -3,7 +3,7 @@ module Fetcher
     module ObjectMetadata
       include Fetcher::Salesforce::Base
       
-      # Fetch project stories.
+      # Fetch object metadata
       # == Parameters
       #   + session_id: Session ID
       def fetch_object_metadata(session_id)

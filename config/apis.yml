@@ -46,7 +46,10 @@ development:
       type: "general"
       unit: "day"
       interval: 1
-      format: "json"
+      
+      # Current version of Mixpanel API does not work well witj CSV format.
+      # So the default format is always JSON.
+      #format: "json"
       limit: 255
 
   pivotal_tracker:
@@ -107,7 +110,11 @@ test:
       type: "general"
       unit: "day"
       interval: 1
-      format: "json"
+      
+      # Current version of Mixpanel API does not work well witj CSV format.
+      # So the default format is always JSON.
+      #format: "json"
+      
       limit: 255
   
   pivotal_tracker:

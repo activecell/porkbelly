@@ -163,11 +163,12 @@ module Fetcher
         return target_ids
       end
       
-      # Detect the server url used to combine with other URL to make the request
-      # After login, SF service will respond an URL for SOAP message like this:
+      # Detect the server url used to combine with other URL to make the request.
+      # After logging in, SF service will respond a SOAP message containing an URL like this:
       #   https://na9-api.salesforce.com/services/Soap/u/21.0/00DE0000000HuxM
-      # However, we cannot use this for REST API. The expected URL is:
+      # However, we cannot use this URL for REST API. Our necessary URL is:
       #   https://na9.salesforce.com/services/data/...
+      # The purpose of this method is to return the necessary URL.
       # == Parameters
       #   +server_url: A server URL returned after logging in to Salesforce.
       #     EX: https://na9-api.salesforce.com/services/Soap/u/21.0/00DE0000000HuxM

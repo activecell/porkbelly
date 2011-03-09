@@ -9,7 +9,7 @@ module Fetcher
       @@event_property_supported_methods = [
         :fetch_all_properties, :fetch_top_properties, :fetch_top_property_values]
             
-      # Get total, unique, or average data from a single or an array event property.
+      # Get total, unique, or average data from a single or an array of event properties.
       # == API reference:
       #   http://mixpanel.com/api/docs/guides/api/v2#event-properties-default
       # == Parameters:
@@ -26,7 +26,15 @@ module Fetcher
       #   + save_to_db: determine to save the responded data to DB or not.
       #                 Default value is 'true'
       # == Returned value:
-      #   An array of hash object parsed from the returned data of Mixpanel service.
+      #   An array of hash object in this structure:
+      #   [{
+      #      :target_id => 'property name', 
+      #      :request_url => 'http://mixpanel.com/api/2.0/events/properties?name=feature...', 
+      #      :content => 'hash containing property's data'
+      #    },
+      #    ...
+      #   ]
+      
       def fetch_all_properties(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::EventProperty
@@ -100,7 +108,7 @@ module Fetcher
                 logger.info "===> Update Mixpanel event/properties '#{p_data[:target_id]}'..."
                 self.model_class.update_all(
                   { :content => json_data, 
-                    :format => FORMATS[:json],
+                    :format => params[:format],
                     :request_url => p_data[:request_url]
                   },
                   ["target_id = ? AND credential = ?", p_data[:target_id], credential[:api_key]]
@@ -111,7 +119,7 @@ module Fetcher
                   :content => json_data, 
                   :target_id => p_data[:target_id],
                   :event_name => params[:event],
-                  :format => FORMATS[:json],
+                  :format => params[:format],
                   :credential => credential[:api_key],
                   :request_url => p_data[:request_url]
                 })
@@ -165,7 +173,8 @@ module Fetcher
               should_save = false # Flag to save the data to DB or not.
               should_update = false # Flag to update existing record.
               
-              json_data = {name => data[property_name]}.to_json
+              json_data = {property_name => data[property_name]}.to_json
+              is_empty = data[property_name].blank?
               
               if params[:detect_changes] && !target_ids.blank?
                 if target_ids.include?(property_name)

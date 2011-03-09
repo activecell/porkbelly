@@ -16,15 +16,21 @@ module Fetcher
       
       # Supported format of returned data of the Mixpanel service.
       FORMATS = {:json => 'json', :csv => 'csv'}
+      
+      # The analysis type you would like to get data for,
+      # such as general, unique, or average events. 
       TYPES = {:general => 'general', :unique => 'unique', :average => 'average' }
+      
+      # The unit of measurement to determine the level of granularity of the data you get back.
       UNITS = {:hour => 'hour', :day => 'day', :week => 'week', :month =>'month'}
       
       # Limit of the maximum number of values returned by the service.
       DEFAULT_LIMIT = 255
       
+      # The default number of "units" to return data for - hours, days, weeks, or months. 
       DEFAULT_INTERVAL = 1
       
-      # Keys word in the Mixpanel response
+      # Keys words in the Mixpanel response
       RESPONSE_KEYS = {:legend_size => 'legend_size'}
       
       # Default API URLs
@@ -44,21 +50,14 @@ module Fetcher
       end
       
       # Get a list of existence keys from db based on the given credential
-      # params:
-      #   credential: the value of api_key.
+      # == Parameters:
+      #   |+ credential: the value of api_key.
       def existence_keys(credential)
         keys = self.model_class.where("credential = ?", credential).select(:target_id).all
         if(!keys.blank?)
           return keys.collect{|entry| entry.target_id}
         end
         return nil
-      end
-    
-      # Extract unique identifiers from the response(xml/json)
-      # params:
-      #   response: xml/json response
-      def extract_keys(response)
-        # Do nothing.
       end
       
       #------  End abstract class implementation. --------#
@@ -116,7 +115,7 @@ module Fetcher
           MixpanelClientExt.set_api_version(MIXPANEL_CONFIG['version'])
         end
         
-        @client = MixpanelClientExt.new( 'api_key' => @credential[:api_key], 
+        @client = MixpanelClientExt.new('api_key' => @credential[:api_key], 
                                       'api_secret' => @credential[:api_secret])
       end
       
@@ -133,6 +132,8 @@ module Fetcher
       
       # Setup and prepare default (required) parameters for 
       # the request to Mixpanel API service.
+      # NOTE: all parameters are specified by Mixpanel Data API (http://mixpanel.com/api/docs/guides/api/v2),
+      #       except two special params :detect_changes and :update are our custom params.
       # == Parameters:
       #   + params: hash containing your optional parameters need preparing.
       # == Returned value:
@@ -140,7 +141,7 @@ module Fetcher
       def setup_params(params={})
         params.to_options!
         
-        # Set default params.
+        # Set Mixpanel params.
         if params[:type].blank?
           params[:type] = MIXPANEL_CONFIG['params']['type'] || TYPES[:general]
         end
@@ -161,6 +162,16 @@ module Fetcher
           params[:limit] = MIXPANEL_CONFIG['params']['limit'] || DEFAULT_LIMIT
         end
         
+        # Setup optional parameters.
+        [:event, :funnel, :name, :values, :bucket].each do |key|
+          if !params.has_key?(key)
+            params[key] = nil
+          end
+        end    
+        
+        # End setup Mixpanel params.
+        
+        # Setup our custom params
         if !params.has_key?(:detect_changes)
           # Auto detect changes          
           params[:detect_changes] = true
@@ -172,12 +183,7 @@ module Fetcher
           params[:update] = true
         end
         
-        # Setup optional parameters.
-        [:event, :funnel, :name, :values, :bucket].each do |key|
-          if !params.has_key?(key)
-            params[key] = nil
-          end
-        end        
+        # End custom params.
         
         return params
       end
@@ -209,6 +215,8 @@ module Fetcher
       # == Returned value:
       #   + A hash of {:api_key => "<api_key>". :api_secret => "<api_secret>"}.
       #   + Or, an array of hashes {:api_key => "<api_key>". :api_secret => "<api_secret>"}
+      # == Exception:
+      #   An ArgumentError will be raise if the credential is not valid.
       def normalize_credential!(credential)
         tmp_credential = credential
         if(tmp_credential.is_a?(String))
