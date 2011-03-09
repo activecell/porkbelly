@@ -28,7 +28,6 @@ module Fetcher
         profile_names = contents[3]
         profile_ids = contents[4]
         dxp_table_ids = contents[5]
-        ga_profile =  ::GA::Profile
         i = 0
         for i in (i..entries.size - 1) do
           entry = entries[i]
@@ -37,16 +36,17 @@ module Fetcher
           profile_name = profile_names[i]
           profile_id = profile_ids[i]
           dxp_table_id = dxp_table_ids[i]
-          ga_profile.create(:account_id => a_id, 
-                            :web_property_id => wp_id, 
-                            :entry => entry.to_s, 
-                            :profile_name => profile_name.to_s, 
-                            :profile_id => profile_id,
-                            :dxp_table_id => dxp_table_id, 
-                            :content => response.to_s, 
-                            :credential => credential, 
-                            :request_url => request_url, 
-                            :format => "xml")
+          ga_profile =  ::GA::Profile.find_or_initialize_by_profile_id(profile_id)
+          ga_profile.update_attributes({:account_id => a_id, 
+                                        :web_property_id => wp_id, 
+                                        :entry => entry.to_s, 
+                                        :profile_name => profile_name.to_s, 
+                                        :profile_id => profile_id,
+                                        :dxp_table_id => dxp_table_id, 
+                                        :content => response.to_s, 
+                                        :credential => credential, 
+                                        :request_url => request_url, 
+                                        :format => "xml"})
         end
       end
 

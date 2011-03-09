@@ -90,16 +90,20 @@ module Fetcher
 
       def extract_goal(response)
         entries = Nokogiri::XML(response).search("entry")
+        entry_ids = Array.new
         profile_ids = Array.new
         goal_names = Array.new
         contents = Array.new
+        entries.search("id").each do |goal|
+          entry_ids << goal.text.to_s
+        end
         entries.xpath("//ga:goal").each do |goal|
           goal_names << goal.attribute('name').value
         end
         entries.xpath("//dxp:property").each do |dxp_prop|
           profile_ids << dxp_prop.attribute('value').value
         end
-        contents = [entries, profile_ids, goal_names]
+        contents = [entries, entry_ids, profile_ids, goal_names]
       end
 
     end

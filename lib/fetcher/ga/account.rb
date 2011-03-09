@@ -21,7 +21,11 @@ module Fetcher
       def save_account(account_id, content, credential, request_url)
         ga_account =  ::GA::Account.find_or_initialize_by_account_id(account_id)
         logger.info ga_account.inspect
-        ga_account.update_attributes({:account_id => account_id, :content => content, :credential => credential, :request_url => request_url})
+        ga_account.update_attributes({:account_id => account_id,
+                                      :content => content, 
+                                      :credential => credential, 
+                                      :request_url => request_url,
+                                      :format => "xml"})
       end
 
     end

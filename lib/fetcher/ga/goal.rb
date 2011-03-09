@@ -25,21 +25,24 @@ GA_CONFIG["apis"]["profiles"] + "/" + profile_id.to_s + GA_CONFIG["apis"]["goals
 
       def save_goal(response, contents, credential, request_url)
         entries = contents[0]
-        profile_ids = contents[1]
-        goal_names = contents[2]
-        ga_goal =  ::GA::Goal
+        entry_ids = contents[1]
+        profile_ids = contents[2]
+        goal_names = contents[3]
         i = 0
         for i in (i..entries.size - 1) do
           entry = entries[i]
+          entry_id = entry_ids[i]
           profile_id = profile_ids[i]
           name = goal_names[i]
-          ga_goal.create(:entry => entry.to_s, 
+          ga_goal =  ::GA::Goal.find_or_initialize_by_entry_id(entry_id)
+          ga_goal.update_attributes({:entry => entry.to_s, 
+                         :entry_id => entry_id,
                          :profile_id => profile_id,
                          :name => name,
                          :content => response.to_s, 
                          :credential => credential, 
                          :request_url => request_url, 
-                         :format => "xml")
+                         :format => "xml"})
         end
       end
 
