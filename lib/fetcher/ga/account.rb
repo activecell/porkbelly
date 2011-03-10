@@ -14,6 +14,7 @@ module Fetcher
         begin
           save_account(account_id, content, credential, request_url)
         rescue 
+          #TODO: send email here  
           raise "Data is not fully propered or adequate"
         end
       end
@@ -26,6 +27,12 @@ module Fetcher
                                       :credential => credential, 
                                       :request_url => request_url,
                                       :format => "xml"})
+      end
+
+      def extract_account_id(response)
+        entry = Nokogiri::XML(response).search("entry")
+        account_id = entry.at_xpath("dxp:property").values[1]
+        account_id
       end
 
     end

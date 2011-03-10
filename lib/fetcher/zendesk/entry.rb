@@ -4,10 +4,12 @@ module Fetcher
       include Fetcher::Zendesk::Base
 
       attr_accessor :content_keys, :forums
+
       def load_forum_ids
         zendesk_forum = ::Zendesk::Forum
         @forums = zendesk_forum.find(:all)
       end
+
       def fetch_entry(credential)
         load_forum_ids
         @forums.each do |f|
