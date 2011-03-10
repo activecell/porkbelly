@@ -1,0 +1,13 @@
+{'Signup flow': {'meta': {'date': '2010-05-28 23:00:00'},
+                 'names': [{'count': 2,
+                            'name': 'authentication',
+                            'property': 'authentication'},
+                           {'count': 1,
+                            'name': 'utm_source',
+                            'property': 'utm_source'},
+                           {'count': 1132,
+                            'name': 'view features',
+                            'property': 'view features'},
+                           {'count': 1131,
+                            'name': 'test_version',
+                            'property': 'test_version'}]}}

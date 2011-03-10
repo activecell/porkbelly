@@ -29,8 +29,7 @@ module Fetcher
       def fetch_all_funnel_properties(params={}, save_to_db=true)
         params = setup_params(params)
         self.model_class = ::Mixpanel::FunnelProperty
-        funnel_name = params[:funnel]
-        
+
         property_names = []
         if params[:name]
           if params[:name].is_a?(Array)
@@ -51,15 +50,12 @@ module Fetcher
         property_data = []
         
         method_url = get_method_url('funnels_properties')
-        property_names.each do |property_name|
-          data = client.request do
-            resource  method_url #'funnels/properties'
-            funnel    funnel_name
-            name      property_name
-            unit      params[:unit]
-            interval  params[:interval]
-            limit     params[:limit]
-          end
+        property_names.each do |property_name|        
+          request_params = self.select_params(params, [:funnel, :unit, :interval, :limit])
+          request_params[:resource] = method_url
+          request_params[:name] = property_name
+          
+          data = send_request(request_params)
           
           property_data << {
             :target_id => property_name, 
@@ -71,52 +67,18 @@ module Fetcher
         if save_to_db && !property_data.blank?
           self.model_class.transaction do
             # Get existing key in DB.
-            target_ids = nil
-            if params[:detect_changes]
-              target_ids = self.existence_keys(self.credential[:api_key])
-            end
+            target_ids = get_target_ids(params)
             
             property_data.each do |p_data|
-              should_save = false # Flag to save the data to DB or not.
-              should_update = false # Flag to update the record or not.
+              next if p_data[:content].blank?
               
-              # Detect data is empty or not
-              is_empty = (p_data[:content].blank?)
+              attrs = {
+                :funnel_name => params[:funnel],
+                :request_url => p_data[:request_url]
+              }
               
-              json_data = p_data[:content].to_json
-              
-              if !is_empty && params[:detect_changes] && !target_ids.blank?
-                if target_ids.include? p_data[:target_id]
-                  # Detect data were changed
-                  should_save = check_changes(json_data, p_data[:request_url],  p_data[:target_id])
-                  should_update = true
-                else
-                  should_save = true
-                end
-              elsif !is_empty
-                should_save = true
-              end
-              
-              if should_save && should_update && params[:update]
-                logger.info "===> Update Mixpanel funnels/properties '#{p_data[:target_id]}'..."
-                self.model_class.update_all(
-                  { :content => json_data, 
-                    :format => FORMATS[:json],
-                    :request_url =>  p_data[:request_url]
-                  },
-                  ["target_id = ? AND credential = ?", p_data[:target_id], credential[:api_key]]
-                )
-              elsif should_save
-                logger.info "===> Insert new Mixpanel funnels/properties ..." 
-                record = self.model_class.create!({
-                  :content => json_data, 
-                  :target_id =>  p_data[:target_id],
-                  :funnel_name => params[:funnel],
-                  :format => FORMATS[:json],
-                  :credential => credential[:api_key],
-                  :request_url => p_data[:request_url]
-                })
-              end
+              self.insert_or_update(params, target_ids, p_data[:target_id], 
+                p_data[:content].to_json, attrs)
             end
           end
         end
@@ -159,13 +121,12 @@ module Fetcher
         
         method_url = get_method_url('funnels_properties', 'names')
         funnel_names.each do |funnel_name|
-          data = client.request do
-            resource  method_url #'funnels/properties/names'
-            funnel    funnel_name
-            unit      params[:unit]
-            interval  params[:interval]
-            limit     params[:limit]
-          end          
+          request_params = self.select_params(params, [:unit, :interval, :limit])
+          request_params[:resource] = method_url
+          request_params[:funnel] = funnel_name
+          
+          data = send_request(request_params)
+          
           property_data << {
             :target_id => funnel_name, 
             :request_url => current_url, 
@@ -176,52 +137,18 @@ module Fetcher
         if save_to_db && !property_data.blank?
           self.model_class.transaction do
             # Get existing keys from DB.
-            target_ids = nil
-            if params[:detect_changes]
-              target_ids = self.existence_keys(self.credential[:api_key])
-            end
+            target_ids = get_target_ids(params)
             
             property_data.each do |p_data|
-              should_save = false # Flag to save the data to DB or not.
-              should_update = false
+              next if p_data[:content].blank?
               
-              # Detect data is empty or not
-              is_empty = (p_data[:content].blank?)
+              attrs = {
+                :funnel_name => params[:funnel],
+                :request_url => p_data[:request_url]
+              }
               
-              json_data = p_data[:content].to_json
-              
-              if !is_empty && params[:detect_changes] & !target_ids.blank?
-                if target_ids.include p_data[:target_id]
-                  # Detect data were changed
-                  should_save = check_changes(json_data, p_data[:request_url], p_data[:target_id])
-                  should_update = true
-                else
-                  should_save = true
-                end
-              elsif !is_empty
-                should_save = true
-              end
-              
-              if should_save && should_update && params[:update]
-                logger.info "===> Update Mixpanel funnels/properties/names '#{p_data[:target_id]}'..."
-                self.model_class.update_all(
-                  { :content => json_data, 
-                    :format => FORMATS[:json],
-                    :request_url => p_data[:request_url]
-                  },
-                  ["target_id = ? AND credential = ?", p_data[:target_id], credential[:api_key]]
-                )
-              elsif should_save
-                logger.info "===> Insert new Mixpanel funnels/properties/names ..."            
-                record = self.model_class.create!({
-                  :content => json_data, 
-                  :target_id => p_data[:target_id],
-                  :funnel_name => params[:funnel],
-                  :format => FORMATS[:json],
-                  :credential => credential[:api_key],
-                  :request_url => p_data[:request_url]
-                })
-              end
+              self.insert_or_update(params, target_ids, p_data[:target_id], 
+                p_data[:content].to_json, attrs)
             end
           end
         end

@@ -47,25 +47,19 @@ module Fetcher
         
         # Get events data.
         method_url = get_method_url('events')
-        event_data = client.request do
-          resource method_url #'events'
-          event    event_names.to_json
-          type     params[:type]
-          unit     params[:unit]
-          interval params[:interval]
-          format   params[:format]
-          bucket   params[:bucket]
-        end
+        
+        request_params = self.select_params(params, [:type, :unit, :interval, :format, :bucket])
+        request_params[:resource] = method_url
+        request_params[:event] = event_names.to_json
+                
+        event_data = send_request(request_params)
         
         # Detect event data is empty or not
         is_empty = (event_data.blank? || event_data[RESPONSE_KEYS[:legend_size]].to_i <= 0)
         if save_to_db && !is_empty
           self.model_class.transaction do            
             # Get all target ids existing in DB, in order to detect data was changed or not.
-            target_ids = nil
-            if params[:detect_changes]
-              target_ids = self.existence_keys(self.credential[:api_key])
-            end
+            target_ids = get_target_ids(params)
             
             # Sample data:
             # {'data': {'series': ['2010-05-29',
@@ -103,38 +97,8 @@ module Fetcher
               # Format hash to JSON.
               json_data = origin_data.to_json
               
-              should_save = true # Flag to save the data to DB or not.
-              should_update = false # Flag to update the record or not.
-              
-              if params[:detect_changes] && !target_ids.blank?
-                if target_ids.include?(event_name)
-                  # The record with given keys existed, check it's content.
-                  should_save = check_changes(json_data, current_url, event_name)
-                  should_update = true
-                else
-                  should_save = true # The record does not exist, so insert the new one.
-                end
-              end
-              
-              if should_save && should_update && params[:update]
-                logger.info "===> Update Mixpanel event '#{event_name}'..."
-                self.model_class.update_all(
-                  { :content => json_data, 
-                    :format => params[:format],
-                    :request_url => current_url
-                  },
-                  ["target_id = ? AND credential = ?", event_name, credential[:api_key]]
-                )
-              elsif should_save
-                logger.info "===> Insert new Mixpanel event '#{event_name}'..."
-                record = self.model_class.create!({
-                  :content => json_data, 
-                  :target_id  => event_name,
-                  :format => params[:format],
-                  :credential => credential[:api_key],
-                  :request_url => current_url
-                })
-              end
+              self.insert_or_update(params, target_ids, 
+                event_name, json_data)
             end
           end
         end
@@ -162,19 +126,14 @@ module Fetcher
         self.model_class = ::Mixpanel::Event
         
         method_url = get_method_url('events', 'top')
-        data = client.request do
-          resource method_url #'events/top'
-          type     params[:type]
-          limit    params[:limit]
-          bucket   params[:bucket]
-        end
+        request_params = self.select_params(params, [:type, :limit, :bucket])
+        request_params[:resource] = method_url
+        
+        data = send_request(request_params)
         
         is_empty = (data.blank? || data['events'].blank?)
         if save_to_db && !is_empty
-          target_ids = nil
-          if params[:detect_changes]
-            target_ids = self.existence_keys(self.credential[:api_key])
-          end          
+          target_ids = get_target_ids(params)        
           
           self.model_class.transaction do
             data['events'].each do |event|
@@ -182,45 +141,8 @@ module Fetcher
               # Format to JSON data.
               json_data = {:events => event}.to_json
               
-              should_save = false # Flag to save the data to DB or not.
-              should_update = false
-              
-              # Detect data is empty or not
-              is_event_empty = event.blank?
-              
-              if !is_event_empty && params[:detect_changes] && !target_ids.blank?
-                # Detect data were changed
-                if target_ids.include?(target_id)
-                  # The record with given keys existed, check it's content.
-                  should_save = check_changes(json_data, current_url, target_id)
-                  should_update = true
-                else
-                  should_save = true # The record does not exist, so insert the new one.
-                end
-              elsif !is_event_empty
-                # Insert a new record.
-                should_save = true
-              end
-              
-              if should_save && should_update && params[:update]
-                logger.info "===> Update Mixpanel event/top '#{target_id}'..."
-                self.model_class.update_all(
-                  { :content => json_data, 
-                    :format => FORMATS[:json],
-                    :request_url => current_url
-                  },
-                  ["target_id = ? AND credential = ?", target_id, credential[:api_key]]
-                )
-              elsif should_save
-                logger.info "===> Insert new Mixpanel events/top '#{target_id}'..."
-                record = self.model_class.create!({
-                  :content => json_data, 
-                  :target_id => target_id,
-                  :format => FORMATS[:json],
-                  :credential => credential[:api_key],
-                  :request_url => current_url
-                })
-              end
+              self.insert_or_update(params, target_ids, 
+                target_id, json_data)
             end
           end         
         end
@@ -245,44 +167,26 @@ module Fetcher
       #   An array of events' names.
       def fetch_event_names(params={}, save_to_db=true)
         params = setup_params(params)
+        
+        # Mixpanel does not support tracking events' names were changed.
+        params[:update] = false
+        
         self.model_class = ::Mixpanel::Event
         
         method_url = get_method_url('events', 'names')
-        data = client.request do
-          resource  method_url #'events/names'
-          type      params[:type]
-          unit      params[:unit]
-          interval  params[:interval]
-          limit     params[:limit]
-          bucket    params[:bucket]
-        end
+        request_params = self.select_params(params, [:type, :unit, :interval, 
+          :limit, :bucket])
+        request_params[:resource] = method_url
+        
+        data = send_request(request_params)
         
         if save_to_db && !data.blank?
           self.model_class.transaction do
-            target_ids = nil
-            if params[:detect_changes]
-              target_ids = self.existence_keys(self.credential[:api_key])
-            end
+            target_ids = get_target_ids(params)
             
             data.each do |name|
-              should_save = false
-              if params[:detect_changes] && !target_ids.blank?
-                should_save = !target_ids.include?(name)
-              else
-                should_save = true
-              end
-              
-              if should_save
-                # insert data into database
-                logger.info "===> Insert event name '#{name}' ..."
-                record = self.model_class.create!({
-                  :content => name, 
-                  :target_id => name,
-                  :format => FORMATS[:json],
-                  :credential => credential[:api_key],
-                  :request_url => current_url
-                })
-              end
+              self.insert_or_update(params, target_ids, 
+                name, name)
             end
           end
         end
@@ -325,41 +229,15 @@ module Fetcher
         end
         
         method_url = get_method_url('events', 'retention')
-        data = client.request do
-          resource method_url #'events/retention'
-          event    event_names.to_json
-          unit     params[:unit]
-          interval params[:interval]
-          format   params[:format]
-          bucket   params[:bucket]
-        end
+        request_params = self.select_params(params, [:unit, :interval, 
+          :format, :bucket])
+        request_params[:resource] = method_url
+        request_params[:event] = event_names.to_json
         
-        # Format to JSON data.
-        json_data = data.to_json
+        data = send_request(request_params)
         
-        if save_to_db
-          should_save = false # Flag to save the data to DB or not.
-          
-          # Detect data is empty or not
-          is_empty = false#(data.blank? || data[RESPONSE_KEYS[:legend_size]].to_i <= 0)
-          
-          if !is_empty && params[:detect_changes]
-            # Detect data were changed
-            should_save = check_changes(json_data, current_url, current_url)
-          elsif !is_empty
-            should_save = true
-          end
-          
-          if should_save
-            logger.info "===> Insert data of events/retention ..."
-            record = self.model_class.create!({
-              :content => json_data,
-              :target_id => current_url,
-              :format => params[:format],
-              :credential => credential[:api_key],
-              :request_url => current_url
-            })
-          end
+        if save_to_db && !data.blank?
+          self.insert_or_update(params, nil, current_url, data.to_json)
         end
         return data
       end

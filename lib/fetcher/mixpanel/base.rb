@@ -134,6 +134,9 @@ module Fetcher
       # the request to Mixpanel API service.
       # NOTE: all parameters are specified by Mixpanel Data API (http://mixpanel.com/api/docs/guides/api/v2),
       #       except two special params :detect_changes and :update are our custom params.
+      # To avoid error when use the params (returned by this method) with method 'send_request()',
+      # you should select necessary params by calling the method 'select_params()',
+      # then pass the value to the 'send_request()' method
       # == Parameters:
       #   + params: hash containing your optional parameters need preparing.
       # == Returned value:
@@ -188,6 +191,36 @@ module Fetcher
         return params
       end
       
+      # Select only necessary parameters in the parent hash of params.
+      # == Parameters:
+      #   + params: the origin hash of parameters. This hash can contains a great number of unnecessary parameters.
+      #   + keys: an array of names (or keys) of your necessary parameters.
+      # == Returned value:
+      #   A new hash.
+      def select_params(params, keys)
+        params.select {|k,v| keys.include?(k)}
+      end
+      
+      # Send request to Mixpanel API service by using MixpanelClient.
+      # == Parameters:
+      #   + A hash whose keys are matched with supported parameters of Mixpanel Client.
+      # == Returned value:
+      #   The response from Mixpanel service.
+      def send_request(params)        
+        str_block = ""
+        params.each{|method, value| 
+          if value.nil?
+            str_block << "#{method} nil \n"
+          else
+            str_block << "#{method} '#{value}'\n"
+          end
+        }
+        
+        client.request do
+          eval(str_block)
+        end
+      end
+      
       # Check data associate with the 'target_id' and 'request_url' was changed or not.
       # This method will compare the passed 'data' to the existing data in DB.
       # == Parameters:
@@ -204,6 +237,69 @@ module Fetcher
         end
         
         return false
+      end
+      
+      # Gets collection of IDs
+      # == Parameters:
+      #   + params: a hash. Required item: params[:detect_changes] = true (or false)
+      def get_target_ids(params)
+        if params[:detect_changes]
+          return self.existence_keys(self.credential[:api_key])
+        end
+      end
+      
+      def insert_or_update(logic_params, target_ids_array, target_id, data, model_attrs={})
+        model_attrs ||= {}
+                
+        is_empty = data.blank?
+        should_save = true # Flag to save the data to DB or not.
+        should_update = false # Flag to update the record or not.
+        
+        # --------------------------
+        # Logic code to setup value for two flags should_save & should_update.
+        # -------------------------
+        
+        # Get the request url in the model params or current url.
+        url = (model_attrs && !model_attrs[:request_url].blank? ?
+                model_attrs[:request_url] : self.current_url)
+        
+        if !is_empty && logic_params[:detect_changes] && 
+            !target_ids_array.blank?
+          if target_ids_array.include?(target_id)               
+            # Detect data were changed        
+            should_save = check_changes(data, url, target_id)
+            should_update = true
+          else
+            should_save = true
+          end
+        elsif !is_empty
+          should_save = true
+        end
+
+        # --------------------------
+        # Perform insert, update or nothing ;)
+        # --------------------------
+        if should_save && should_update && logic_params[:update]
+          logger.info "===> Update #{self.model_class}: '#{target_id}'..."
+          self.model_class.update_all(
+            { :content      => data, 
+              :format       => logic_params[:format],
+              :request_url  => url
+            },
+            ["target_id = ? AND credential = ?", target_id, credential[:api_key]]
+          )
+        elsif should_save
+          logger.info "===> Insert new #{self.model_class} ..." 
+          basic_attrs = {
+            :content      => data, 
+            :target_id    => target_id,
+            :format       => logic_params[:format],
+            :credential   => credential[:api_key],
+            :request_url  => url
+          }      
+          basic_attrs.merge!(model_attrs)          
+          self.model_class.create!(basic_attrs)
+        end
       end
       
       # Normalize credential, this will raise an ArgumentError if the credential is invalid.

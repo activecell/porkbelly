@@ -122,7 +122,7 @@ describe "Module: Fetcher::Mixpanel" do
       end
     end
     
-    describe "Method:  setup_params(params={})" do
+    describe "Method: setup_params(params={})" do
       it "should setup default value for missing parameters" do
         params = {}
         @all.setup_params(params)
@@ -133,6 +133,36 @@ describe "Module: Fetcher::Mixpanel" do
         params = {:detect_changes => false}
         @all.setup_params(params)
         (params[:detect_changes] == false).should be_true
+      end
+    end
+    
+    describe "Method: select_params(params, keys)" do
+      it "should select necessary params specified by the keys" do
+        params = {:a => 1, :b => 2, :c => 3, :d => 4}
+        keys = [:a, :b]
+        
+        expected = {:a => 1, :b => 2}
+        actual = @all.select_params(params, keys)
+        
+        (actual.length == expected.length &&
+          actual.each{|k, v| v == expected[k]}).should be_true
+      end
+    end
+    
+    describe "Method: send_request(params)" do
+      it "should pass the correct block to the client.request method" do
+        block = lambda{
+          puts "events"
+          p "['login']"
+        }
+        
+        response = mock("Mixpanel Response")
+        params = {:puts => "events", :p => "['login']"}
+        @all.client.should_receive(:request).with(&block).and_return(response)
+        
+        # The same as above.
+        #@all.client.stub!(:request).with(&block).and_return(response)
+        @all.send_request(params)
       end
     end
     
@@ -818,8 +848,8 @@ describe "Module: Fetcher::Mixpanel" do
           @request_url,  property_name, @all.credential[:api_key]]
         ).all
         
-        #~ property_data << {:target_id => property_name, 
-            #~ :request_url => current_url, :content => data}
+        #property_data << {:target_id => property_name, 
+        #    :request_url => current_url, :content => data}
             
         (data[0][:content] == @property_values && records.blank?).should be_true
       end
@@ -839,8 +869,8 @@ describe "Module: Fetcher::Mixpanel" do
           @request_url,  property_name, @all.credential[:api_key]]
         ).all
         
-        #~ property_data << {:target_id => property_name, 
-            #~ :request_url => current_url, :content => data}
+        #property_data << {:target_id => property_name, 
+        #    :request_url => current_url, :content => data}
             
         (data[0][:content] == @property_values && 
           records.first.target_id == property_name).should be_true
@@ -882,7 +912,7 @@ describe "Module: Fetcher::Mixpanel" do
         (data == @funnels && records.blank?).should be_true
       end
       
-      it "should not save to db if 'save_to_db'=false" do
+      it "should save to db if 'save_to_db'=true" do
         params = {}
         save_to_db = true
         
@@ -989,7 +1019,46 @@ describe "Module: Fetcher::Mixpanel" do
     end
     
     describe "fetch_funnel_dates(params={}, save_to_db=true)" do
+      before (:each) do
+        @request_url = "http://www.mixpanel.com/funnels/dates/?test=1"
+        @all.stub!(:current_url).and_return(@request_url)
+        @funnel_dates = JSON.parse(Mixpanel::Util.load_fixture("funnel_dates"))
+        @all.stub_chain(:client, :request).and_return(@funnel_dates)
+      end
       
+      it "should not save funnel dates to DB if 'save_to_db'=false " do
+        ::Mixpanel::Funnel.delete_all
+        funnel_name = @funnel_names[0]
+        params = {:funnel => funnel_name}
+        save_to_db = false
+        dates = @all.fetch_funnel_dates(params, save_to_db)
+        
+        # Check whether the data was saved to DB.
+        records = @all.model_class.where([
+          "request_url = ? AND target_id = ? AND credential = ?", 
+          @request_url, funnel_name, @all.credential[:api_key]]
+        ).all
+        
+        (dates == @funnel_dates && records.blank?).should be_true
+      end
+      
+      it "should save funnel dates to DB if 'save_to_db'=true " do 
+        ::Mixpanel::Funnel.delete_all
+        funnel_name = @funnel_names[0]
+        params = {:funnel => funnel_name}
+        save_to_db = true
+        dates = @all.fetch_funnel_dates(params, save_to_db)
+        
+        # Check whether the data was saved to DB.
+        records = @all.model_class.where([
+          "request_url = ? AND target_id = ? AND credential = ?", 
+          @request_url, funnel_name, @all.credential[:api_key]]
+        ).all
+        
+        puts "===== Funnels dates record: #{records}"
+        (dates == @funnel_dates && !records.blank? &&
+          records.first.target_id == funnel_name).should be_true
+      end
     end
     
     describe "fetch_funnel_names(params={}, save_to_db=true)" do
@@ -1024,14 +1093,51 @@ describe "Module: Fetcher::Mixpanel" do
           @request_url,  @funnel_names[0], @all.credential[:api_key]]
         ).all
         
-        (names == @funnel_names && records.blank?).should be_true
+        (names == @funnel_names && !records.blank? && 
+          records.first.target_id == @funnel_names[0]).should be_true
       end
     end
   end
   
   describe "Module: FunnelProperty" do
+    before(:each) do
+      @request_url = "http://www.mixpanel.com/funnels/dates/?test=1"
+      @funnel_properties = JSON.parse(Mixpanel::Util.load_fixture("funnel_properties"))
+      @funnel_property_names = JSON.parse(Mixpanel::Util.load_fixture("funnel_property_names"))
+      @funnel_name = "Test Funnel"
+    end
+    
     describe "fetch_all_funnel_properties(params={}, save_to_db=true)" do
-      
+      before(:each) do
+        @request_url = "http://www.mixpanel.com/funnels/properties/?test=1"
+        @all.stub!(:current_url).and_return(@request_url)        
+        @all.stub_chain(:client, :request).and_return(@funnel_properties)
+      end
+      it "should save to db if 'save_to_db'=true" do
+        params = {:funnel => @funnel_name}
+        
+        save_to_db = true
+        proper_names = [{
+          :target_id => @funnel_name, 
+          :request_url => @request_url, 
+          :content => @funnel_property_names
+        }]
+        
+        names = @all.stub!(:fetch_funnel_property_names).with(params, false).and_return(proper_names)
+        
+        property_name = @funnel_property_names.keys[0]
+        
+        data = @all.fetch_all_funnel_properties(params, save_to_db)
+        
+        # Check whether the data was saved to DB.
+        records = @all.model_class.where([
+          "request_url = ? AND target_id = ? AND credential = ?", 
+          @request_url,  property_name, @all.credential[:api_key]]
+        ).all
+        
+        (!records.blank? && 
+          records.first.target_id == property_name).should be_true
+      end
     end
     
     describe "fetch_funnel_property_names(params={}, save_to_db=true)" do
