@@ -3,7 +3,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "config", "boot"))
 require File.expand_path(File.join(File.dirname(__FILE__), "lib", "fetcher"))
 require "active_record"
 require "yaml"
-require "sqlite3"
+require "pg"
 
 PROJECT_DIR = File.dirname(__FILE__)
 DATABASE_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
@@ -133,7 +133,7 @@ namespace :site do
           Get all data of the Zendesk site
         Usage: 
           rake site:zendesk credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
-          rake site:zendesk credential=<username>:<password> #=> get all data of the given credential
+          rake site:zendesk credential=<subdomain>:<username>:<password> #=> get all data of the given credential
           Replace variable in <> with actual params
         **************************
       }
@@ -141,7 +141,7 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::Zendesk::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456"})
+      client = Fetcher::Zendesk::All.new({:subdomain => "tpltest", :username => "utwkidvn@gmail.com", :password => "tpl123456"})
       client.fetch_all
     end
   end
@@ -165,6 +165,7 @@ namespace :site do
         raise usage
       end
       client = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456"})
+#      client = Fetcher::GA::All.new({:username => "tinn988@gmail.com", :password => "pedigree"})
       client.fetch_all
     end
   end
