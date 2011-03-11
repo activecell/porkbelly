@@ -28,6 +28,7 @@ module Fetcher
                   data = send(method, params)
                 rescue Exception => exc
                   logger.error "Error when run method '#{method}' with params='#{params}'"
+                  notify_exception(SITE, exc)
                 end
               end
             end
@@ -36,8 +37,9 @@ module Fetcher
           end
           return data  
         rescue Exception => exception
-          #notify_exception(SITE, exception)
-          raise exception
+          logger.error(exception)
+          notify_exception(SITE, exception)
+          #raise exception
         end
       end
       
@@ -50,8 +52,7 @@ module Fetcher
           @@funnel_support_methods +
           @@funnel_property_support_methods
           
-        @@supported_method << 'fetch_all'
-        
+        @@supported_method << 'fetch_all'        
       end
       
       def supported_methods

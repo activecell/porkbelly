@@ -1,4 +1,5 @@
 require 'cgi'
+require 'rubygems'
 require 'rest_client'
 require 'nokogiri'
 require "active_support/core_ext"
@@ -30,14 +31,12 @@ module Fetcher
       attr_accessor :model_class
       attr_accessor :current_url
       
+      #------ Implemetation of abstract Base class ------#
+      
       @@logger = BaseLogger.new(File.join(File.dirname(__FILE__), "..", "..", "..", "log", "pivotal_tracker.log"))
       def logger
         @@logger
       end
-      
-      #------ Implemetation of abstract Base class ------#
-      
-      
       
       #------  End abstract class implementation. --------#
       
@@ -233,6 +232,9 @@ module Fetcher
           end
           
         rescue Exception => exception
+          logger.error exception
+          logger.error exception.backtrace
+          notify_exception(SITE, exception) 
           raise exception
         end
         

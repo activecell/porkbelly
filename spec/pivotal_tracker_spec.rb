@@ -290,7 +290,7 @@ describe "Module: Fetcher::PivotalTracker" do
         r1 = ::PivotalTracker::Activity.find_by_target_id('59596685')
         r2 = ::PivotalTracker::Activity.find_by_target_id('59596663')
         
-        (result[0] == '59596685' && result[1] == '59596663' && 
+        (result.include?('59596685') && result.include?('59596663') && 
           r1 != nil && r2 != nil).should be_true
       end
     end
@@ -348,7 +348,7 @@ describe "Module: Fetcher::PivotalTracker" do
         
         r1 = ::PivotalTracker::Iteration.find_by_target_id('1')
         r2 = ::PivotalTracker::Iteration.find_by_target_id('2')
-        (result[0] == '1' && result[1] == '2' &&
+        (result.include?('1') && result.include?('2') &&
           r1 != nil && r2 != nil).should be_true
       end
     end
@@ -388,7 +388,7 @@ describe "Module: Fetcher::PivotalTracker" do
         
         r1 = ::PivotalTracker::Story.find_by_target_id('6256883')
         r2 = ::PivotalTracker::Story.find_by_target_id('6500875')
-        (result[0] == '6256883' && result[1] == '6500875' &&
+        (result.include?('6256883') && result.include?('6500875') &&
           r1 != nil && r2 != nil).should be_true
       end
     end

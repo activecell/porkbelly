@@ -14,8 +14,8 @@ module Fetcher
       #   http://mixpanel.com/api/docs/guides/api/v2#event-properties-default
       # == Parameters:
       #   + params: hash of parameters for the request.
-      #       - params[:name]: single or array of properties to fetch. If no property is specified.
-      #           The method will automatically get all properties (within a time interval)
+      #       - params[:name]: single or array of properties to fetch. If no property is specified,
+      #           the method will automatically get all properties (within a time interval)
       #       Two special parameters: 
       #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
       #         - params[:update]: specify to update the existing record or insert the new one. 
@@ -53,15 +53,13 @@ module Fetcher
         
         property_data = []
         
-        method_url = get_method_url('events_properties')        
-        property_names.each do |proper_name|
-          request_params = self.select_params(params, [:event, :values, :type, 
+        request_params = self.select_params(params, [:event, :values, :type, 
             :unit, :interval, :format, :bucket])
-          request_params[:resource] = method_url
+        request_params[:resource] = get_method_url('events_properties')
+        
+        property_names.each do |proper_name|
           request_params[:name] = proper_name
-          
           data = send_request(request_params)
-          
           property_data << {
             :target_id => proper_name, 
             :request_url => current_url, 
@@ -112,10 +110,9 @@ module Fetcher
         params = setup_params(params)
         self.model_class = ::Mixpanel::EventProperty
         
-        method_url = get_method_url('events_properties', 'top')
         request_params = self.select_params(params, [:event, :type, :unit, 
           :interval, :limit, :bucket])
-        request_params[:resource] = method_url
+        request_params[:resource] = get_method_url('events_properties', 'top')
         
         data = send_request(request_params)
         
@@ -171,13 +168,12 @@ module Fetcher
         
         property_data = []
         
-        method_url = get_method_url('events_properties', 'values')
-        property_names.each do |property_name|
-          request_params = self.select_params(params, [:event, :type, :unit, 
+        request_params = self.select_params(params, [:event, :type, :unit, 
             :interval, :bucket])
-          request_params[:resource] = method_url
+        request_params[:resource] = get_method_url('events_properties', 'values')
+        
+        property_names.each do |property_name|
           request_params[:name] = property_name
-          
           data = send_request(request_params)
           
           property_data << {:target_id => property_name, 

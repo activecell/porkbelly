@@ -13,8 +13,8 @@ module Fetcher
       #   http://mixpanel.com/api/docs/guides/api/v2#funnel-properties-default
       # == Parameters:
       #   + params: hash of parameters for the request.
-      #       - params[:name]: single or array of funnel properties to fetch. If no properties is specified.
-      #           The method will automatically get all properties (within a time interval)
+      #       - params[:name]: single or array of funnel properties to fetch. If no properties is specified,
+      #           the method will automatically get all properties (within a time interval)
       #       Two special parameters: 
       #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
       #         - params[:update]: specify to update the existing record or insert the new one. 
@@ -49,14 +49,13 @@ module Fetcher
         
         property_data = []
         
-        method_url = get_method_url('funnels_properties')
+        request_params = self.select_params(params, [:funnel, :unit, :interval, :limit])
+        request_params[:resource] = get_method_url('funnels_properties')
+          
+        # Fetch data for each funnel properties.
         property_names.each do |property_name|        
-          request_params = self.select_params(params, [:funnel, :unit, :interval, :limit])
-          request_params[:resource] = method_url
           request_params[:name] = property_name
-          
           data = send_request(request_params)
-          
           property_data << {
             :target_id => property_name, 
             :request_url => current_url,
@@ -64,6 +63,7 @@ module Fetcher
           }
         end
         
+        # Save to DB?
         if save_to_db && !property_data.blank?
           self.model_class.transaction do
             # Get existing key in DB.
@@ -91,8 +91,7 @@ module Fetcher
       #   http://mixpanel.com/api/docs/guides/api/v2#funnel-properties-names
       # == Parameters:
       #   + params: hash of parameters for the request.
-      #       - params[:name]: single or array of funnel properties to fetch. If no properties is specified.
-      #           The method will automatically get all properties (within a time interval)
+      #       - params[:funnel]: single or array of funnels' names.
       #       Two special parameters: 
       #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
       #         - params[:update]: specify to update the existing record or insert the new one. 
@@ -118,15 +117,12 @@ module Fetcher
         end
         
         property_data = []
+        request_params = self.select_params(params, [:unit, :interval, :limit])
+        request_params[:resource] = get_method_url('funnels_properties', 'names')
         
-        method_url = get_method_url('funnels_properties', 'names')
         funnel_names.each do |funnel_name|
-          request_params = self.select_params(params, [:unit, :interval, :limit])
-          request_params[:resource] = method_url
           request_params[:funnel] = funnel_name
-          
           data = send_request(request_params)
-          
           property_data << {
             :target_id => funnel_name, 
             :request_url => current_url, 

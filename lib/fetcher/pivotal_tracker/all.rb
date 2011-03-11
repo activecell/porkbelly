@@ -17,11 +17,9 @@ module Fetcher
       def fetch_all
         begin
           if single_fetch?
-            puts "===> Starting Pivotal Tracker single fetching..."
             logger.info "===> Starting Pivotal Tracker single fetching..."
             fetch_single(self.credential)
           else
-            puts "===> Starting Pivotal Tracker multiple fetching..."
             logger.info "===> Starting Pivotal Tracker multiple fetching..."
             self.credential.each do |c|
               begin
@@ -35,8 +33,7 @@ module Fetcher
         rescue Exception => exc
           logger.error exc
           logger.error exc.backtrace
-          #notify_exception(SITE, exc)
-          raise exc
+          notify_exception(SITE, exc)          
         end
       end
       

@@ -13,8 +13,8 @@ module Fetcher
       #   http://mixpanel.com/api/docs/guides/api/v2#funnels-default
       # == Parameters:
       #   + params: hash of parameters for the request.
-      #       - params[:funnel]: single or array of funnels to fetch. If no funnel is specified.
-      #           The method will automatically get all funnels (within a time interval)
+      #       - params[:funnel]: single or array of funnels to fetch. If no funnel is specified,
+      #           the method will automatically get all funnels (within a time interval)
       #       Two special parameters: 
       #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
       #         - params[:update]: specify to update the existing record or insert the new one. 
@@ -42,16 +42,14 @@ module Fetcher
           funnel_names = self.fetch_funnel_names(params, false)
         end
         
-        method_url = get_method_url('funnels')
         request_params = self.select_params(params, [:unit, :interval])
-        request_params[:resource] = method_url
+        request_params[:resource] = get_method_url('funnels')
         request_params[:funnel] = funnel_names.to_json
         
         data = send_request(request_params)
                   
         if save_to_db && !data.blank?
           self.model_class.transaction do
-            # Detect data were changed
             target_ids = get_target_ids(params)
             
             data.keys.each do |funnel_name|
@@ -90,9 +88,8 @@ module Fetcher
         params[:unit] = 'week'
         params[:update] = false
         
-        method_url = get_method_url('funnels', 'names')
         request_params = self.select_params(params, [:unit, :interval])
-        request_params[:resource] = method_url
+        request_params[:resource] = get_method_url('funnels', 'names')
         
         data = send_request(request_params)
 
@@ -115,7 +112,7 @@ module Fetcher
       #   http://mixpanel.com/api/docs/guides/api/v2#funnels-dates
       # == Parameters:
       #   + params: hash of parameters for the request.
-      #       - params[:funnel]: single or array of funnels to fetch.
+      #       - params[:funnel]: single or array of funnels' names to fetch.
       #       Two special parameters: 
       #         - params[:detect_changes]: specify to detect changes or not. Default value is true.
       #         - params[:update]: specify to update the existing record or insert the new one. 
@@ -140,9 +137,8 @@ module Fetcher
           end
         end
         
-        method_url = get_method_url('funnels', 'dates')
         request_params = self.select_params(params, [:unit, :limit])
-        request_params[:resource] = method_url
+        request_params[:resource] = get_method_url('funnels', 'dates')
         request_params[:funnel] = funnel_names.to_json
         
         data = send_request(request_params)

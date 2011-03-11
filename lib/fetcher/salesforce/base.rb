@@ -1,5 +1,6 @@
 require 'cgi'
 require 'uri'
+require 'rubygems'
 require 'rest_client'
 require "active_support/core_ext"
 require 'json'

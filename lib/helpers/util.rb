@@ -6,7 +6,7 @@ module Helpers
   module Util
     # Parse CSV file to hash object.
     def self.hash_from_csv(csv_file)
-      rows = ::CSV.open(File.open(csv_file)).to_a
+      rows = ::CSV.open(csv_file, 'r').to_a
       col_headers = rows.shift
       col_headers.each do |h|
         h.strip!

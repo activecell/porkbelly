@@ -1,4 +1,5 @@
 require File.expand_path("../mixpanel_client_ext", __FILE__)
+require 'rubygems'
 require "active_support/core_ext"
 require 'json'
 
@@ -254,11 +255,20 @@ module Fetcher
         end
       end
       
+      # Insert new or update an existing record.
+      # == Parameters:
+      #   + logic_params: a hash containing necessary flags such as :update, 
+      #       :detect_changes and params of the request to Mixpanel API 
+      #       (e.g: :event, :funnel,...).
+      #   + target_ids_array: an array containing ids of the objects fetched from Mixpanel
+      #   + target_id: the id of the object need detecting to be inserted or updated.
+      #   + data: the content of the object (usually in JSON format).
+      #   + model_attrs (optional): a hash containing fields need to save to DB.
       def insert_or_update(logic_params, target_ids_array, target_id, data, model_attrs={})
         model_attrs ||= {}
                 
         is_empty = data.blank?
-        should_save = true # Flag to save the data to DB or not.
+        should_save = false # Flag to save the data to DB or not.
         should_update = false # Flag to update the record or not.
         
         # --------------------------
@@ -277,9 +287,11 @@ module Fetcher
             should_update = true
           else
             should_save = true
+            should_update = false
           end
         elsif !is_empty
           should_save = true
+          should_update = false
         end
 
         # --------------------------
@@ -287,11 +299,14 @@ module Fetcher
         # --------------------------
         if should_save && should_update && logic_params[:update]
           logger.info "===> Update #{self.model_class}: '#{target_id}'..."
-          self.model_class.update_all(
-            { :content      => data, 
-              :format       => logic_params[:format],
-              :request_url  => url
-            },
+          basic_attrs = { 
+            :content      => data, 
+            :format       => logic_params[:format],
+            :request_url  => url
+          }
+          basic_attrs.merge!(model_attrs) 
+          
+          self.model_class.update_all(basic_attrs,
             ["target_id = ? AND credential = ?", target_id, credential[:api_key]]
           )
         elsif should_save
@@ -325,7 +340,7 @@ module Fetcher
           begin
             # Detect inline credential or CSV file.
             tmp_credential = self.get_api_credentials(credential)  
-          rescue Exception
+          rescue Exception => exc
             raise ArgumentError, "Credential must be in following formats: '<api_key>:<api_secret>' or '<path to a CSV file>'" 
           end
         end
