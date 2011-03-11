@@ -1,6 +1,6 @@
 development:
   harvest:
-    base_url: "http://[subdomain].harvestapp.com"
+    base_url: "http://[SUBDOMAIN].harvestapp.com"
     apis:
       clients: "/clients"
       contacts: "/contacts"
@@ -9,13 +9,13 @@ development:
       people: "/people"
       expense_categories: "/expense_categories"
       expenses: "/expenses"
-      user_assignments: "/projects/[project_id]/user_assignments"
-      task_assignments: "/projects/[project_id]/task_assignments"
+      user_assignments: "/projects/[PROJECT_ID]/user_assignments"
+      task_assignments: "/projects/[PROJECT_ID]/task_assignments"
       invoices: "/invoices"
       invoice_categories: "/invoice_item_categories"
-      invoice_messages: "/invoices/[invoice_id]/messages"
-      invoice_payments: "/invoices/[invoice_id]/payments"
-      timesheets: "/daily/[day_of_year]/[year]"
+      invoice_messages: "/invoices/[INVOICE_ID]/messages"
+      invoice_payments: "/invoices/[INVOICE_ID]/payments"
+      timesheets: "/daily/[DAY_OF_YEAR]/[YEAR]"
     format: "xml"
 
   zendesk:

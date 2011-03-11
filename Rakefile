@@ -26,7 +26,7 @@ namespace :site do
       }
       # validate arguments
       unless ENV.include?("credentials") or ENV.include?("credential")
-        #raise usage
+        raise usage
       end
       client = Fetcher::Harvest::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456", :subdomain => "tpltest"})
       client.fetch_all

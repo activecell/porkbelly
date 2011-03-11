@@ -50,7 +50,7 @@ module Fetcher
               attrs = {
                 :request_url => base_url, 
                 :content => content, 
-                :credential => Hash[*credential.sort.flatten].to_s, 
+                :credential => credential.inspect, 
                 :format => HARVEST_CONFIG["format"]
               }
               attrs.merge!(additional_attrs)

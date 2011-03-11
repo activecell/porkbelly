@@ -41,6 +41,7 @@ module Fetcher
 
           fetch_invoice_categories(credential)
           fetch_timesheets(credential)
+          logger.info "FETCH COMPLETED."
         else
           logger.info "multi fetch"
           credential.each do |cd|
@@ -63,6 +64,7 @@ module Fetcher
             fetch_invoice_categories(cd)
             fetch_timesheets(cd)
           end
+          logger.info "FETCH COMPLETED."
         end
       end
     end
