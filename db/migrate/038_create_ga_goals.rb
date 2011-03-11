@@ -1,6 +1,7 @@
 class CreateGaGoals < ActiveRecord::Migration
   def self.up
     create_table :ga_goals do |t|
+      t.column :account_id, :integer, :null => false
       t.column :entry_id, :string, :null => false
       t.column :profile_id, :integer, :null => false
       t.column :name, :string, :null => false
