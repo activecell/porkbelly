@@ -11,6 +11,9 @@ module Fetcher
       include Fetcher::Zendesk::Macro
 
       def initialize(credential)
+        #<subdomain>:<username>:<password>
+        subdomain, username, password = credential.split(":")
+        credential = {:subdomain => subdomain, :username => username, :password => password}
         super(credential)
         raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
       end

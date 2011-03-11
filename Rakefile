@@ -17,10 +17,10 @@ namespace :site do
       usage = %q{
         ***************************
         Description:
-          Get all data of the Harvest site
+          Get all data of the Zendesk site
         Usage: 
           rake site:harvest credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
-          rake site:harvest credential=<username>:<password> #=> get all data of the given credential
+          rake site:harvest credential=<subdomain>:<username>:<password> #=> get all data of the given credential
           Replace variable in <> with actual params
         **************************
       }
@@ -28,7 +28,7 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::Harvest::All.new({:username => "utwkidvn@gmail.com", :password => "tpl123456", :subdomain => "tpltest"})
+      client = Fetcher::Harvest::All.new(ENV['credential'])
       client.fetch_all
     end
   end
@@ -141,7 +141,7 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::Zendesk::All.new({:subdomain => "tpltest", :username => "utwkidvn@gmail.com", :password => "tpl123456"})
+      client = Fetcher::Zendesk::All.new(ENV["credential"])
       client.fetch_all
     end
   end

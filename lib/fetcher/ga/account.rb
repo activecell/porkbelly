@@ -12,8 +12,9 @@ module Fetcher
         content = response
         begin
           save_account(account_id, content, credential, request_url)
-        rescue 
+        rescue Exception => e
           #TODO: send email here  
+          puts e
           raise "Data is not fully propered or adequate"
         end
       end
