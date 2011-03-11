@@ -3,13 +3,12 @@ module Fetcher
     module Account
       include Fetcher::GA::Base
 
+      attr_accessor :account_id
+      
       def fetch_account(credential)
-        request_login_url =  GA_CONFIG["auth_url"].gsub(/\[EMAIL\]/, credential[:username]).gsub(/\[PASSWORD\]/, credential[:password])
-        response_login = create_login_request(credential, request_login_url).get.to_s
-        auth_key = response_login.split("Auth=").last
         request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"]
-        response = create_request(auth_key, request_url)
-        account_id = extract_account_id(response)
+        response = create_request(request_url)
+        @account_id = extract_account_id(response)
         content = response
         begin
           save_account(account_id, content, credential, request_url)
@@ -24,7 +23,7 @@ module Fetcher
         logger.info ga_account.inspect
         ga_account.update_attributes({:account_id => account_id,
                                       :content => content, 
-                                      :credential => credential, 
+                                      :credential => credential.inspect, 
                                       :request_url => request_url,
                                       :format => "xml"})
       end

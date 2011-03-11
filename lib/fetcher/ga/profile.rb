@@ -5,17 +5,16 @@ module Fetcher
 
       def load_webproperty_ids
         ga_wp = ::GA::WebProperty
-        @wps = ga_wp.find(:all)
+        @wps = ga_wp.where(:account_id => account_id)
       end
 
       def fetch_profile(credential)
         load_webproperty_ids
         @wps.each do |wp|
           wp_id = wp.web_property_id
-          account_id = wp.account_id
           request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
 "/" + account_id.to_s + GA_CONFIG["apis"]["webproperties"] + "/" + wp_id.to_s + GA_CONFIG["apis"]["profiles"]
-          response = create_request(@@auth_key, request_url)
+          response = create_request(request_url)
           contents = extract_profiles(response)
           save_profile(response, contents, credential, request_url)
         end

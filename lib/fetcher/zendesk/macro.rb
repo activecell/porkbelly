@@ -5,7 +5,7 @@ module Fetcher
 
       attr_accessor :content_keys
       def fetch_macro(credential)
-        request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["tags"] + "." + ZENDESK_CONFIG["format"]
+        request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["macros"] + "." + ZENDESK_CONFIG["format"]
         response = create_request(credential, request_url)
         logger.info response.get.to_s
         @content_keys = extract_content_keys(response.get)

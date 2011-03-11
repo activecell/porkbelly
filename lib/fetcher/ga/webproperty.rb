@@ -3,21 +3,13 @@ module Fetcher
     module WebProperty
       include Fetcher::GA::Base
 
-      def load_account_ids
-        ga_account = ::GA::Account
-        @accounts = ga_account.find(:all)
-      end
-
       def fetch_webproperty(credential)
-        load_account_ids
-        @accounts.each do |a|
-          account_id = a.account_id
-          request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
-"/" + account_id.to_s + GA_CONFIG["apis"]["webproperties"]
-          response = create_request(@@auth_key, request_url)
-          contents = extract_web_property_contents(response)
-          save_webproperty(response, contents, credential, request_url)
-        end
+        account = ::GA::Account.find_by_credential(credential.inspect)
+        request_url = GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
+"/" + account.account_id.to_s + GA_CONFIG["apis"]["webproperties"]
+        response = create_request(request_url)
+        contents = extract_web_property_contents(response)
+        save_webproperty(response, contents, credential, request_url)
       end
 
       def save_webproperty(response, contents, credential, request_url)
@@ -34,7 +26,7 @@ module Fetcher
                                              :web_property_id => wp_id,
                                              :entry => entry.to_s,
                                              :content => response.to_s,
-                                             :credential => credential,
+                                             :credential => credential.inspect,
                                              :request_url => request_url, :format => "xml"})
         end
       end
