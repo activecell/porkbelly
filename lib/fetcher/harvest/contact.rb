@@ -1,5 +1,4 @@
-require "rexml/document"
-include REXML
+require 'nokogiri'
 
 module Fetcher
   module Harvest
@@ -9,9 +8,9 @@ module Fetcher
       def fetch_contacts(credential)
         response_parse_logic = lambda {|response|
           content_keys = {}
-          doc = Document.new(response)
-          doc.elements.each("contacts/contact") do |contact| 
-            content_keys["#{contact.elements["id"].text}"] = contact.to_s
+          doc = Nokogiri::XML(response)
+          doc.xpath("/contacts/contact").each do |node|
+            content_keys["#{node.xpath("//id").first.text}"] = node.to_s
           end
           return content_keys
         }

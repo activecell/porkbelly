@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user-assignments type="array">
+  <user-assignment>
+    <created-at type="datetime">2011-02-14T06:11:49Z</created-at>
+    <project-id type="integer">1077512</project-id>
+    <updated-at type="datetime">2011-02-14T06:11:49Z</updated-at>
+    <hourly-rate type="decimal" nil="true"></hourly-rate>
+    <id type="integer">7878790</id>
+    <user-id type="integer">192406</user-id>
+    <deactivated type="boolean">false</deactivated>
+    <is-project-manager type="boolean">true</is-project-manager>
+    <budget type="decimal" nil="true"></budget>
+    <estimate type="yaml" nil="true"></estimate>
+  </user-assignment>
+</user-assignments>

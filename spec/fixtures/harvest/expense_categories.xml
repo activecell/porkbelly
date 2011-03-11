@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expense-categories>
+  <expense-category>
+    <name>Mileage</name>
+    <unit-name>Miles</unit-name>
+    <unit-price type="decimal">0.485</unit-price>
+    <deactivated type="boolean">false</deactivated>
+  </expense-category>
+</expense-categories>

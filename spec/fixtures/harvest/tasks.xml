@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tasks>
+  <task>
+    <!-- If true task will be added as billable upon assigning it to
+    a project -->
+    <billable-by-default type="boolean">true</billable-by-default>
+    <deactivated type="boolean">false</deactivated>
+    <default-hourly-rate type="decimal">120</default-hourly-rate>
+    <id type="integer">1</id>
+    <!-- If true task is added to new projects by default -->
+    <is-default type="boolean">true</is-default>
+    <name>UI Design</name>
+  </task>
+</tasks>

@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 module Fetcher
   module Harvest
     module User
@@ -6,9 +8,9 @@ module Fetcher
       def fetch_people(credential)
         response_parse_logic = lambda {|response|
           content_keys = {}
-          doc = Document.new(response)
-          doc.elements.each("users/user") do |user| 
-            content_keys["#{user.elements["id"].text}"] = user.to_s
+          doc = Nokogiri::XML(response)
+          doc.xpath("/users/user").each do |node|
+            content_keys["#{node.xpath("//id").first.text}"] = node.to_s
           end
           return content_keys
         }

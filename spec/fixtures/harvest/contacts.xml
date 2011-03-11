@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contacts type="array">
+  <contact>
+    <id type="integer">9</id>
+    <client-id type="integer">11072</client-id>
+    <email>Jane@Doe.com</email>
+    <first-name>Jane</first-name>
+    <last-name>Doe</last-name>
+    <phone-office>555.555.5555</phone-office>
+    <phone-mobile>555.555.7777</phone-mobile>
+    <fax>555.555.9999</fax>
+  </contact>
+</contacts>

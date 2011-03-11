@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task-assignments type="array">
+  <task-assignment>
+    <billable type="boolean">false</billable>
+    <created-at type="datetime">2011-02-14T06:11:49Z</created-at>
+    <task-id type="integer">765036</task-id>
+    <project-id type="integer">1077512</project-id>
+    <updated-at type="datetime">2011-02-14T06:11:49Z</updated-at>
+    <hourly-rate type="decimal" nil="true"></hourly-rate>
+    <id type="integer">10790731</id>
+    <deactivated type="boolean">false</deactivated>
+    <budget type="decimal" nil="true"></budget>
+    <estimate type="yaml" nil="true"></estimate>
+  </task-assignment>
+</task-assignments>

@@ -16,7 +16,7 @@ module Fetcher
         @@logger
       end
 
-      def create_request(credential, request_url, params = {})
+      def send_request(credential, request_url, params = {})
         options = {
           :user => credential[:username], 
           :password => credential[:password],
@@ -26,7 +26,8 @@ module Fetcher
         # convert params hash to request param string
         request_url = request_url + "?" + hash_to_param_string(params) unless params.empty?
         logger.info "Create request #{request_url}"
-        RestClient::Resource.new(request_url, options)
+        response = RestClient::Resource.new(request_url, options).get.to_s
+        response
       end
 
       def fetch(model_class, credential, target_api, response_parse_logic, support_timestamp = true, additional_attrs = {})
@@ -38,7 +39,7 @@ module Fetcher
           base_url = HARVEST_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + target_api
           params = {}
           params[:updated_since] = tracking.last_request.strftime("%Y-%m-%d %H:%M") if support_timestamp and tracking and tracking.last_request
-          response = create_request(credential, base_url, params).get.to_s
+          response = send_request(credential, base_url, params)
           logger.info "Response #{response}"
           content_keys = response_parse_logic.call(response)
           if content_keys.kind_of?(Hash) and !content_keys.empty?

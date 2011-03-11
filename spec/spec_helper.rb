@@ -2,6 +2,8 @@ ENV["STAGE_ENV"] ||= "test"
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "config", "boot"))
 require "rspec"
 
+STAGE_ENV = "test"
+
 Rspec.configure do |c|
   c.mock_with :rspec
 end

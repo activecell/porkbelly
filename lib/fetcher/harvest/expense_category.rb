@@ -1,5 +1,4 @@
-require "rexml/document"
-include REXML
+require 'nokogiri'
 
 module Fetcher
   module Harvest
@@ -9,9 +8,9 @@ module Fetcher
       def fetch_expense_categories(credential)
         response_parse_logic = lambda do |response|
           content_keys = {}
-          doc = Document.new(response)
-          doc.elements.each("expense-categories/expense-category") do |ec| 
-            content_keys["#{ec.elements["name"].text}"] = ec.to_s
+          doc = Nokogiri::XML(response)
+          doc.xpath("/expense-categories/expense-category").each do |node|
+            content_keys["#{node.xpath("//name").first.text}"] = node.to_s
           end
           content_keys
         end

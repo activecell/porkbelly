@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<invoices type="array">
+  <invoice>
+    <number>2</number>
+    <period-end type="date" nil="true"></period-end>
+    <tax type="decimal" nil="true"></tax>
+    <created-at type="datetime">2011-02-25T09:09:00Z</created-at>
+    <discount type="decimal">10.0</discount>
+    <due-at-human-format>upon receipt</due-at-human-format>
+    <notes>asdlfkasdlfkaslfk</notes>
+    <updated-at type="datetime">2011-02-25T09:27:01Z</updated-at>
+    <amount type="decimal">900.0</amount>
+    <client-key>c7dc587945e3c5b5ed65a070d1d306b9a9148b9f</client-key>
+    <discount-amount type="decimal">100.0</discount-amount>
+    <period-start type="date" nil="true"></period-start>
+    <recurring-invoice-id type="integer" nil="true"></recurring-invoice-id>
+    <due-amount type="decimal">900.0</due-amount>
+    <id type="integer">556730</id>
+    <subject>test</subject>
+    <tax-amount type="decimal">0.0</tax-amount>
+    <client-id type="integer">489216</client-id>
+    <purchase-order>TYSS</purchase-order>
+    <tax2-amount type="decimal">0.0</tax2-amount>
+    <currency>United States Dollars - USD</currency>
+    <retainer-id type="integer" nil="true"></retainer-id>
+    <estimate-id type="integer" nil="true"></estimate-id>
+    <issued-at type="date">2011-02-25</issued-at>
+    <tax2 type="decimal" nil="true"></tax2>
+    <due-at type="date">2011-02-25</due-at>
+    <state>open</state>
+  </invoice>
+</invoices>

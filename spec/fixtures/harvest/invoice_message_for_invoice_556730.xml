@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<invoice-message type="array">
+  <invoice-message>
+    <sent-by-email>utwkidvn@gmail.com</sent-by-email>
+    <created-at type="datetime">2011-02-25T09:27:01Z</created-at>
+    <include-pay-pal-link type="boolean">false</include-pay-pal-link>
+    <thank-you type="boolean">false</thank-you>
+    <body>
+---------------------------------------------
+Invoice Summary
+---------------------------------------------
+Invoice ID: 2
+Issue date: 02/25/2011
+Client: HNGHIEM
+P.O. Number: TYSS
+Amount: $900.00
+Due: 02/25/2011 (Upon receipt)
+
+The detailed invoice is attached as a PDF.
+
+Thank you!
+---------------------------------------------
+</body>
+    <send-me-a-copy type="boolean">true</send-me-a-copy>
+    <updated-at type="datetime">2011-02-25T09:27:01Z</updated-at>
+    <invoice-id type="integer">556730</invoice-id>
+    <id type="integer">573131</id>
+    <subject>Invoice #2 from TPL</subject>
+    <sent-by>Harry Potter</sent-by>
+    <full-recipient-list>&quot;Harry Potter&quot; &lt;utwkidvn@gmail.com&gt;</full-recipient-list>
+  </invoice-message>
+</invoice-message>

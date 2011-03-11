@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users>
+  <user>
+    <id type="integer">54234</id>
+    <email>Jane@Doe.com</email>
+    <first-name>Jane</first-name>
+    <last-name>Doe</last-name>
+    <has-access-to-all-future-projects type="boolean">false</has-access-to-all-future-projects>
+    <default-hourly-rate type="decimal">100</default-hourly-rate>
+    <is-active type="boolean">true</is-active>
+    <is-admin type="boolean">true</is-admin>
+    <is-contractor type="boolean">true</is-contractor>
+    <telephone></telephone>
+    <department></department>
+    <timezone>Eastern Time (US & Canada)</timezone>
+   </user>
+</users>

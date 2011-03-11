@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 module Fetcher
   module Harvest
     module Project
@@ -6,9 +8,9 @@ module Fetcher
       def fetch_projects(credential)
         response_parse_logic = lambda {|response|
           content_keys = {}
-          doc = Document.new(response)
-          doc.elements.each("projects/project") do |project| 
-            content_keys["#{project.elements["id"].text}"] = project.to_s
+          doc = Nokogiri::XML(response)
+          doc.xpath("/projects/project").each do |node|
+            content_keys["#{node.xpath("//id").first.text}"] = node.to_s
           end
           return content_keys
         }

@@ -1,5 +1,4 @@
-require "rexml/document"
-include REXML
+require 'nokogiri'
 
 module Fetcher
   module Harvest
@@ -9,9 +8,9 @@ module Fetcher
       def fetch_tasks(credential)
         response_parse_logic = lambda do |response|
           content_keys = {}
-          doc = Document.new(response)
-          doc.elements.each("tasks/task") do |client| 
-            content_keys["#{client.elements["id"].text}"] = client.to_s
+          doc = Nokogiri::XML(response)
+          doc.xpath("/tasks/task").each do |node|
+            content_keys["#{node.xpath("//id").first.text}"] = node.to_s
           end
           content_keys
         end

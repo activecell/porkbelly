@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expenses>
+  <expense>
+    <notes>Buy Valentine's Day _dark_ chocolates for Harvest</notes>
+    <total-cost type="decimal">20.00</total-cost>
+    <project_id type="integer">2</project_id>
+    <expense_category_id type="integer">1</expense_category_id>
+    <spent_at type="date">Sun, 10 Feb 2008</spent_at>
+    <has-receipt type="boolean">true</has-receipt>
+    <receipt-url>https://sub.harvestapp.com/expenses/234997/receipt</receipt-url>
+  </expense>
+</expenses>
