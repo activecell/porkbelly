@@ -9,7 +9,7 @@ module Mailers
       mail(
         :to      => "hoang.nghiem@techpropulsionlabs.com",  
         :from    => "fake@domain.com",  
-        :subject => "[Profitably] Error occured",
+        :subject => "[Profitably] Error occured"
       ) do |format|
         format.html
       end
