@@ -38,7 +38,7 @@ module Zendesk
   end
   class Macro < ActiveRecord::Base
     def self.table_name
-      "zendesk_ticket_macros"
+      "zendesk_macros"
     end
   end
 end
