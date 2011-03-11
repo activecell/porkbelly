@@ -198,7 +198,13 @@ module Fetcher
       # == Returned value:
       #   A new hash.
       def select_params(params, keys)
-        params.select {|k,v| keys.include?(k)}
+        result = {}
+        params.each do |k,v|
+          if keys.include?(k)
+            result[k] = v
+          end
+        end
+        return result
       end
       
       # Send request to Mixpanel API service by using MixpanelClient.
