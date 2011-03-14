@@ -38,7 +38,6 @@ module Fetcher
       end
 
       def create_request(request_url, params = {})
-        puts "$$$$$$$$$$$$$$$ #{auth_key}"
         RestClient.get request_url, :authorization => "GoogleLogin auth=#{auth_key}"
       end
 

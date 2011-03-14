@@ -141,8 +141,18 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::Zendesk::All.new(ENV["credential"])
-      client.fetch_all
+      credential_source = ENV["credentials"] || ENV["credential"]
+      if ENV["credentials"]
+        Helpers::Util.hash_from_csv(credential_source).each do |credential|
+        client = Fetcher::Zendesk::All.new({:subdomain => credential["subdomain"],
+                                            :username => credential["username"],
+                                            :password => credential["password"]})
+        client.fetch_all
+        end
+      elsif ENV["credential"]
+        client = Fetcher::Zendesk::All.new(ENV["credential"])
+        client.fetch_all
+      end
     end
   end
 
@@ -164,9 +174,17 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456"})
-#      client = Fetcher::GA::All.new({:username => "tinn988@gmail.com", :password => "pedigree"})
-      client.fetch_all
+      credential_source = ENV["credentials"] || ENV["credential"]
+      if ENV["credentials"]
+        Helpers::Util.hash_from_csv(credential_source).each do |credential|
+          client = Fetcher::GA::All.new({:username => credential["username"],
+                                         :password => credential["password"]})
+          client.fetch_all
+        end
+      elsif ENV["credential"]
+        client = Fetcher::GA::All.new(ENV['credential'])
+        client.fetch_all
+      end
     end
   end
 end

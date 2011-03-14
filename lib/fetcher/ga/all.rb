@@ -8,8 +8,14 @@ module Fetcher
       include Fetcher::GA::Segment
 
       def initialize(credential)
-        super(credential)
-        #raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
+        #<subdomain>:<username>:<password>
+        if !credential.is_a?(Hash)
+          username, password = credential.split(":")
+          credential = {:username => username, :password => password}
+          super(credential)
+        else super(credential)
+#        raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
+        end
       end
 
       def fetch_all
