@@ -45,7 +45,7 @@ module Fetcher
               property_names += property[:content].keys
             end
           end
-        end        
+        end       
         
         property_data = []
         
@@ -122,14 +122,26 @@ module Fetcher
         
         funnel_names.each do |funnel_name|
           request_params[:funnel] = funnel_name
-          data = send_request(request_params)
-          property_data << {
-            :target_id => funnel_name, 
-            :request_url => current_url, 
-            :content => data
-          }
-        end
+          data = send_request(request_params)       
           
+          # Sample data:
+          # {
+          #   "gender": {"count": 1}, 
+          #   "mp_country_code": {"count": 1},
+          #   "funnel_test_num": {"count": 1}
+          # }
+
+          if !data.blank?
+            data.each do |p_name, value|
+              property_data << {
+                :target_id => p_name, 
+                :request_url => current_url, 
+                :content => {p_name => value}
+              }
+            end
+          end
+        end
+        
         if save_to_db && !property_data.blank?
           self.model_class.transaction do
             # Get existing keys from DB.
