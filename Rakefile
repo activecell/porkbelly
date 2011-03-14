@@ -28,8 +28,18 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      client = Fetcher::Harvest::All.new(ENV['credential'])
-      client.fetch_all
+      credential_source = ENV["credentials"] || ENV["credential"]
+      if ENV["credentials"]
+        Helpers::Util.hash_from_csv(credential_source).each do |credential|
+        client = Fetcher::Harvest::All.new({:subdomain => credential["subdomain"],
+                                            :username => credential["username"],
+                                            :password => credential["password"]})
+        client.fetch_all
+        end
+      elsif ENV["credential"]
+        client = Fetcher::Harvest::All.new(ENV["credential"])
+        client.fetch_all
+      end
     end
   end
 

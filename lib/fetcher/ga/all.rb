@@ -14,7 +14,7 @@ module Fetcher
           credential = {:username => username, :password => password}
           super(credential)
         else super(credential)
-#        raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
+        raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
         end
       end
 
