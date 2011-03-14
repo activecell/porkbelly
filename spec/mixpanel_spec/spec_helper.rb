@@ -10,4 +10,3 @@ module Mixpanel
     end
   end
 end
-

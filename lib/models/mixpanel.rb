@@ -9,9 +9,12 @@ module Mixpanel
   class MixpanelData < ActiveRecord::Base
     before_save :format_request_url
     before_create :format_request_url
+    before_update :format_request_url
     
     def format_request_url
       self.request_url = self.class.format_request_url(self.request_url)
+      
+      "=====> Format URL: #{self.request_url}"
       return true # To not interrupt the saving process.
     end
     
@@ -21,20 +24,23 @@ module Mixpanel
       # because they are always different and not important params.
       uri = ::URI.parse(full_url)
       
-      # Parse query string to hash.
-      params_hash = ::CGI.parse(uri.query)
-      
-      # Delete unnecessary params.
-      ["sig", "expire"].each do |key|
-        params_hash.delete(key)
+      if uri.query
+        # Parse query string to hash.
+        params_hash = ::CGI.parse(uri.query)
+        
+        # Delete unnecessary params.
+        ["sig", "expire"].each do |key|
+          params_hash.delete(key)
+        end
+        
+        # Reset the self.params
+        uri.query = params_hash.to_query.gsub("[]", '')
       end
       
-      # Reset the self.params
-      uri.query = params_hash.to_query.gsub("[]", '')
       return uri.to_s
     end
   end
-   
+  
 =begin
   'mixpanel_events' Tables's Schema:
   id: int         int (primary key)

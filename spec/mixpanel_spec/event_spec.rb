@@ -129,7 +129,7 @@ describe "Module: Fetcher::Mixpanel" do
         # The content of the record.
         series_data = events['data']['series']
         values_data = events['data']['values']
-        event_values = values_data[test_name]              
+        event_values = values_data[test_name]
         event_series = event_values.keys & series_data
         json_data = {
           :data => {

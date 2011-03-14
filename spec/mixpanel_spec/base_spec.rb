@@ -155,41 +155,37 @@ describe "Module: Fetcher::Mixpanel" do
       end
     end
     
-    describe "Method: check_changes(data, request_url, target_id)" do
+    describe "Method: check_changes(data, credential, target_id)" do
       it "should return true if data was changed" do
-        request_url = "http://www.mixpanel.com/api"
         data = mock("data")
         target_id = "something"
-        
+        credential = "ababababaCCCHJkk77DUUo9"
         mock_events = mock("Mock table")
-        @all.stub_chain(:model_class, :format_request_url).with(request_url).and_return(request_url)
         @all.stub_chain(:model_class, :where).with(
           :target_id => target_id, 
-          :request_url => request_url, 
+          :credential => credential, 
           :content => data).and_return(mock_events)
         
         mock_events.stub!(:first).and_return(nil)
         
-        result = @all.check_changes(data, request_url, target_id)
+        result = @all.check_changes(data, credential, target_id)
         (result == true).should be_true
       end
       
       it "should return false if data was not changed" do
-        request_url = "http://www.mixpanel.com/api"
         data = mock("data")
         target_id = "something"
-        
+        credential = "ababababaCCCHJkk77DUUo9"
         mock_events = mock("Mock table")
-        @all.stub_chain(:model_class, :format_request_url).with(request_url).and_return(request_url)
         @all.stub_chain(:model_class, :where).with(
           :target_id => target_id, 
-          :request_url => request_url, 
+          :credential => credential, 
           :content => data).and_return(mock_events)
         
         mock_data = mock("Mock data")
         mock_events.stub!(:first).and_return(mock_data)
         
-        result = @all.check_changes(data, request_url, target_id)
+        result = @all.check_changes(data, credential, target_id)
         (result == false).should be_true
       end
     end
@@ -247,6 +243,201 @@ describe "Module: Fetcher::Mixpanel" do
         url = @all.get_method_url(endpoint, api_method)
         
         (url == "#{endpoint_url}/#{api_method}").should be_true
+      end
+    end
+    
+    describe "Method: get_target_ids(params)" do
+      it "should get existent keys in db if params[:detect_changes] = true" do
+        params = {:detect_changes => true}
+        keys = [1, 2, 3, 4]
+        @all.stub!(:existence_keys).with(@all.credential[:api_key]).and_return(keys)
+        
+        actual_result = @all.get_target_ids(params)
+        (actual_result == keys).should be_true
+      end
+      
+      it "should not get existent keys if params[:detect_changes] = false" do
+        params = {:detect_changes => false}
+        test_result = [1, 2, 3, 4]
+        expected_resutl = nil
+        @all.stub!(:existence_keys).with(@all.credential[:api_key]).and_return(test_result)
+        
+        actual_result = @all.get_target_ids(params)
+        
+        (actual_result == expected_resutl).should be_true
+      end
+    end
+    
+    describe "Method: inspect_request_url(model_attrs)" do
+      before (:each) do
+        @expected_url = "http://mixpanel.com/api?ver=2.0/event/properties/test/action"
+      end
+      
+      it "should return the current_url if params 'model_attrs' is nil, or empty or not contain the 'request_url' " do
+        @all.stub!(:current_url).and_return(@expected_url)
+        
+        attrs = nil
+        actual1 = @all.inspect_request_url(attrs)
+        
+        attrs = {}
+        actual2 = @all.inspect_request_url(attrs)
+        
+        attrs = {:some_key => 1234}
+        actual3 = @all.inspect_request_url(attrs)
+        
+        (actual1 == @expected_url && actual2 == @expected_url && 
+          actual3 == @expected_url).should be_true
+      end
+      
+      it "should return the model_attrs[:request_url]" do
+        @all.stub!(:current_url).and_return("http://foo.com/bar/test")
+        
+        attrs = {:request_url => @expected_url}
+        actual = @all.inspect_request_url(attrs)
+        
+        (actual == @expected_url).should be_true
+      end
+    end
+    
+    describe "Method: detect_save_or_update(logic_params, target_ids_array, target_id, data, model_attrs={})" do
+      it "should return [true, true] if the record's existing and its data was changed" do
+        logic_params = {:detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 213465
+        data = "{'data' : 'data was changed'}"
+        model_attrs = {:request_url => "http://mixpanel.api.test/events/foo?test=1"}
+        
+        @all.stub!(:check_changes).with(data, @all.credential[:api_key], target_id).and_return(true)
+        
+        save, update = @all.detect_save_or_update(logic_params, target_ids_array, 
+          target_id, data, model_attrs)
+          
+        (save == true && update == true).should be_true
+      end
+      
+      it "should return [true, false] if the record does not exist and its data is not empty, OR data is not empty and logic_params[:detect_changes]=true" do
+        logic_params = {:detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 132465
+        data = "{'data' : 'data was changed'}"
+        model_attrs = {:request_url => "http://mixpanel.api.test/events/foo?test=1"}
+        
+        @all.stub!(:check_changes).with(data, @all.credential[:api_key], target_id).and_return(true)
+        
+        save, update = @all.detect_save_or_update(logic_params, target_ids_array, 
+          target_id, data, model_attrs)
+          
+        (save == true && update == false).should be_true
+      end
+      
+      it "should return [false, true] if the record is existing and its data was not changed" do
+        logic_params = {:detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 123456
+        data = "{'data' : 'data was changed'}"
+        model_attrs = {:request_url => "http://mixpanel.api.test/events/foo?test=1"}
+        
+        @all.stub!(:check_changes).with(data, @all.credential[:api_key], target_id).and_return(false)
+        
+        save, update = @all.detect_save_or_update(logic_params, target_ids_array, 
+          target_id, data, model_attrs)
+          
+        (save == false && update == true).should be_true
+      end
+      
+      it "should return [false, false] if data is empty OR logic_params[:detect_changes] = false, OR target_ids_array is empty" do
+        logic_params = {:detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 123456
+        model_attrs = {}
+        expected = [false, false]
+        
+        # Case 1: data is empty
+        data = ''
+        actual1 = @all.detect_save_or_update(logic_params, target_ids_array, 
+          target_id, data, model_attrs)
+        
+        # Case 2: logic_params[:detect_changes] = false
+        logic_params = {}
+        actual2 = @all.detect_save_or_update(logic_params, target_ids_array, 
+          target_id, data, model_attrs)
+        
+        # Case 3: target_ids_array = nil (or [])
+        target_ids_array = nil
+        actual3 = @all.detect_save_or_update(logic_params, target_ids_array, 
+          target_id, data, model_attrs)
+          
+        (actual1 == expected && actual2 == expected && actual3 == expected).should be_true
+      end
+    end
+    
+    describe "Method: insert_or_update(logic_params, target_ids_array, target_id, data, model_attrs={})" do
+      before(:each) do
+        @all.stub!(:model_class).and_return(::Mixpanel::Event)
+      end
+      
+      it "should update existing record if should_save=true and should_update=true" do
+        logic_params = {:format => 'json', :detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 123456
+        data = "{'data' : 'data was changed'}"
+        model_attrs = {:request_url => "http://mixpanel.api.test/events/foo?test=1"}
+        
+        attrs = {
+          :content => data,
+          :format => logic_params[:format],
+          :request_url => model_attrs[:request_url]
+        }
+        
+        @all.should_receive(:detect_save_or_update).with(logic_params, target_ids_array,           
+          target_id, data, model_attrs).and_return([true, true])        
+        
+        @all.model_class.stub!(:update_all).with(attrs, 
+          ["target_id = ? AND credential = ?", 
+            target_id, @all.credential[:api_key]]).and_return(1)
+            
+        @all.insert_or_update(logic_params, target_ids_array,           
+          target_id, data, model_attrs)
+      end
+      
+      it "should insert new record if should_save=true and should_update=false" do
+        logic_params = {:format => 'json', :detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 111111
+        data = "{'data' : 'data was changed'}"
+        model_attrs = {:request_url => "http://mixpanel.api.test/events/foo?test=1"}
+        
+        attrs = {
+          :content => data,
+          :target_id => target_id,
+          :format => logic_params[:format],
+          :credential => @all.credential[:api_key],
+          :request_url => model_attrs[:request_url]
+        }
+        
+        @all.should_receive(:detect_save_or_update).with(logic_params, target_ids_array,           
+          target_id, data, model_attrs).and_return([true, false])
+        
+        @all.model_class.stub!(:create!).with(attrs).and_return(1)
+            
+        @all.insert_or_update(logic_params, target_ids_array,           
+          target_id, data, model_attrs)
+      end
+      
+      it "should do nothing if 'should_save'=false" do
+        logic_params = {:format => 'json', :detect_changes => true}
+        target_ids_array = [123456, 213465, 345621]
+        target_id = 111111
+        data = ""
+        model_attrs = {:request_url => "http://mixpanel.com/api"}
+        
+        @all.should_receive(:detect_save_or_update).with(logic_params, target_ids_array,           
+          target_id, data, model_attrs).and_return([false, false])
+            
+        result = @all.insert_or_update(logic_params, target_ids_array,           
+          target_id, data, model_attrs)
+        
+        result.nil?.should be_true
       end
     end
   end

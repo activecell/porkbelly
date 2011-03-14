@@ -52,7 +52,7 @@ module Fetcher
       
       # Get a list of existence keys from db based on the given credential
       # == Parameters:
-      #   |+ credential: the value of api_key.
+      #   + credential: the value of api_key.
       def existence_keys(credential)
         keys = self.model_class.where("credential = ?", credential).select(:target_id).all
         if(!keys.blank?)
@@ -232,12 +232,11 @@ module Fetcher
       # This method will compare the passed 'data' to the existing data in DB.
       # == Parameters:
       #   + data: data (is usually a string in JSON or CSV).
-      #   + request_url: The URL that was sent to get the data.
+      #   + credential: The unique credential.
       #   + target_id: a key to identify the data (such as event's id or event's name, etc.)
-      def check_changes(data, request_url, target_id)
-        url = self.model_class.format_request_url(request_url)
+      def check_changes(data, credential, target_id)
         search_result = self.model_class.where(:target_id => target_id, 
-          :request_url => url, :content => data).first
+          :credential => credential, :content => data).first
         
         if search_result.blank?
           return true
@@ -255,6 +254,61 @@ module Fetcher
         end
       end
       
+      # Get the correct request url in the hash of attributes
+      # == Parameters:
+      #   + model_attrs: a hash of attributes and values.
+      #       Required attribute is 'model_attrs[:request_url]'.
+      # == Returned value:
+      #   The string of URL.
+      def inspect_request_url(model_attrs)
+        return (model_attrs && !model_attrs[:request_url].blank? ?
+                model_attrs[:request_url] : self.current_url)
+      end
+      
+      # Detect whether we should insert or update a record.
+      # == Parameters:
+      #   + logic_params: a hash containing necessary flags such as :update, 
+      #       :detect_changes and params of the request to Mixpanel API 
+      #       (e.g: :event, :funnel,...).
+      #   + target_ids_array: an array containing ids of the objects fetched from Mixpanel
+      #   + target_id: the id of the object need detecting to be inserted or updated.
+      #   + data: the content of the object (usually in JSON format).
+      #   + model_attrs: a hash containing fields need to save to DB.
+      # == Returned values:
+      #   + An array containing a pair of value [should_save, should_update]
+      # == Usage guideline:
+      #   There are some cases of the returned values:
+      #   + [true, true]: it means that you should update the existing record.
+      #   + [true, false]: it means that you should insert a new record.
+      #   + [false, true]: it means that the record is existing but its data has no change, 
+      #                    so you don't need to update.
+      #   + [false, false]: do nothing.
+      def detect_save_or_update(logic_params, target_ids_array, target_id, data, model_attrs)
+        is_empty = data.blank?
+        should_save = false # Flag to save the data to DB or not.
+        should_update = false # Flag to update the record or not.
+        
+        # Get the request url in the model params or current url.
+        url = inspect_request_url(model_attrs)
+        
+        if !is_empty && logic_params[:detect_changes] && 
+            !target_ids_array.blank?
+          if target_ids_array.include?(target_id)               
+            # Detect data were changed        
+            should_save = check_changes(data, credential[:api_key], target_id)
+            should_update = true
+          else
+            should_save = true
+            should_update = false
+          end
+        elsif !is_empty
+          should_save = true
+          should_update = false
+        end
+        
+        return [should_save, should_update]
+      end
+      
       # Insert new or update an existing record.
       # == Parameters:
       #   + logic_params: a hash containing necessary flags such as :update, 
@@ -267,37 +321,19 @@ module Fetcher
       def insert_or_update(logic_params, target_ids_array, target_id, data, model_attrs={})
         model_attrs ||= {}
                 
-        is_empty = data.blank?
-        should_save = false # Flag to save the data to DB or not.
-        should_update = false # Flag to update the record or not.
-        
         # --------------------------
         # Logic code to setup value for two flags should_save & should_update.
         # -------------------------
+        should_save, should_update = detect_save_or_update(logic_params, 
+            target_ids_array, target_id, data, model_attrs)
         
         # Get the request url in the model params or current url.
-        url = (model_attrs && !model_attrs[:request_url].blank? ?
-                model_attrs[:request_url] : self.current_url)
+        url = inspect_request_url(model_attrs)
         
-        if !is_empty && logic_params[:detect_changes] && 
-            !target_ids_array.blank?
-          if target_ids_array.include?(target_id)               
-            # Detect data were changed        
-            should_save = check_changes(data, url, target_id)
-            should_update = true
-          else
-            should_save = true
-            should_update = false
-          end
-        elsif !is_empty
-          should_save = true
-          should_update = false
-        end
-
         # --------------------------
         # Perform insert, update or nothing ;)
         # --------------------------
-        if should_save && should_update && logic_params[:update]
+        if should_save && should_update
           logger.info "===> Update #{self.model_class}: '#{target_id}'..."
           basic_attrs = { 
             :content      => data, 
@@ -305,6 +341,9 @@ module Fetcher
             :request_url  => url
           }
           basic_attrs.merge!(model_attrs) 
+          
+          basic_attrs[:request_url] = 
+            self.model_class.format_request_url(basic_attrs[:request_url])
           
           self.model_class.update_all(basic_attrs,
             ["target_id = ? AND credential = ?", target_id, credential[:api_key]]
@@ -318,7 +357,7 @@ module Fetcher
             :credential   => credential[:api_key],
             :request_url  => url
           }      
-          basic_attrs.merge!(model_attrs)          
+          basic_attrs.merge!(model_attrs)      
           self.model_class.create!(basic_attrs)
         end
       end
