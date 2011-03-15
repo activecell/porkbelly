@@ -10,10 +10,19 @@ describe "Module: Fetcher::PivotalTracker" do
 
   describe "::Base: base module for all Pivotal Tracker fetchers" do
     describe "get_token(username, password)" do
-      it "should return token if username and password are correct" do
-        token = @all.get_token(@username, @password)
+      before (:each) do
+        @token_xml = ::Pivotal::Util.load_fixture("token")
+        @response = mock("Response")        
+        ::RestClient.stub!(:post).with(::Fetcher::PivotalTracker::Base::TOKEN_URL, 
+          :username => @username, :password => @password).and_return(@response)
+        @response.stub!(:body).and_return(@token_xml)
         
-        (!token.blank?).should be_true
+        @expected_token = "c93f12c71bec27843c1d84b3bdd547f3"
+      end
+      
+      it "should return token if username and password are correct" do
+        token = @all.get_token(@username, @password)        
+        (token == @expected_token).should be_true
       end
     end
     
@@ -33,9 +42,12 @@ describe "Module: Fetcher::PivotalTracker" do
     describe "encode_options(options)" do
       it "should format options as params string" do
         options = {:project_id => 123456, :story_id => 654321}
-        expected = "?filter=project_id%3A123456%20story_id%3A654321"
+        expected1 = "?filter=project_id%3A123456%20story_id%3A654321"
+        expected2 = "?filter=story_id%3A654321%20project_id%3A123456"
+        
         actual = @all.encode_options(options)
-        (actual == expected).should be_true
+        
+        (actual == expected1 || actual == expected2).should be_true
       end
       
       it "should return nil if options is not hash or empty" do

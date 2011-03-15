@@ -11,7 +11,13 @@ module Fetcher
       
       PT_CONFIG = APIS_CONFIG['pivotal_tracker']
       SITE = "PIVOTAL_TRACKER"
+      
+      # Default base URL.
       BASE_URL = "https://www.pivotaltracker.com/services/v3"
+      
+      # URL to retrieve the API token
+      TOKEN_URL = "https://www.pivotaltracker.com/services/v3/tokens/active"
+      
       # Default API URLs
       DEFAULT_API_URLS = {
         'projects' => '/projects', 
@@ -23,8 +29,13 @@ module Fetcher
         'tasks' => '/projects/[PROJECT_ID]/stories/[STORY_ID]/tasks',
       }
       
+      # Content type to embed in the HTTP header.
       CONTENT_TYPE = "application/xml"
+      
+      # The format of Pivotal Tracker response.
       FORMAT = "xml"
+      
+      # Date time format to use for tracking last update time.
       DATE_TIME_FORMAT = "%Y/%m/%d"
       
       attr_accessor :token
@@ -77,9 +88,11 @@ module Fetcher
             end
           end
         else
+          # Case 2: credential stored in file.
           if(File.exists?(credentials_source))
             credentials = ::Helpers::Util.hash_from_csv(credentials_source)
           elsif(!credentials_source.blank?)
+            # Case 3: credential is a token
             credentials = {:token => credentials_source}
           end
         end
@@ -87,13 +100,24 @@ module Fetcher
       end
       
       # Retrieve the token needs to get data from Pivotal Tracker service.
+      # If the credential is a token, there is no need to call thhis method.
+      # == Parameters:
+      #   + username (usually is an email address).
+      #   + password
       def get_token(username, password)
-        response = RestClient.post('https://www.pivotaltracker.com/services/v3/tokens/active',
-          :username => username, :password => password)
+        response = RestClient.post(TOKEN_URL, :username => username, :password => password)
         self.token= Nokogiri::XML(response.body).search('guid').inner_html
         return self.token
       end
       
+      # Create a new RestClient::Resource pbject.
+      # Note that the request will be not sent until you call get() or post()
+      # == Parameters:
+      #   + token: API token supplied by Pivotal Tracker.
+      #   + request_url: the URL.
+      #   + params: additional parameters to be embeded in the request.
+      # == Returned value:
+      #   A new instance of RestClient::Resource.
       def create_request(token, request_url, params = {})
         # convert params hash to request param string
         options = encode_options(params)
@@ -106,6 +130,7 @@ module Fetcher
         )
       end
       
+      # Get base URL. If no URL was found in the config file, the default URL will be used.
       def base_url
         if PT_CONFIG['base_url'].blank?
           return BASE_URL
@@ -216,11 +241,15 @@ module Fetcher
                 :format => FORMAT
               }
               attrs.merge!(additional_attrs)
-              updated = target_entity.update_attributes(attrs)
               
-              if updated                
+              updated = nil
+              if(target_entity.changed?)
+                updated = target_entity.update_attributes(attrs)
+              end
+              
+              if updated             
                 logger.info "Finish save #{target} with key #{key} to database."
-              else
+              elsif updated == false
                 raise "Fails to save #{target} with key #{key} to database."
               end
             end

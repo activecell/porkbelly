@@ -18,17 +18,23 @@ module Fetcher
         begin
           if single_fetch?
             logger.info "===> Starting Pivotal Tracker single fetching..."
+            
             fetch_single(self.credential)
+            
+            logger.info "===> Finish Pivotal Tracker single fetching."
           else
             logger.info "===> Starting Pivotal Tracker multiple fetching..."
+            
             self.credential.each do |c|
               begin
                 fetch_single(c)
               rescue Exception => exc
                 logger.error "Error when fetching with credential: #{c}"
-                puts exc
+                logger.error exc
               end
             end
+            
+            logger.info "===> Finish Pivotal Tracker multiple fetching."
           end
         rescue Exception => exc
           logger.error exc
