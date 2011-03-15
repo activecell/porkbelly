@@ -55,4 +55,82 @@ describe "GA's" do
       end
     end
   end
+
+  describe "web property" do
+    describe "fetch" do
+      before(:each) do
+        @all = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456", :subdomain => "tpltest"})
+        @extracted_keys = Array.new
+        @dummy_response = GA::Util.load_fixture("accounts")
+      end
+      it "should extract valid content from response" do
+        dummy_response = @dummy_response
+      end
+      it "should raise error when extract account id with invalid parameters" do
+        some_var = "argument to pass"
+        lambda { Fetcher::GA::WebProperty.extract_web_property_contents(some_var) }.should raise_error(ArgumentError)
+      end
+      it "should not raise error when extract account id with valid parameters" do
+        some_var = @dummy_response
+        lambda { Fetcher::GA::WebProperty.extract_account_id(@dummy_response) }.should_not raise_error(ArgumentError)
+      end
+      it "should extract and return account id with integer type" do
+#        @all = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456", :subdomain => "tpltest"})
+        returned_value = Array.new
+        @all.extract_account_id(some_var).should eql(returned_value)
+      end
+    end
+  end
+
+  describe "profile" do
+    describe "fetch" do
+      before(:each) do
+        @all = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456", :subdomain => "tpltest"})
+        @extracted_keys = Array.new
+        @dummy_response = GA::Util.load_fixture("accounts")
+      end
+      it "should extract valid content from response" do
+        dummy_response = @dummy_response
+      end
+      it "should raise error when extract account id with invalid parameters" do
+        some_var = "argument to pass"
+        lambda { Fetcher::GA::Profile.extract_profiles(some_var) }.should raise_error(ArgumentError)
+      end
+      it "should not raise error when extract account id with valid parameters" do
+        some_var = @dummy_response
+        lambda { Fetcher::GA::Profile.extract_account_id(some_var) }.should_not raise_error(ArgumentError)
+      end
+      it "should extract and return account id with integer type" do
+#        @all = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456", :subdomain => "tpltest"})
+        returned_value = Array.new
+        @all.extract_account_id(some_var).should eql(returned_value)
+      end
+    end
+  end
+
+  describe "goal" do
+    describe "fetch" do
+      before(:each) do
+        @all = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456", :subdomain => "tpltest"})
+        @extracted_keys = Array.new
+        @dummy_response = GA::Util.load_fixture("accounts")
+      end
+      it "should extract valid content from response" do
+        dummy_response = @dummy_response
+      end
+      it "should raise error when extract account id with invalid parameters" do
+        some_var = "argument to pass"
+        lambda { Fetcher::GA::Goal.extract_goal(some_var) }.should raise_error(ArgumentError)
+      end
+      it "should not raise error when extract account id with valid parameters" do
+        some_var = @dummy_response
+        lambda { Fetcher::GA::Goal.extract_goal(some_var) }.should_not raise_error(ArgumentError)
+      end
+      it "should extract and return account id with integer type" do
+#        @all = Fetcher::GA::All.new({:username => "utwkidvn@gmail.com", :password => "utwkidvn123456", :subdomain => "tpltest"})
+        returned_value = Array.new
+        @all.extract_account_id(some_var).should eql(returned_value)
+      end
+    end
+  end
 end
