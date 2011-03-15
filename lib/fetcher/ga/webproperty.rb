@@ -8,8 +8,15 @@ module Fetcher
         request_url = GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
 "/" + account.account_id.to_s + GA_CONFIG["apis"]["webproperties"]
         response = create_request(request_url)
+        logger.info "Created request url: #{request_url}"
         contents = extract_web_property_contents(response)
-        save_webproperty(response, contents, credential, request_url)
+        begin
+          save_webproperty(response, contents, credential, request_url)
+        rescue Exception => e
+          #TODO send email here
+          puts e
+        end
+        logger.info "Updated web data"
       end
 
       def save_webproperty(response, contents, credential, request_url)

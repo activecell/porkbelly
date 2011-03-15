@@ -16,12 +16,19 @@ module Fetcher
           f_id = f.target_id
           request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["forums"] + "/" + f_id.to_s + ZENDESK_CONFIG["apis"]["entries"] + "." + ZENDESK_CONFIG["format"]
           response = create_request(credential, request_url)
+          logger.info "Created request url: #{request_url}"
           logger.info response.get.to_s
           @content_keys = extract_content_keys(response.get)
           format_param = ZENDESK_CONFIG["format"].to_s
           request_url_param = request_url.to_s
           forum_id = f_id
-          save_entry_data(@content_keys, request_url_param, format_param, credential, forum_id)
+          begin
+            save_entry_data(@content_keys, request_url_param, format_param, credential, forum_id)
+          rescue Exception => e
+            #TODO send email
+            puts e
+          end
+          logger.info "Updated data"
         end
       end
 

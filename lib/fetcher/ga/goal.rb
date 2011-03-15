@@ -17,8 +17,15 @@ module Fetcher
 "/" + account_id.to_s + GA_CONFIG["apis"]["webproperties"] + "/" + wp_id.to_s + 
 GA_CONFIG["apis"]["profiles"] + "/" + profile_id.to_s + GA_CONFIG["apis"]["goals"]
           response = create_request(request_url)
+          logger.info "Created request url: #{request_url}"
           contents = extract_goal(response)
-          save_goal(response, contents, credential, request_url)
+          begin
+            save_goal(response, contents, credential, request_url)
+          rescue Exception => e
+            #TODO send email here
+            puts e
+          end
+          logger.info "Updated data"
         end
       end
 

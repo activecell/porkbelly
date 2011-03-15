@@ -7,11 +7,18 @@ module Fetcher
       def fetch_tag(credential)
         request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["tags"] + "." + ZENDESK_CONFIG["format"]
         response = create_request(credential, request_url)
+        logger.info "Created request url: #{request_url}"
         logger.info response.get.to_s
         @content_keys = extract_content_keys(response.get)
         format_param = ZENDESK_CONFIG["format"].to_s
         request_url_param = request_url.to_s
-        save_tag_data(@content_keys, request_url_param, format_param, credential)
+        begin
+          save_tag_data(@content_keys, request_url_param, format_param, credential)
+        rescue Exception => e
+          #TODO send email
+          puts e
+        end
+        logger.info "Updated data"
       end
 
       def save_tag_data(content_keys, request_url_param, format_param, credential)

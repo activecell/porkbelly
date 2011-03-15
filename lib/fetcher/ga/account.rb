@@ -8,6 +8,7 @@ module Fetcher
       def fetch_account(credential)
         request_url =  GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"]
         response = create_request(request_url)
+        logger.info "Created login request url: #{request_url}"
         @account_id = extract_account_id(response)
         content = response
         begin
@@ -15,8 +16,8 @@ module Fetcher
         rescue Exception => e
           #TODO: send email here  
           puts e
-          raise "Data is not fully propered or adequate"
         end
+        logger.info "Updated data"
       end
 
       def save_account(account_id, content, credential, request_url)
