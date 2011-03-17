@@ -4,7 +4,7 @@ class CreateMixpanelEvents < ActiveRecord::Migration
       t.column :target_id , :string
       t.column :content, :text, :null => false
       t.column :credential, :string, :null => false      
-      t.column :request_url, :text
+      t.column :request_url, :string
       t.column :format, :string
       t.timestamps
     end

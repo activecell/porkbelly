@@ -1,4 +1,5 @@
 require "cgi"
+require 'digest/sha1'
 
 module Fetcher
   # this module contains a list of common methods that will be used in all fetchers
@@ -40,6 +41,11 @@ module Fetcher
       raise NotImplementedError.new("Implement this method to return a list of credential and key.")
     end
 
+    # Generate SHA1 hash string from a plain text.
+    def to_sha1(plain_text)
+      ::Digest::SHA1.hexdigest(plain_text.to_s)
+    end
+    
     def hash_to_param_string(param_hash)
       arr_param = []
       param_hash.each do |key, value|
