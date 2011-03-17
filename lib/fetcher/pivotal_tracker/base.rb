@@ -241,15 +241,12 @@ module Fetcher
                 :format => FORMAT
               }
               attrs.merge!(additional_attrs)
-              
-              updated = nil
-              if(target_entity.changed?)
-                updated = target_entity.update_attributes(attrs)
-              end
+            
+              updated = target_entity.update_attributes(attrs)
               
               if updated             
                 logger.info "Finish save #{target} with key #{key} to database."
-              elsif updated == false
+              else
                 raise "Fails to save #{target} with key #{key} to database."
               end
             end
