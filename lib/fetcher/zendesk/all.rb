@@ -26,21 +26,26 @@ module Fetcher
 
       def fetch_all
         if single_fetch?
-          fetch_organization(credential)
-          fetch_group(credential)
-          fetch_user(credential)
-          fetch_tag(credential)
-          fetch_forum(credential)
-          fetch_entry(credential)
-          fetch_ticket_field(credential)
-          fetch_macro(credential)
+          fetch(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|
-            fetch_client(credential)
+            fetch(cd)
           end
         end
       end
+
+      def fetch(credential)
+        fetch_organization(credential)
+        fetch_group(credential)
+        fetch_user(credential)
+        fetch_tag(credential)
+        fetch_forum(credential)
+        fetch_entry(credential)
+        fetch_ticket_field(credential)
+        fetch_macro(credential)
+      end
+
     end
   end
 end

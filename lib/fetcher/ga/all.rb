@@ -13,27 +13,32 @@ module Fetcher
           username, password = credential.split(":")
           credential = {:username => username, :password => password}
           super(credential)
-        else super(credential)
-#          raise ArgumentError, "This site required a subdomain, please specify the subdomain along with credential!" if single_fetch? && credential[:subdomain].nil?
+        else 
+          super(credential)
         end
       end
 
       def fetch_all
         if single_fetch?
-          login
-          fetch_account(credential)
-          fetch_webproperty(credential)
-          fetch_profile(credential)
-          fetch_goal(credential)
-          fetch_segment(credential)
-          logout
+          fetch(credential)
         else
           logger.info "multi fetch"
           credential.each do |cd|
-            fetch_account(credential)
+            fetch(cd)
           end
         end
       end
+
+      def fetch(credential)
+        login
+        fetch_account(credential)
+        fetch_webproperty(credential)
+        fetch_profile(credential)
+        fetch_goal(credential)
+        fetch_segment(credential)
+        logout
+      end
+      
     end
   end
 end
