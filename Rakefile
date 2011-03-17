@@ -187,9 +187,8 @@ namespace :site do
       credential_source = ENV["credentials"] || ENV["credential"]
       if ENV["credentials"]
         Helpers::Util.hash_from_csv(credential_source).each do |credential|
-          client = Fetcher::GA::All.new({:subdomain => credential["subdomain"],
-                                            :username => credential["username"],
-                                            :password => credential["password"]})
+          client = Fetcher::GA::All.new({:username => credential["username"],
+                                         :password => credential["password"]})
           client.fetch_all
         end
       elsif ENV["credential"]

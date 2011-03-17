@@ -1,4 +1,4 @@
-rake site:ga:all credential=tpltest:utwkidvn@gmail.com:utwkidvn123456
+rake site:ga:all credential=utwkidvn@gmail.com:utwkidvn123456
 rake site:mixpanel:all credential=09c68384ae8f86cdc568e1cd4bfe58ab:bf93660dc571137a9b845ec15ba46b79
 rake site:pt:all credential=b496be86ae795917cb5cf375606afaac
 rake site:zendesk:all credential=tpltest:utwkidvn@gmail.com:tpl123456
