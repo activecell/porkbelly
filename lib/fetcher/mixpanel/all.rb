@@ -11,56 +11,39 @@ module Fetcher
         super(tmp_credential)
       end
       
-      # fetch data for the given credential
-      def fetch_data(method="fetch_all", params={})
+      def fetch_all
         begin
-          data = nil
-          
-          if supported_methods.include?(method)
-            if self.single_fetch?
-              new_client(self.credential)
-              data = send(method, params)
-            else
-              # Multiple fetch.
-              self.credential.each do |creden|
-                begin
-                  new_client(creden)
-                  data = send(method, params)
-                rescue Exception => exc
-                  logger.error "Error when run method '#{method}' with params='#{params}'"
-                  notify_exception(SITE, exc)
-                end
+          if single_fetch?
+            logger.info "===> Starting Mixpanel single fetching..."
+            
+            fetch_single(self.credential)
+            
+            logger.info "===> Finish Mixpanel single fetching."
+          else
+            logger.info "===> Starting Mixpanel multiple fetching..."
+            
+            self.credential.each do |c|
+              begin
+                fetch_single(c)
+              rescue Exception => exc
+                logger.error "Error when fetching with credential: #{c}"
+                logger.error exc
               end
             end
-          else
-            raise ArgumentError, "Invalid method. Supported methods are: #{supported_methods}" 
+            
+            logger.info "===> Finish Mixpanel multiple fetching."
           end
-          return data  
-        rescue Exception => exception
-          logger.error(exception)
-          notify_exception(SITE, exception)
-          #raise exception
+        rescue Exception => exc
+          logger.error exc
+          logger.error exc.backtrace
+          notify_exception(SITE, exc)          
         end
-      end
+      end    
       
-      def self.supported_methods
-        @@supported_method ||= nil
+      def fetch_single(credential)
+        new_client(credential)
+        params = {}
         
-        return @@supported_method if @@supported_method
-        @@supported_method = @@event_supported_methods + 
-          @@event_property_supported_methods +
-          @@funnel_support_methods +
-          @@funnel_property_support_methods
-          
-        @@supported_method << 'fetch_all'        
-      end
-      
-      def supported_methods
-        self.class.supported_methods
-      end
-      
-      private
-      def fetch_all(params={})
         # Fetcher all event data (events and event properties).
         events = fetch_all_events(params)
         if (!events.blank? && 
@@ -89,6 +72,22 @@ module Fetcher
             logger.info "===> Finished fetching properties for funnel #{funnel_name}"      
           end
         end
+      end
+    
+      def self.supported_methods
+        @@supported_method ||= nil
+        
+        return @@supported_method if @@supported_method
+        @@supported_method = @@event_supported_methods + 
+          @@event_property_supported_methods +
+          @@funnel_support_methods +
+          @@funnel_property_support_methods
+          
+        @@supported_method += ['fetch_all', 'fetch_single']
+      end
+      
+      def supported_methods
+        self.class.supported_methods
       end
     end
   end

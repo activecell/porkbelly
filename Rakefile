@@ -86,7 +86,7 @@ namespace :site do
   namespace :mixpanel do
     desc "Fetch all Mixpanel events for the given credentials (single/multiple)"
 
-    def fetch_mixpanel_data(data_type)
+    def fetch_mixpanel_data
       usage = %q{    
         ***************************
         Description:
@@ -106,30 +106,21 @@ namespace :site do
       credential_source = ENV["credentials"] || ENV["credential"]
       
       method = ENV["method"]
-
-      @params = {}
-
-      if ENV.include?("params")
-        @params = Helpers::Util.hash_from_query_string!(ENV["params"])
-        if @params == nil || @params.empty?
-          raise usage
-        end
-      end
-
-      puts "Data type= #{data_type}. Fetching data from Mixpanel with credentials: '#{credential_source}'..."
+      
+      puts "Fetching data from Mixpanel with credentials: '#{credential_source}'..."
 
       # Begin fetching data.
       fetcher = Fetcher::Mixpanel::All.new(credential_source)
 
       puts "=== #{Time.now}: Fetching events and funnels data..."
       
-      fetcher.fetch_data('fetch_all', @params)
+      fetcher.fetch_all
       
       puts "=== #{Time.now}: Finished fetching events and funnels data."
     end
 
     task :all do
-      fetch_mixpanel_data(:all)
+      fetch_mixpanel_data
     end
   end
 
