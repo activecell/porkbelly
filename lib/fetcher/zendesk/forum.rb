@@ -28,7 +28,7 @@ module Fetcher
           extracted_key = content_key.keys[0]
           zendesk_forum =  ::Zendesk::Forum.find_or_initialize_by_target_id(extracted_key)
           logger.info zendesk_forum.inspect
-          zendesk_forum.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
+          zendesk_forum.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => extract_credential(credential), :target_id => extracted_key})
         end
       end
 

@@ -37,7 +37,10 @@ module Fetcher
         end
         extracted_keys
       end
-
+      
+      def extract_credential(credential)
+        {:username => credential[:username], :subdomain => credential[:subdomain]}.inspect
+      end
     end
   end
 end

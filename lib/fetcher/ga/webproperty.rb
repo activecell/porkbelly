@@ -4,7 +4,7 @@ module Fetcher
       include Fetcher::GA::Base
 
       def fetch_webproperty(credential)
-        account = ::GA::Account.find_by_credential(credential.inspect)
+        account = ::GA::Account.find_by_credential(extract_credential(credential))
         request_url = GA_CONFIG["base_url"] + GA_CONFIG["apis"]["accounts"] + 
 "/" + account.account_id.to_s + GA_CONFIG["apis"]["webproperties"]
         response = create_request(request_url)
@@ -33,7 +33,7 @@ module Fetcher
                                              :web_property_id => wp_id,
                                              :entry => entry.to_s,
                                              :content => response.to_s,
-                                             :credential => credential.inspect,
+                                             :credential => extract_credential(credential),
                                              :request_url => request_url, :format => "xml"})
         end
       end

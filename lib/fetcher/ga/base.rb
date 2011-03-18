@@ -41,6 +41,9 @@ module Fetcher
         RestClient.get request_url, :authorization => "GoogleLogin auth=#{auth_key}"
       end
 
+      def extract_credential(credential)
+        {:username => credential[:username]}.inspect
+      end
     end
   end
 end

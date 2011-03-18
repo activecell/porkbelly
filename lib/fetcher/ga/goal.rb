@@ -47,7 +47,7 @@ GA_CONFIG["apis"]["profiles"] + "/" + profile_id.to_s + GA_CONFIG["apis"]["goals
                          :profile_id => profile_id,
                          :name => name,
                          :content => response.to_s, 
-                         :credential => credential.inspect, 
+                         :credential => extract_credential(credential), 
                          :request_url => request_url, 
                          :format => "xml"})
         end

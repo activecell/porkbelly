@@ -50,7 +50,7 @@ module Fetcher
                                         :profile_id => profile_id,
                                         :dxp_table_id => dxp_table_id, 
                                         :content => response.to_s, 
-                                        :credential => credential, 
+                                        :credential => extract_credential(credential), 
                                         :request_url => request_url, 
                                         :format => "xml"})
         end

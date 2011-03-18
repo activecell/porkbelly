@@ -25,7 +25,7 @@ module Fetcher
         logger.info ga_account.inspect
         ga_account.update_attributes({:account_id => account_id,
                                       :content => content, 
-                                      :credential => credential.inspect, 
+                                      :credential => extract_credential(credential), 
                                       :request_url => request_url,
                                       :format => "xml"})
       end

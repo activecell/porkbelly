@@ -28,7 +28,7 @@ module Fetcher
           extracted_key = content_key.keys[0]
           zendesk_ticket_field =  ::Zendesk::TicketField.find_or_initialize_by_target_id(extracted_key)
           logger.info zendesk_ticket_field.inspect
-          zendesk_ticket_field.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key})
+          zendesk_ticket_field.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => extract_credential(credential), :target_id => extracted_key})
         end
       end
 

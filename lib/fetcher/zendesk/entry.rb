@@ -5,13 +5,13 @@ module Fetcher
 
       attr_accessor :content_keys, :forums
 
-      def load_forum_ids
+      def load_forum_ids(credential)
         zendesk_forum = ::Zendesk::Forum
-        @forums = zendesk_forum.find(:all)
+        @forums = zendesk_forum.where(:credential => extract_credential(credential))
       end
 
       def fetch_entry(credential)
-        load_forum_ids
+        load_forum_ids(credential)
         @forums.each do |f|
           f_id = f.target_id
           request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["forums"] + "/" + f_id.to_s + ZENDESK_CONFIG["apis"]["entries"] + "." + ZENDESK_CONFIG["format"]
@@ -39,7 +39,7 @@ module Fetcher
           extracted_key = content_key.keys[0]
           zendesk_entry =  ::Zendesk::Entry.find_or_initialize_by_target_id(extracted_key)
           logger.info zendesk_entry.inspect
-          zendesk_entry.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => credential, :target_id => extracted_key, :forum_id => forum_id})
+          zendesk_entry.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => extract_credential(credential), :target_id => extracted_key, :forum_id => forum_id})
         end
       end
 

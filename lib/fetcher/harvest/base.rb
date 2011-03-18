@@ -50,7 +50,7 @@ module Fetcher
               attrs = {
                 :request_url => base_url, 
                 :content => content, 
-                :credential => credential.inspect, 
+                :credential => extract_credential(credential), 
                 :format => HARVEST_CONFIG["format"]
               }
               attrs.merge!(additional_attrs)
@@ -72,6 +72,10 @@ module Fetcher
         end
         logger.info "Fetched #{target}."
         return target_ids
+      end
+      
+      def extract_credential(credential)
+        {:username => credential[:username], :subdomain => credential[:subdomain]}.inspect
       end
     end
   end

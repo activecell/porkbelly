@@ -18,7 +18,7 @@ module Fetcher
         ga_segment =  ::GA::Segment
         logger.info ga_segment.inspect
         ga_segment.create(:content => content,
-                          :credential => credential.inspect,
+                          :credential => extract_credential(credential),
                           :request_url => request_url,
                           :format => "xml")
       end
