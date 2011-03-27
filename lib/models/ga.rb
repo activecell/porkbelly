@@ -26,6 +26,11 @@ module GA
       "ga_src_segments"
     end
   end
+  class Data < ActiveRecord::Base
+    def self.table_name
+      "ga_data"
+    end
+  end
 
 
 end

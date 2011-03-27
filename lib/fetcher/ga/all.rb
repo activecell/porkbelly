@@ -2,10 +2,11 @@ module Fetcher
   module GA
     class All
       include Fetcher::GA::Account
-      include Fetcher::GA::WebProperty
-      include Fetcher::GA::Profile
-      include Fetcher::GA::Goal
-      include Fetcher::GA::Segment
+      include Fetcher::GA::Data
+#      include Fetcher::GA::WebProperty
+ #     include Fetcher::GA::Profile
+  #    include Fetcher::GA::Goal
+   #   include Fetcher::GA::Segment
 
       def initialize(credential)
         #<subdomain>:<username>:<password>
@@ -29,13 +30,25 @@ module Fetcher
         end
       end
 
+      def fetch_acc
+        if single_fetch?
+          fetch(credential)
+        else
+          logger.info "multi fetch"
+          credential.each do |cd|
+            fetch(cd)
+          end
+        end
+      end
+
       def fetch(credential)
         login
         fetch_account(credential)
-        fetch_webproperty(credential)
-        fetch_profile(credential)
-        fetch_goal(credential)
-        fetch_segment(credential)
+        fetch_data(credential)
+#        fetch_webproperty(credential)
+ #       fetch_profile(credential)
+  #      fetch_goal(credential)
+   #     fetch_segment(credential)
         logout
       end
       
