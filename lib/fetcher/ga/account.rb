@@ -8,11 +8,8 @@ module Fetcher
       def fetch_account(credential)
         request_url =  GA_CONFIG["base_url"]
         response = create_request(request_url)
-        puts response
         logger.info "Created login request url: #{request_url}"
         @account_id = extract_account(response)[1][0]
-        puts request_url
-        puts @account_id
         contents = extract_account(response)
         begin
           save_account(response, contents, credential, request_url)

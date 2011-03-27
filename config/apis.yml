@@ -58,8 +58,9 @@ development:
     format: "xml"
 
   ga:
-    auth_url: "https://www.google.com/accounts/ClientLogin?accountType=GOOGLE&Email=[EMAIL]&Passwd=[PASSWORD]&service=analytics&source=curl-accountFeed-v2"
+    auth_url: "https://www.google.com/accounts/ClientLogin?Email=[EMAIL]&Passwd=[PASSWORD]&accountType=GOOGLE&service=analytics&source=curl-accountFeed-v2"
     base_url: "https://www.google.com/analytics/feeds/accounts/default"
+    data_url: "https://www.google.com/analytics/feeds/data?"
     apis:
       accounts: "/accounts"
       webproperties: "/webproperties"
