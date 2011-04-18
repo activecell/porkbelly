@@ -11,6 +11,9 @@ require 'models/pivotal_tracker'
 require 'models/ga'
 require 'models/salesforce'
 
+# parser models
+require 'parser/models/pivotal_tracker'
+
 # base fetcher
 require 'fetcher/base'
 
@@ -83,3 +86,4 @@ require 'fetcher/salesforce/all'
 module Fetcher
   VERSION = "1.0.0"
 end
+

@@ -1,0 +1,26 @@
+#development:
+#  adapter: postgresql
+#  host: localhost
+#  port: 5432
+#  username: postgres
+#  password: tin
+#  database: profitably
+#  encoding: utf8
+#  template: template0
+
+development:
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 5000
+
+production:
+  adapter: postgresql
+  host: localhost
+  port: 5432
+  username: postgres
+  password: tin
+  database: profitably
+  encoding: utf8
+  template: template0
+

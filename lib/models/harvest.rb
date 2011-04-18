@@ -3,43 +3,43 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", '..', 'config',
 module Harvest
   class Client < ActiveRecord::Base
     def self.table_name
-      "harvest_clients"
+      "harvest_src_clients"
     end
   end
 
   class Contact < ActiveRecord::Base
     def self.table_name
-      "harvest_contacts"
+      "harvest_src_contacts"
     end
   end
 
   class Project < ActiveRecord::Base
     def self.table_name
-      "harvest_projects"
+      "harvest_src_projects"
     end
   end
 
   class Task < ActiveRecord::Base
     def self.table_name
-      "harvest_tasks"
+      "harvest_src_tasks"
     end
   end
 
   class User < ActiveRecord::Base
     def self.table_name
-      "harvest_people"
+      "harvest_src_people"
     end
   end
 
   class ExpenseCategory < ActiveRecord::Base
     def self.table_name
-      "harvest_expense_categories"
+      "harvest_src_expense_categories"
     end
   end
-  
+
   class Expense < ActiveRecord::Base
     def self.table_name
-      "harvest_expenses"
+      "harvest_src_expenses"
     end
   end
 
@@ -86,3 +86,4 @@ module Harvest
   end
 
 end
+

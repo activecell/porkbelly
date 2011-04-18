@@ -3,59 +3,49 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", '..', 'config',
 module PivotalTracker
   # Base class for all Pivotal Tracker model classes.
   class PivotalTrackerData < ActiveRecord::Base
-    
+
   end
-  
-=begin
-  'mixpanel_events' Tables's Schema:
-    id:             int (primary key)
-    target_id:      string # unique ID from API services.
-    content:        text
-    request_url:    string
-    format:         string
-    credential:     string
-    created_at:     datetime
-    updated_at:     datetime  
-=end
+
   class Project < PivotalTrackerData
     def self.table_name
-      "pt_projects"
+      "pt_src_projects"
     end
   end
-  
+
   class Activity < PivotalTrackerData
     def self.table_name
-      "pt_activities"
+      "pt_src_activities"
     end
   end
-  
+
   class Membership < PivotalTrackerData
     def self.table_name
-      "pt_memberships"
+      "pt_src_memberships"
     end
   end
-  
+
   class Iteration < PivotalTrackerData
     def self.table_name
-      "pt_iterations"
+      "pt_src_iterations"
     end
   end
-  
+
   class Story < PivotalTrackerData
     def self.table_name
-      "pt_stories"
+      "pt_src_stories"
     end
   end
-  
+
   class Note < PivotalTrackerData
     def self.table_name
-      "pt_notes"
+      "pt_src_notes"
     end
   end
-  
+
   class Task < PivotalTrackerData
     def self.table_name
-      "pt_tasks"
+      "pt_src_tasks"
     end
   end
 end
+

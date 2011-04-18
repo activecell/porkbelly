@@ -13,6 +13,7 @@ gem 'garb'
 gem 'rforce'# For Salesforce fetcher.
 gem 'json'
 gem 'rforce' # For Salesforce fetcher.
+gem 'sqlite3'
 
 group :development, :test do
   gem "ruby-debug"

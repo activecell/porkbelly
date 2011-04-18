@@ -3,29 +3,30 @@ require File.expand_path(File.join(File.dirname(__FILE__), "..", '..', 'config',
 module GA
   class Account < ActiveRecord::Base
     def self.table_name
-      "ga_accounts"
+      "ga_src_accounts"
     end
   end
   class WebProperty < ActiveRecord::Base
     def self.table_name
-      "ga_web_properties"
+      "ga_src_web_properties"
     end
   end
   class Profile < ActiveRecord::Base
     def self.table_name
-      "ga_profiles"
+      "ga_src_profiles"
     end
   end
   class Goal < ActiveRecord::Base
     def self.table_name
-      "ga_goals"
+      "ga_src_goals"
     end
   end
   class Segment < ActiveRecord::Base
     def self.table_name
-      "ga_segments"
+      "ga_src_segments"
     end
   end
 
 
 end
+
