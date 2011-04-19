@@ -5,6 +5,8 @@ require "active_record"
 require "yaml"
 require "pg"
 
+# TODO: add task for parsing
+
 PROJECT_DIR = File.dirname(__FILE__)
 DATABASE_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
 DB_FILE = File.join(PROJECT_DIR, DATABASE_CONFIG[STAGE]["database"])
@@ -18,7 +20,7 @@ namespace :site do
         ***************************
         Description:
           Get all data of the Zendesk site
-        Usage: 
+        Usage:
           rake site:harvest credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
           rake site:harvest credential=<subdomain>:<username>:<password> #=> get all data of the given credential
           Replace variable in <> with actual params
@@ -46,13 +48,13 @@ namespace :site do
   task :pt => :"pt:all" # default fetch all data
   namespace :pt do
     desc "Fetch all Pivotal Tracker data for the given credentials (single/multiple)"
-    
+
     def fetch_pivotal_tracker_data
-      usage = %q{    
+      usage = %q{
         ***************************
         Description:
           Get all data of the Pivotal Tracker site
-        Usage: 
+        Usage:
           rake site:pt credentials=<path_to_credentials_csv_file> #=> get all data with many credentials
           rake site:pt credential="<username>:<password>"  #=> get all data with the given username and password
           rake site:pt credential="<token>"  #=> get all data with the given API token
@@ -64,19 +66,19 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      
+
       credential_source = ENV["credentials"] || ENV["credential"]
 
       # Begin fetching data.
       fetcher = Fetcher::PivotalTracker::All.new(credential_source)
 
       puts "=== #{Time.now}: Fetching data from Pivotal Tracker with credential(s): '#{credential_source}'..."
-      
+
       fetcher.fetch_all
-      
+
       puts "=== #{Time.now}: Finished fetching data from Pivotal Tracker."
     end
-    
+
     task :all do
       fetch_pivotal_tracker_data
     end
@@ -87,11 +89,11 @@ namespace :site do
     desc "Fetch all Mixpanel events for the given credentials (single/multiple)"
 
     def fetch_mixpanel_data
-      usage = %q{    
+      usage = %q{
         ***************************
         Description:
           Get all data of the Mixpanel site
-        Usage: 
+        Usage:
           rake site:mixpanel credentials=<path_to_credentials_csv_file> #=> get all data with many credentials
           rake site:mixpanel credential="<api_key>:<api_secret>" #=> get all data with the given credential
           Replace variable in <> with actual params
@@ -102,20 +104,20 @@ namespace :site do
       unless ENV.include?("credentials") or ENV.include?("credential")
         raise usage
       end
-      
+
       credential_source = ENV["credentials"] || ENV["credential"]
-      
+
       method = ENV["method"]
-      
+
       puts "Fetching data from Mixpanel with credentials: '#{credential_source}'..."
 
       # Begin fetching data.
       fetcher = Fetcher::Mixpanel::All.new(credential_source)
 
       puts "=== #{Time.now}: Fetching events and funnels data..."
-      
+
       fetcher.fetch_all
-      
+
       puts "=== #{Time.now}: Finished fetching events and funnels data."
     end
 
@@ -132,7 +134,7 @@ namespace :site do
         ***************************
         Description:
           Get all data of the Zendesk site
-        Usage: 
+        Usage:
           rake site:zendesk credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
           rake site:zendesk credential=<subdomain>:<username>:<password> #=> get all data of the given credential
           Replace variable in <> with actual params
@@ -165,7 +167,7 @@ namespace :site do
         ***************************
         Description:
           Get all data of the GoogleAnalytic site
-        Usage: 
+        Usage:
           rake site:ga credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
           rake site:ga credential=<username>:<password> #=> get all data of the given credential
           Replace variable in <> with actual params
@@ -220,3 +222,4 @@ namespace :db do
     end
   end
 end
+
