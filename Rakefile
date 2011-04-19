@@ -223,3 +223,20 @@ namespace :db do
   end
 end
 
+namespace :parsing do
+  task :pt => :"pt:all" # default parse all data
+  namespace :pt do
+    desc "Parser all data of Pivotal Tracker"
+    task :all do
+      ENV['credentials'] = "doc/pt.csv"
+      # TODO: remove comment for do fetching from here
+      # Rake::Task["site:pt:all"].invoke
+      parse_all_data
+    end
+
+    def parse_all_data
+      BusinessDomain::PivotalTracker::All.new().parse_all
+    end
+  end
+end
+

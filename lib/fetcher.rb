@@ -11,9 +11,6 @@ require 'models/pivotal_tracker'
 require 'models/ga'
 require 'models/salesforce'
 
-# parser models
-require 'parser/models/pivotal_tracker'
-
 # base fetcher
 require 'fetcher/base'
 
@@ -86,4 +83,13 @@ require 'fetcher/salesforce/all'
 module Fetcher
   VERSION = "1.0.0"
 end
+
+# ---- BUSINESS DOMAIN --- #
+
+# PIVOTAL TRACKER
+require 'app/models/pivotal_tracker/base'
+require 'app/models/pivotal_tracker/project'
+require 'app/models/pivotal_tracker/activity'
+require 'app/models/pivotal_tracker//story'
+require 'app/models/pivotal_tracker/all'
 

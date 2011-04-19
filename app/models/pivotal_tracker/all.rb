@@ -1,11 +1,10 @@
-module Parser
+module BusinessDomain
   module PivotalTracker
     class All
-      include Parser::PivotalTracker::Activity
 
       def parse_all
-        parse_activity
-
+        Activity.parse_all
+        Project.parse_all
       end
     end
   end
