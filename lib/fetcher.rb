@@ -88,8 +88,17 @@ end
 
 # PIVOTAL TRACKER
 require 'app/models/pivotal_tracker/base'
+require 'app/models/pivotal_tracker/parser'
 require 'app/models/pivotal_tracker/project'
 require 'app/models/pivotal_tracker/activity'
-require 'app/models/pivotal_tracker//story'
+require 'app/models/pivotal_tracker/story'
+require 'app/models/pivotal_tracker/iteration'
+require 'app/models/pivotal_tracker/note'
+require 'app/models/pivotal_tracker/task'
+require 'app/models/pivotal_tracker/person'
+require 'app/models/pivotal_tracker/membership'
+require 'app/models/pivotal_tracker/iteration_story'
+require 'app/models/pivotal_tracker/history_track'
+require 'app/models/pivotal_tracker/story_note'
 require 'app/models/pivotal_tracker/all'
 

@@ -2,7 +2,7 @@ module BusinessDomain
   module PivotalTracker
     class Activity < Base
 
-      belongs_to :story
+
 
       def self.table_name
         "pt_activities"

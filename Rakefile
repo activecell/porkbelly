@@ -4,6 +4,7 @@ require File.expand_path(File.join(File.dirname(__FILE__), "lib", "fetcher"))
 require "active_record"
 require "yaml"
 require "pg"
+require 'sqlite3'
 
 # TODO: add task for parsing
 

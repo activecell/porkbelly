@@ -7,36 +7,32 @@ module BusinessDomain
       @@params = []
       @@parent = ''
       @@src_data = ''
-      def self.parse(obj)
-        parse_content(obj.content)
+      def self.parse(content)
+        parse_content(content)
       end
 
       def self.parse_all
         transaction do
           arr_obj = []
           @@src_data.find(:all).each do |o|
-            arr_obj.push parse(o)
+            arr_obj.push parse(o.content)
           end
-          arr_obj.each do |o|
-            object = find_or_initialize_by_target_id(o[:target_id])
-            object.update_attributes(o)
+          arr_obj.each do |arr_ele|
+            arr_ele.each do |o|
+              object = find_or_initialize_by_target_id(o[:target_id])
+              object.update_attributes(o)
+            end unless arr_ele.nil?
           end
         end
       end
 
       protected
 
-      # parse a text with format xml to database
-      # finds children from parent_node
+#     parse a text with format xml to database
+#     finds children from parent node
       def self.parse_content(content)
-        contain = {}
-        doc = Nokogiri::XML(content)
-        doc.xpath(@@parent).each do |n|
-          @@params.each do |p|
-            contain[p[0]] = n.xpath(p[1]).text
-          end
-        end
-        contain
+        @@contain = Parser.parse_XML(@@parent,content,@@params)
+        @@contain
       end
     end
   end

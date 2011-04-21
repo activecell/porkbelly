@@ -8,19 +8,19 @@ module Fetcher
   module PivotalTracker
     module Base
       include Fetcher::Base
-      
+
       PT_CONFIG = APIS_CONFIG['pivotal_tracker']
       SITE = "PIVOTAL_TRACKER"
-      
+
       # Default base URL.
       BASE_URL = "https://www.pivotaltracker.com/services/v3"
-      
+
       # URL to retrieve the API token
       TOKEN_URL = "https://www.pivotaltracker.com/services/v3/tokens/active"
-      
+
       # Default API URLs
       DEFAULT_API_URLS = {
-        'projects' => '/projects', 
+        'projects' => '/projects',
         'stories' => '/projects/[PROJECT_ID]/stories',
         'activities' => '/projects/[PROJECT_ID]/activities',
         'memberships' => '/projects/[PROJECT_ID]/memberships',
@@ -28,29 +28,29 @@ module Fetcher
         'notes' => '/projects/[PROJECT_ID]/stories/[STORY_ID]/notes',
         'tasks' => '/projects/[PROJECT_ID]/stories/[STORY_ID]/tasks',
       }
-      
+
       # Content type to embed in the HTTP header.
       CONTENT_TYPE = "application/xml"
-      
+
       # The format of Pivotal Tracker response.
       FORMAT = "xml"
-      
+
       # Date time format to use for tracking last update time.
       DATE_TIME_FORMAT = "%Y/%m/%d"
-      
+
       attr_accessor :token
       attr_accessor :model_class
       attr_accessor :current_url
-      
+
       #------ Implemetation of abstract Base class ------#
-      
+
       @@logger = BaseLogger.new(File.join(File.dirname(__FILE__), "..", "..", "..", "log", "pivotal_tracker.log"))
       def logger
         @@logger
       end
-      
+
       #------  End abstract class implementation. --------#
-      
+
       # Get identification info (such as: api_key, token or username:password)
       # == Parameters:
       #   + credentials_source: there are 3 types of options:
@@ -78,11 +78,11 @@ module Fetcher
         # Case 1: "username:password"
         if(credentials_source.include?(':'))
           values = credentials_source.split(':')
-          
+
           if(values.length == 2)
             username = values[0].strip
             password = values[1].strip
-            
+
             if(username.strip != '' && password.strip != '')
               credentials = {:username => username, :password => password}
             end
@@ -98,7 +98,7 @@ module Fetcher
         end
         return credentials
       end
-      
+
       # Retrieve the token needs to get data from Pivotal Tracker service.
       # If the credential is a token, there is no need to call thhis method.
       # == Parameters:
@@ -109,7 +109,7 @@ module Fetcher
         self.token= Nokogiri::XML(response.body).search('guid').inner_html
         return self.token
       end
-      
+
       # Create a new RestClient::Resource pbject.
       # Note that the request will be not sent until you call get() or post()
       # == Parameters:
@@ -121,26 +121,26 @@ module Fetcher
       def create_request(token, request_url, params = {})
         # convert params hash to request param string
         options = encode_options(params)
-        request_url << options       
-        
-        logger.info "Create request #{request_url}"       
-        
-        RestClient::Resource.new(request_url, 
+        request_url << options
+
+        logger.info "Create request #{request_url}"
+
+        RestClient::Resource.new(request_url,
           :headers => {'X-TrackerToken' => token, 'Content-Type' => CONTENT_TYPE}
         )
       end
-      
+
       # Get base URL. If no URL was found in the config file, the default URL will be used.
       def base_url
         if PT_CONFIG['base_url'].blank?
           return BASE_URL
         end
-        
+
         PT_CONFIG['base_url']
       end
-      
+
       # Normalize options to params string.
-      # Inspired from Pivotal Tracker gem 
+      # Inspired from Pivotal Tracker gem
       # by Justin Smestad (https://github.com/jsmestad/pivotal-tracker)
       def encode_options(options)
         return '' if !options.is_a?(Hash) || options.empty?
@@ -156,11 +156,11 @@ module Fetcher
         options_strings << "filter=#{filters_string.join('%20')}" unless filters_string.empty?
         return "?#{options_strings.join('&')}"
       end
-      
+
       # Normalize credential, this will raise an ArgumentError if the credential is invalid.
       # == Parameters:
-      #   + credential can be: 
-      #       - A string that contains path to an CSV file 
+      #   + credential can be:
+      #       - A string that contains path to an CSV file
       #       - Or a key.
       #       - Or, the string with the format: "<username>:<password>"
       #       - Or, a hash with the format {:username => "<username>", :password => "<password>"}
@@ -176,56 +176,57 @@ module Fetcher
             tmp_credential = self.get_api_credentials(credential)
             raise if tmp_credential.blank?
           rescue Exception
-            raise ArgumentError, "Credential must be in following formats: '<username>:<password>', 'token' or '<path to a CSV file>'" 
+            raise ArgumentError, "Credential must be in following formats: '<username>:<password>', 'token' or '<path to a CSV file>'"
           end
         end
-        
+
         if tmp_credential.is_a?(Hash)
           tmp_credential.to_options # Require active_support/core_ext
           if ((tmp_credential[:username].blank? || tmp_credential[:password].blank?) &&
                 (tmp_credential[:token].blank?))
-            raise ArgumentError, "This site required api_key and api_secret" 
+            raise ArgumentError, "This site required api_key and api_secret"
           end
         end
-        
+
         return tmp_credential
       end
-      
-      def fetch(model_class, token, target_api, response_parse_logic, 
+
+      def fetch(model_class, token, target_api, response_parse_logic,
                 setup_params_logic, support_timestamp = true,
                 additional_attrs = {})
         self.model_class = model_class
-        
-        target = model_class.to_s.split("::").last
+
+        # Use the same target for all model
+        target = model_class.to_s.split("::").first
         logger.info "Fetching #{target} ..."
-        
+
         target_ids = []
-        
+
         if support_timestamp
-          tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, target)
+          tracking = ::SiteTracking.find_by_site_and_target(SITE, target)
         end
-        
+
         begin
           url = self.combine_url(target_api)
           params = {}
-          
+
           last_request = nil
           if support_timestamp and tracking and tracking.last_request
             last_request = tracking.last_request.strftime(DATE_TIME_FORMAT)
           end
-          
+
           # Call the delegate code to setup time tracking param.
           setup_params_logic.call(last_request, params)
-          
+
           # Send request to Pivotal Tracker.
           logger.info "Basic request URL: #{url}"
-          
+
           response = create_request(token, url, params).get
-          
+
           self.current_url = url
-          
+
           logger.info "====== Full request URL: #{url} ====="
-          
+
           # Call the delegate code to parse the responded data.
           content_keys = response_parse_logic.call(response)
 
@@ -235,58 +236,59 @@ module Fetcher
               target_entity = model_class.find_or_initialize_by_target_id(key)
               # insert of update target
               attrs = {
-                :request_url => url, 
-                :content => content, 
-                :credential => token, 
+                :request_url => url,
+                :content => content,
+                :credential => token,
                 :format => FORMAT
               }
               attrs.merge!(additional_attrs)
-            
+
               updated = target_entity.update_attributes(attrs)
-              
-              if updated             
+
+              if updated
                 logger.info "Finish save #{target} with key #{key} to database."
               else
                 raise "Fails to save #{target} with key #{key} to database."
               end
             end
-            
+
             # update tracking record for the next fetch
-            if support_timestamp
-              tracking.update_attributes({:last_request => Time.now})
-            end
+#            if support_timestamp
+#              tracking.update_attributes({:last_request => Time.now})
+#            end
           end
-          
+
         rescue Exception => exception
           logger.error exception
           logger.error exception.backtrace
-          notify_exception(SITE, exception) 
+          notify_exception(SITE, exception)
           raise exception
         end
-        
+
         logger.info "Finish fetching #{target}."
         return target_ids
       end
-      
+
       def combine_url(sub_url)
         return File.join(base_url, sub_url)
       end
-      
+
       def get_api_url(name)
         if PT_CONFIG['apis'].blank? || PT_CONFIG['apis'][name].blank?
           return DEFAULT_API_URLS[name]
         end
-        
+
         return PT_CONFIG['apis'][name]
       end
-      
+
       def format_project_url(origin_url, project_id)
         return origin_url.gsub('[PROJECT_ID]', project_id.to_s)
       end
-      
+
       def format_story_url(origin_url, story_id)
         return origin_url.gsub('[STORY_ID]', story_id.to_s)
       end
     end
   end
 end
+

@@ -8,23 +8,30 @@ module BusinessDomain
           "pt_stories"
       end
 
-      # override method
+# override method
       def self.parse_all
-
+        @@src_data = ::PivotalTracker::Story
+        super
       end
 
       protected
 
-      # override method
+# override method
       def self.parse_content(content)
         @@params = [[:target_id,'id'],
-        [:version,'version'],
-        [:event_type,'event_type'],
-        [:occurred_at,'occurred_at'],
-        [:author,'author'],
-        [:project_id, 'project_id'],
-        [:description,'description']]
-        @@parent = '/activity'
+                    [:project_id,'project_id'],
+                    [:story_type,'story_type'],
+                    [:url,'url'],
+                    [:estimate,'estimate'],
+                    [:current_state,'current_state'],
+                    [:description,'description'],
+                    [:name,'name'],
+                    [:requested_by,'requested_by'],
+                    [:owned_by,'owned_by'],
+                    [:srv_created_at,'created_at'],
+                    [:srv_updated_at,'updated_at'],
+                    [:labels,'labels']]
+        @@parent = '/story'
         super(content)
       end
 
