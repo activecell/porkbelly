@@ -1,9 +1,12 @@
 module BusinessDomain
   module PivotalTracker
     class Membership < Base
-      validates_uniqueness_of :person_id, :scope => :project_id
 
-#      This class will fill data to Person table automatic
+      validates_uniqueness_of :person_id, :scope => :project_id
+      belongs_to :person
+      belongs_to :project
+
+
 
       def self.table_name
           "pt_memberships"

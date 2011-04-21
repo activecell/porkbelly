@@ -22,7 +22,8 @@ module Fetcher
       DEFAULT_API_URLS = {
         'projects' => '/projects',
         'stories' => '/projects/[PROJECT_ID]/stories',
-        'activities' => '/projects/[PROJECT_ID]/activities',
+        # FIXME: just limit 100 records, can not download all of 'em
+        'activities' => '/projects/[PROJECT_ID]/activities?limit=100',
         'memberships' => '/projects/[PROJECT_ID]/memberships',
         'iterations' => '/projects/[PROJECT_ID]/iterations',
         'notes' => '/projects/[PROJECT_ID]/stories/[STORY_ID]/notes',

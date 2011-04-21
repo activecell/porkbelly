@@ -2,6 +2,9 @@ module BusinessDomain
   module PivotalTracker
     class History_Track < Base
 
+      belongs_to :story
+      belongs_to :activity
+
       def self.table_name
         "pt_history_tracks"
       end
@@ -42,7 +45,7 @@ module BusinessDomain
 #        update id from database
         activity = Activity.find_by_target_id(contain[0][:activity_id])
         story = Story.find_by_target_id(contain[0][:story_id])
-        note = Note.find_by_target_id(contain[0][:note_id])
+        note = Note.find_by_target_id(contain[0][:note_id]) if contain[0][:note_id] != ''
         contain[0][:activity_id] = activity[:id] unless activity.nil?
         contain[0][:story_id] = story[:id] unless story.nil?
         contain[0][:note_id] = note[:id] unless note.nil?

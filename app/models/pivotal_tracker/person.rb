@@ -2,6 +2,9 @@ module BusinessDomain
   module PivotalTracker
     class Person < Base
 
+      has_many :memberships
+      has_many :projects, :through => :memberships
+
       def self.table_name
           "pt_persons"
       end

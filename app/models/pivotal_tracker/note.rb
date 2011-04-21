@@ -2,6 +2,9 @@ module BusinessDomain
   module PivotalTracker
     class Note < Base
 
+      has_one :story_note
+      has_one :story, :through => :story_note
+
       def self.table_name
         "pt_notes"
       end

@@ -2,6 +2,9 @@ module BusinessDomain
   module PivotalTracker
     class Iteration_Story < Base
 
+      belongs_to :iteration
+      belongs_to :story
+
       def self.table_name
         "pt_iterations_stories"
       end
@@ -29,7 +32,7 @@ module BusinessDomain
         contain = []
         params = [[:iteration_id,'id']]
         parent = 'iteration'
-#        get stories
+#        get iteration
         contain.push Parser.parse_XML(parent,content,params)
 #        get each story info
         contain.push Parser.parse_XML('iteration/stories//story',content,[[:story_id,'id']])

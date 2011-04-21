@@ -2,7 +2,8 @@ module BusinessDomain
   module PivotalTracker
     class Activity < Base
 
-
+      has_one :history_track
+      has_one :story, :through => :history_track
 
       def self.table_name
         "pt_activities"

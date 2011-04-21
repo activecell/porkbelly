@@ -2,7 +2,11 @@ module BusinessDomain
   module PivotalTracker
     class Story < Base
 
-      has_many :notes
+      has_many :tasks
+      has_many :story_notes
+      has_many :notes, :through => :story_notes
+      belongs_to :project
+
 
       def self.table_name
           "pt_stories"

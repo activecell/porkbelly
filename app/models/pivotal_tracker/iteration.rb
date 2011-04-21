@@ -2,6 +2,7 @@ module BusinessDomain
   module PivotalTracker
     class Iteration < Base
 
+      belongs_to :project
       has_many :iteration_stories
       has_many :stories, :through => :iteration_stories
 

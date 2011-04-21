@@ -4,6 +4,7 @@ module BusinessDomain
 
       has_many :stories
       has_many :memberships
+      has_many :persons, :through => :memberships
 
       def self.table_name
         "pt_projects"
