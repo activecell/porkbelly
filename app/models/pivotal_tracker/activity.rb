@@ -9,25 +9,24 @@ module BusinessDomain
         "pt_activities"
       end
 
-      # override method
-      def self.parse_all
-        @@src_data = ::PivotalTracker::Activity
-        super
+######################
+#      override method
+######################
+      def self.src_data
+        return ::PivotalTracker::Activity
       end
 
-      protected
-
-      # override method
-      def self.parse_content(content)
-        @@params = [[:target_id,'id'],
-        [:version,'version'],
-        [:event_type,'event_type'],
-        [:occurred_at,'occurred_at'],
-        [:author,'author'],
-        [:project_id, 'project_id'],
-        [:description,'description']]
-        @@parent = '/activity'
-        super(content)
+      def self.filter_params
+        params = {}
+        params.update :parent => '/activity'
+        params.update :mapper => [[:target_id,'id'],
+                            [:version,'version'],
+                            [:event_type,'event_type'],
+                            [:occurred_at,'occurred_at'],
+                            [:author,'author'],
+                            [:project_id, 'project_id'],
+                            [:description,'description']]
+        return params
       end
     end
   end

@@ -1,0 +1,35 @@
+  <story>
+    <id type="integer">6256883</id>
+    <project_id type="integer">141589</project_id>
+    <story_type>release</story_type>
+    <url>http://www.pivotaltracker.com/story/show/6256883</url>
+    <current_state>accepted</current_state>
+    <description>test desc</description>
+    <name>no2</name>
+    <requested_by>Le Trong TIn</requested_by>
+    <created_at type="datetime">2010/11/11 10:00:46 UTC</created_at>
+    <updated_at type="datetime">2011/01/24 03:17:34 UTC</updated_at>
+    <accepted_at type="datetime">2011/01/21 05:00:00 UTC</accepted_at>
+    <labels>original,project,test,test label,testing</labels>
+    <notes type="array">
+      <note>
+        <id type="integer">3309731</id>
+        <text>test comment</text>
+        <author>Le Trong TIn</author>
+        <noted_at type="datetime">2010/11/27 18:23:15 UTC</noted_at>
+      </note>
+      <note>
+        <id type="integer">3340251</id>
+        <text>add new comment</text>
+        <author>Le Trong TIn</author>
+        <noted_at type="datetime">2010/11/30 05:10:42 UTC</noted_at>
+      </note>
+      <note>
+        <id type="integer">3341345</id>
+        <text>test add new comment</text>
+        <author>Le Trong TIn</author>
+        <noted_at type="datetime">2010/11/30 07:30:38 UTC</noted_at>
+      </note>
+    </notes>
+  </story>
+

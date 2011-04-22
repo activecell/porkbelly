@@ -1,0 +1,18 @@
+<activity>
+  <id type="integer">59596685</id>
+  <version type="integer">567</version>
+  <event_type>story_update</event_type>
+  <occurred_at type="datetime">2011/02/28 03:05:10 UTC</occurred_at>
+  <author>Chuong Huynh</author>
+  <project_id type="integer">136215</project_id>
+  <description>Changed description</description>
+  <stories>
+    <story>
+      <id type="integer">9963685</id>
+      <url>http://www.pivotaltracker.com/services/v3/projects/136215/stories/9963685</url>
+      <accepted_at type="datetime">2011/02/28 03:05:10 UTC</accepted_at>
+      <current_state>accepted</current_state>
+    </story>
+  </stories>
+</activity>
+

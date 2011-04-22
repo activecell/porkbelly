@@ -1,0 +1,18 @@
+<activity>
+  <id type="integer">59596663</id>
+  <version type="integer">566</version>
+  <event_type>story_update</event_type>
+  <occurred_at type="datetime">2011/02/28 03:04:49 UTC</occurred_at>
+  <author>Chuong Huynh</author>
+  <project_id type="integer">136215</project_id>
+  <description>Chuong Huynh accepted &quot;Include a free text &quot;Summary&quot; field in daily report&quot;</description>
+  <stories>
+    <story>
+      <id type="integer">9963419</id>
+      <url>http://www.pivotaltracker.com/services/v3/projects/136215/stories/9963419</url>
+      <accepted_at type="datetime">2011/02/28 03:04:49 UTC</accepted_at>
+      <current_state>accepted</current_state>
+    </story>
+  </stories>
+</activity>
+

@@ -1,0 +1,30 @@
+  <story>
+    <id type="integer">6256943</id>
+    <project_id type="integer">141589</project_id>
+    <story_type>bug</story_type>
+    <url>http://www.pivotaltracker.com/story/show/6256943</url>
+    <current_state>finished</current_state>
+    <description></description>
+    <name>no4</name>
+    <requested_by>Le Trong TIn</requested_by>
+    <owned_by>Ho Hoang Anh</owned_by>
+    <created_at type="datetime">2010/11/11 10:03:19 UTC</created_at>
+    <updated_at type="datetime">2011/01/14 11:08:15 UTC</updated_at>
+    <labels>changed,project</labels>
+    <notes type="array">
+      <note>
+        <id type="integer">3092921</id>
+        <text>test comment 2</text>
+        <author>Le Trong TIn</author>
+        <noted_at type="datetime">2010/11/16 07:25:59 UTC</noted_at>
+      </note>
+      <note>
+        <id type="integer">4358407</id>
+        <text>Test comment 3</text>
+        <author>Man Vuong</author>
+        <noted_at type="datetime">2011/01/19 09:07:03 UTC</noted_at>
+      </note>
+    </notes>
+  </story>
+  <story>
+

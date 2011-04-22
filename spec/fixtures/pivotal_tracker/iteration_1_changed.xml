@@ -1,0 +1,9 @@
+<iteration>
+    <id type="integer">1</id>
+    <number type="integer">3</number>
+    <start type="datetime">2010/10/31 17:00:00 UTC</start>
+    <finish type="datetime">2010/11/07 17:00:00 UTC</finish>
+    <stories type="array">
+    </stories>
+  </iteration>
+
