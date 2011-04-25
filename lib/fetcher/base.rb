@@ -8,9 +8,11 @@ module Fetcher
     APIS_CONFIG = ::YAML::load(File.open(File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "config", "apis.yml"))))[::STAGE]
 
     attr_accessor :credential
-    def initialize(credential)
+    attr_accessor :params
+    def initialize(credential, params)
       raise ArgumentError, "Invalid credential, credential can be only Hash(single fetch) or Array(multiple fetch)" if (credential.nil? or credential.empty?) or (!credential.kind_of?(Array) and !credential.kind_of?(Hash)) 
       @credential = credential
+      @params = params
     end
 
     def single_fetch?

@@ -160,10 +160,45 @@ namespace :site do
     end
   end
 
-  task :ga => :"ga:all"
+#  task :ga => :"ga:all"
+#  namespace :ga do
+#    desc "Fetch all google analytic feed"
+#    task :all do
+#      usage = %q{
+#        ***************************
+#        Description:
+#          Get all data of the GoogleAnalytic site
+#        Usage:
+#          rake site:ga credentials=<path_to_credentials_csv_file> #=> get all data of the given credentials
+#          rake site:ga credential=<username>:<password> #=> get all data of the given credential
+#          Replace variable in <> with actual params
+#        **************************
+#      }
+#      # validate arguments
+#      unless ENV.include?("credentials") or ENV.include?("credential")
+#        raise usage
+#      end
+#      credential_source = ENV["credentials"] || ENV["credential"]
+#      if ENV["credentials"]
+#        Helpers::Util.hash_from_csv(credential_source).each do |credential|
+#          client = Fetcher::GA::All.new({:username => credential["username"],
+#                                         :password => credential["password"]})
+#          client.fetch_all
+#        end
+#      elsif ENV["credential"]
+#        client = Fetcher::GA::All.new(ENV['credential'])
+#        client.fetch_all
+#      end
+#    end
+#  end
+
+############################################################################
+######## GA task with specified params
+############################################################################
+  task :ga => :"ga:account"
   namespace :ga do
     desc "Fetch all google analytic feed"
-    task :all do
+    task :account do
       usage = %q{
         ***************************
         Description:
@@ -179,15 +214,56 @@ namespace :site do
         raise usage
       end
       credential_source = ENV["credentials"] || ENV["credential"]
+      params = ENV["ids"].to_s+" "+ENV["startdate"].to_s+" "+ENV["enddate"].to_s+" "+ENV["metrics"].to_s
+      if ENV["credentials"]
+        Helpers::Util.hash_from_csv(credential_source).each do |credential|
+        puts params
+          client = Fetcher::GA::All.new({:username => credential["username"],
+                                         :password => credential["password"]})
+          client.fetch_acc
+        end
+      elsif ENV["credential"]
+        puts params
+       client = Fetcher::GA::All.new(ENV['credential'])
+       client.fetch_acc
+      end
+    end
+  end
+
+  task :ga => :"ga:all"
+  namespace :ga do
+    desc "Fetch all google analytic feed"
+    task :all do
+      usage = %q{
+        ***************************
+        Description:
+          Get all data of the GoogleAnalytic site
+        Usage:
+          rake site:ga credentials=<path_to_credentials_csv_file> startdate=<date> enddate=<date> metrics<metrics> #=> get all data of the given credentials
+          rake site:ga credential=<username>:<password> startdate=<date> enddate=<date> metrics<metrics> #=> get all data of the given credential
+          Replace variable in <> with actual params
+        **************************
+      }
+      # validate arguments
+      unless ENV.include?("credentials") or ENV.include?("credential") and ENV.include?("startdate") and ENV.include?("enddate") and ENV.include?("metrics")
+        raise usage
+      end
+      credential_source = ENV["credentials"] || ENV["credential"]
       if ENV["credentials"]
         Helpers::Util.hash_from_csv(credential_source).each do |credential|
           client = Fetcher::GA::All.new({:username => credential["username"],
-                                         :password => credential["password"]})
+                                         :password => credential["password"]},
+                                        {:startdate => ENV["startdate"].to_s,
+                                         :enddate => ENV["enddate"].to_s,
+                                         :metrics => ENV["metrics"].to_s})
           client.fetch_all
         end
       elsif ENV["credential"]
-        client = Fetcher::GA::All.new(ENV['credential'])
-        client.fetch_all
+       client = Fetcher::GA::All.new(ENV['credential'],
+                                     {:startdate => ENV["startdate"].to_s,
+                                      :enddate => ENV["enddate"].to_s,
+                                      :metrics => ENV["metrics"].to_s})
+       client.fetch_all
       end
     end
   end

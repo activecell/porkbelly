@@ -68,10 +68,11 @@ require 'fetcher/pivotal_tracker/all'
 #GOOGLE ANALYTIC
 require 'fetcher/ga/base'
 require 'fetcher/ga/account'
-require 'fetcher/ga/webproperty'
-require 'fetcher/ga/profile'
-require 'fetcher/ga/goal'
-require 'fetcher/ga/segment'
+require 'fetcher/ga/data'
+#require 'fetcher/ga/webproperty'
+#require 'fetcher/ga/profile'
+#require 'fetcher/ga/goal'
+#require 'fetcher/ga/segment'
 require 'fetcher/ga/all'
 
 # SALESFORCE
