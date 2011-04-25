@@ -5,7 +5,7 @@
     <finish type="datetime">2011/01/23 17:00:00 UTC</finish>
     <stories type="array">
       <story>
-        <id type="integer">6256883</id>
+        <id type="integer">9963419</id>
         <project_id type="integer">141589</project_id>
         <story_type>release</story_type>
         <url>http://www.pivotaltracker.com/story/show/6256883</url>

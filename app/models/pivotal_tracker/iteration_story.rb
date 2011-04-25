@@ -8,40 +8,43 @@ module BusinessDomain
       def self.table_name
         "pt_iterations_stories"
       end
+
+######################
 #      override method
-      def self.parse_all
-        src_data = ::PivotalTracker::Iteration
-        transaction do
-          arr_obj = []
-          src_data.find(:all).each do |o|
-            arr_obj.push parse(o.content)
-          end
-          arr_obj.each do |arr_ele|
-            arr_ele.each do |o|
-              object = find_or_initialize_by_story_id_and_iteration_id(o[:story_id],o[:iteration_id])
-              object.update_attributes(o)
-            end
-          end
-        end
+######################
+      def self.src_data
+        return ::PivotalTracker::Iteration
       end
 
-      protected
+      def self.filter_params
+        params = {}
+        params.update :parent => '/iteration'
+        params.update :mapper => [[:iteration_id,'id'],[:arr_story_id,'stories//story']]
+        params.update :key_field => :iteration_id
+        params.update :be_array => [:arr_story_id,'id']
+        return params
+      end
 
-#      override method
-      def self.parse_content(content)
-        contain = []
-        params = [[:iteration_id,'id']]
-        parent = 'iteration'
-#        get iteration
-        contain.push Parser.parse_XML(parent,content,params)
-#        get each story info
-        contain.push Parser.parse_XML('iteration/stories//story',content,[[:story_id,'id']])
-        contain[0][0][:iteration_id] = Iteration.find_by_target_id(contain[0][0][:iteration_id]).id
-        contain[1].each do |ele|
-          ele[:story_id] = Story.find_by_target_id(ele[:story_id]).id
-          ele[:iteration_id] = contain[0][0][:iteration_id]
+      def self.update_data(arr_obj)
+
+        transaction do
+          arr_obj.each do |arr_ele|
+            arr_ele.each do |o|
+              o[:arr_story_id].each do |n|
+                iteration = Iteration.find_by_target_id(o[:iteration_id])
+                story = Story.find_by_target_id(n)
+                if iteration.nil? or story.nil?
+                  next
+                end
+                record = {}
+                record[:iteration_id] = iteration[:id]
+                record[:story_id] = story[:id]
+                object = find_or_initialize_by_iteration_id_and_story_id(record[:iteration_id],record[:story_id])
+                object.update_attributes(record)
+              end
+            end unless arr_ele.nil?
+          end
         end
-        contain[1]
       end
     end
   end

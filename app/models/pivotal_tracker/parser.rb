@@ -1,9 +1,16 @@
 module BusinessDomain
   module PivotalTracker
     class Parser
+#######################################################################################################
+#      params has  :parent ===> root node
+#                  :mapper ===> element is mapped to node
+#                  :change ===> in case update from source table, can reference task or iteration model
+#                  :be_array ===> get sub array
+#######################################################################################################
 
       def self.parse(content, params)
-        parse_XML(params[:parent],content,params[:mapper])
+        obj = parse_XML(content,params)
+        target.update_data(obj) unless obj.nil?
       end
 
       def self.parse_all(target)
@@ -15,7 +22,8 @@ module BusinessDomain
       def self.get_content(src_data,params)
         arr_obj = []
         src_data.find(:all).each do |o|
-          obj = parse(o.content, params)
+          obj = parse_XML(o.content, params)
+          obj.each { |element| element[params[:change][0]] = o[params[:change][1]]} unless params[:change].nil?
           arr_obj.push(obj) unless obj.blank?
         end
         arr_obj.blank? ? nil : arr_obj
@@ -24,16 +32,27 @@ module BusinessDomain
       private
 #      parse a text with format xml to database
 #      finds children from parent_node
-      def self.parse_XML(parent,content,params)
-
+      def self.parse_XML(content,params)
         contain = []
         doc = Nokogiri::XML(content)
-        doc.xpath(parent).each do |n|
+        doc.xpath(params[:parent]).each do |n|
           element = {}
-          params.each do |p|
-            element[p[0]] = n.xpath(p[1]).text
+          params[:mapper].each do |p|
+            unless params[:be_array].nil?
+              if params[:be_array][0] == p[0]
+#                create sub array for nested realationship
+                arr_ele = []
+                n.xpath(p[1]).each { |ele| arr_ele.push ele.xpath(params[:be_array][1]).text }
+                element[p[0]] = arr_ele
+              else
+                element[p[0]] = n.xpath(p[1]).text
+              end
+            else
+              element[p[0]] = n.xpath(p[1]).text
+            end
+
           end
-          contain.push(element) unless element.blank?
+          contain.push(element) unless element[params[:key_field]].blank?
         end
         contain
       end

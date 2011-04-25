@@ -14,7 +14,7 @@ module BusinessDomain
 #      override method
 ######################
       def self.src_data
-        return ::PivotalTracker::Activity
+        return ::PivotalTracker::Project
       end
 
       def self.filter_params
@@ -40,6 +40,7 @@ module BusinessDomain
                                   [:use_https ,'use_https'],
                                   [:bugs_and_chores_are_estimatable ,'bugs_and_chores_are_estimatable'],
                                   [:commit_mode ,'commit_mode']]
+        params.update :key_field => :target_id
         return params
       end
     end

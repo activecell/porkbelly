@@ -9,32 +9,33 @@ module BusinessDomain
           "pt_persons"
       end
 
-#     override method
-      def self.parse_all
-        @@src_data = ::PivotalTracker::Membership
+######################
+#      override method
+######################
+      def self.src_data
+        return ::PivotalTracker::Membership
+      end
+
+      def self.filter_params
+        params = {}
+        params.update :parent => '/membership/person'
+        params.update :mapper => [[:email,'email'],
+                                  [:name,'name'],
+                                  [:initials,'initials']]
+        params.update :key_field => :email
+        return params
+      end
+
+      def self.update_data(arr_obj)
         transaction do
-          arr_obj = []
-          @@src_data.find(:all).each do |o|
-            arr_obj.push parse(o.content)
-          end
           arr_obj.each do |arr_ele|
             arr_ele.each do |o|
-              object = find_or_initialize_by_email(o[:email])
+              object = self.find_or_initialize_by_email(o[:email])
               object.update_attributes(o)
-            end
+            end unless arr_ele.nil?
           end
         end
       end
-
-      protected
-
-#     override method
-      def self.parse_content(content)
-        @@params = [[:email,'email'],[:name,'name'],[:initials,'initials']]
-        @@parent = '/membership/person'
-        super(content)
-      end
-
     end
   end
 end

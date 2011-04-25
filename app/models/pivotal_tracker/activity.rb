@@ -26,6 +26,7 @@ module BusinessDomain
                             [:author,'author'],
                             [:project_id, 'project_id'],
                             [:description,'description']]
+        params.update :key_field => :target_id
         return params
       end
     end

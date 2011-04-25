@@ -15,13 +15,24 @@ describe "::BusinessDomain::PivotalTracker::Iteration" do
                         [:finish,'finish'],
                         [:team_strength,'team_strength']]
       @params[:parent] = "iteration"
+      @params[:key_field] = :target_id
+
+#      fill data to source table
+      record = ::PivotalTracker::Iteration.find_or_initialize_by_target_id("1")
+      record.content = @xml_1
+      record.credential = 'd0f12bb1ac3d8f1867278620dda90dbb'
+      record.update_attributes(record)
+      record = ::PivotalTracker::Iteration.find_or_initialize_by_target_id("12")
+      record.content = @xml_2
+      record.credential = 'd0f12bb1ac3d8f1867278620dda90dbb'
+      record.update_attributes(record)
     end
 
     it "should update data to table when same target_id" do
 
       arr_obj = []
       arr_obj.push Parser.parse(@xml_1,@params)
-      Iteration.update_data(arr_obj.push)
+      Iteration.update_data(arr_obj)
       obj_1 = Iteration.find_or_initialize_by_target_id("1")
 #      second sample
       lambda do
@@ -36,15 +47,24 @@ describe "::BusinessDomain::PivotalTracker::Iteration" do
     end
 
     it "should insert data when new target_id" do
-
+#      reset table
+      Iteration.destroy_all
       lambda do
         arr_obj = []
         arr_obj.push Parser.parse(@xml_2,@params)
-        Iteration.update_data(arr_obj.push)
+        Iteration.update_data(arr_obj)
         obj_1 = Iteration.find_or_initialize_by_target_id("12")
         obj_1.number.should == "12"
 #      check count of record, should increase by 1
       end.should change(Iteration, :count).by(1)
+    end
+
+    it "should get data from source table correctly" do
+      Iteration.destroy_all
+#      get data and update
+      lambda do
+        Parser.parse_all(Iteration)
+      end.should change(Iteration, :count).by(2)
     end
   end
 end

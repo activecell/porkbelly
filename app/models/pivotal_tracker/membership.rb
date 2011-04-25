@@ -12,29 +12,40 @@ module BusinessDomain
           "pt_memberships"
       end
 
+######################
 #      override method
-      def self.parse_all
-        @@src_data = ::PivotalTracker::Membership
-        super
+######################
+      def self.src_data
+        return ::PivotalTracker::Membership
       end
 
-      protected
-
-#      override method
-      def self.parse_content(content)
-#        project_id, person_id used for temporation
-        @@params = [[:target_id,'id'],
-        [:role,'role'],
-        [:project_id,'project/id'],
-        [:person_id,'person/email']]
-        @@parent = '/membership'
-        super(content)
-#        update database
-        @@contain[0][:person_id] = Person.find_by_email(@@contain[0][:person_id]).id
-        @@contain[0][:project_id] = Project.find_by_target_id(@@contain[0][:project_id]).id
-        @@contain
+      def self.filter_params
+        params = {}
+        params.update :parent => '/membership'
+        params.update :mapper => [[:target_id,'id'],
+                                  [:role,'role'],
+                                  [:project_id,'project/id'],
+                                  [:person_id,'person/email']]
+        params.update :key_field => :target_id
+        return params
       end
 
+      def self.update_data(arr_obj)
+        transaction do
+          arr_obj.each do |arr_ele|
+            arr_ele.each do |o|
+#              convert to local id
+              person = Person.find_by_email(o[:person_id]).id
+              project = Project.find_by_target_id(o[:project_id]).id
+              next if person.nil? or project.nil?
+              o[:person_id] = person.id
+              o[:project_id] = project.id
+              object = find_or_initialize_by_target_id(o[:target_id])
+              object.update_attributes(o)
+            end unless arr_ele.nil?
+          end
+        end
+      end
     end
   end
 end

@@ -35,6 +35,7 @@ module BusinessDomain
                     [:srv_created_at,'created_at'],
                     [:srv_updated_at,'updated_at'],
                     [:labels,'labels']]
+        params.update :key_field => :target_id
         return params
       end
     end

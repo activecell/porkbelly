@@ -30,13 +30,23 @@ describe "::BusinessDomain::PivotalTracker::Project" do
                         [:bugs_and_chores_are_estimatable ,'bugs_and_chores_are_estimatable'],
                         [:commit_mode ,'commit_mode']]
       @params[:parent] = "project"
+      @params[:key_field] = :target_id
+#      fill data to source table
+      record = ::PivotalTracker::Project.find_or_initialize_by_target_id("1")
+      record.content = @xml_1
+      record.credential = 'd0f12bb1ac3d8f1867278620dda90dbb'
+      record.update_attributes(record)
+      record = ::PivotalTracker::Project.find_or_initialize_by_target_id("2")
+      record.content = @xml_2
+      record.credential = 'd0f12bb1ac3d8f1867278620dda90dbb'
+      record.update_attributes(record)
     end
 
     it "should update data to table when same target_id" do
 
       arr_obj = []
       arr_obj.push Parser.parse(@xml_1,@params)
-      Project.update_data(arr_obj.push)
+      Project.update_data(arr_obj)
       obj_1 = Project.find_or_initialize_by_target_id("1")
 #      second sample
       lambda do
@@ -51,15 +61,24 @@ describe "::BusinessDomain::PivotalTracker::Project" do
     end
 
     it "should insert data when new target_id" do
-
+#      reset table
+      Project.destroy_all
       lambda do
         arr_obj = []
         arr_obj.push Parser.parse(@xml_2,@params)
-        Project.update_data(arr_obj.push)
+        Project.update_data(arr_obj)
         obj_1 = Project.find_or_initialize_by_target_id("2")
         obj_1.labels.should == "my label"
 #      check count of record, should increase by 1
       end.should change(Project, :count).by(1)
+    end
+
+    it "should get data from source table correctly" do
+      Project.destroy_all
+#      get data and update
+      lambda do
+        Parser.parse_all(Project)
+      end.should change(Project, :count).by(2)
     end
   end
 end

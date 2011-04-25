@@ -9,28 +9,23 @@ module BusinessDomain
         "pt_notes"
       end
 
+######################
 #      override method
-      def self.parse_all
-        @@src_data = ::PivotalTracker::Activity
-        super
+######################
+      def self.src_data
+        return ::PivotalTracker::Activity
       end
 
-      protected
-
-#      override method
-      def self.parse_content(content)
-        @@params = [[:target_id,'stories/story/notes/note/id'],
-        [:text,'stories/story/notes/note/text'],
-        [:author,'author'],
-        [:noted_at,'occurred_at']]
-        @@parent = 'activity'
-        super(content)
-        if @@contain[0][:target_id] == ''
-          return nil
-        end
-        @@contain
+      def self.filter_params
+        params = {}
+        params.update :parent => '/activity'
+        params.update :mapper => [[:target_id,'stories/story/notes/note/id'],
+                                  [:text,'stories/story/notes/note/text'],
+                                  [:author,'author'],
+                                  [:noted_at,'occurred_at']]
+        params.update :key_field => :target_id
+        return params
       end
-
     end
   end
 end

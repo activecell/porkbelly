@@ -1,5 +1,5 @@
   <story>
-    <id type="integer">6256883</id>
+    <id type="integer">9963685</id>
     <project_id type="integer">141589</project_id>
     <story_type>release</story_type>
     <url>http://www.pivotaltracker.com/story/show/6256883</url>
@@ -13,7 +13,7 @@
     <labels>original,project,test,test label,testing</labels>
     <notes type="array">
       <note>
-        <id type="integer">3309731</id>
+        <id type="integer">5681005</id>
         <text>test comment</text>
         <author>Le Trong TIn</author>
         <noted_at type="datetime">2010/11/27 18:23:15 UTC</noted_at>

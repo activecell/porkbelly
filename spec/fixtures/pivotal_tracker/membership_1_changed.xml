@@ -1,0 +1,14 @@
+<membership>
+    <id>1</id>
+    <person>
+      <email>picard@earth.ufp</email>
+      <name>name changed</name>
+      <initials>jlp</initials>
+    </person>
+    <role>Role changed</role>
+    <project>
+      <id>1</id>
+      <name>Warp Engine Upgrades</name>
+    </project>
+  </membership>
+

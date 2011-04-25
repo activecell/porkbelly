@@ -13,7 +13,7 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
           [:project_id, 'project_id'],
           [:description,'description']]
       @params[:parent] = "activities/activity"
-
+      @params[:key_field] = :target_id
   end
 
   describe "Parse Method" do
@@ -27,6 +27,27 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
       result.each do |ele|
         ele.should be_kind_of(Hash)
       end
+    end
+
+    it "should parse nodes of XML to array of hashes and sub array" do
+      params = {}
+      params[:mapper] = [[:target_id,'id'],
+                        [:version,'version'],
+                        [:event_type,'event_type'],
+                        [:occurred_at,'occurred_at'],
+                        [:author,'author'],
+                        [:project_id, 'project_id'],
+                        [:description,'description'],
+                        [:arr_story_id,'stories//story']]
+      params[:parent] = "activities/activity"
+      params[:key_field] = :target_id
+      params[:be_array] = [:arr_story_id,'id']
+      result = ::BusinessDomain::PivotalTracker::Parser.parse(@xml,params)
+      result.each do |ele|
+        ele[:arr_story_id].should be_kind_of(Array)
+        ele.should be_kind_of(Hash)
+      end
+      result[0][:arr_story_id].should =~ ["9963685"]
     end
 
     it "should parse nodes of XML to elements correctly" do

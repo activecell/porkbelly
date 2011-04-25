@@ -17,13 +17,23 @@ describe "::BusinessDomain::PivotalTracker::Activity" do
           [:project_id, 'project_id'],
           [:description,'description']]
       @params[:parent] = "activity"
+      @params[:key_field] = :target_id
+
+#      fill data to source table
+      record = ::PivotalTracker::Activity.find_or_initialize_by_target_id("59596685")
+      record.content = @xml_1
+      record.credential = 'd0f12bb1ac3d8f1867278620dda90dbb'
+      record.update_attributes(record)
+      record = ::PivotalTracker::Activity.find_or_initialize_by_target_id("59596663")
+      record.content = @xml_2
+      record.credential = 'd0f12bb1ac3d8f1867278620dda90dbb'
+      record.update_attributes(record)
     end
 
     it "should update data to table when same target_id" do
-
         arr_obj = []
         arr_obj.push Parser.parse(@xml_1,@params)
-        Activity.update_data(arr_obj.push)
+        Activity.update_data(arr_obj)
         obj_1 = Activity.find_or_initialize_by_target_id("59596685")
 #      second sample
       lambda do
@@ -39,15 +49,24 @@ describe "::BusinessDomain::PivotalTracker::Activity" do
     end
 
     it "should insert data when new target_id" do
+#      reset table
+      Activity.destroy_all
       lambda do
         arr_obj = []
         arr_obj.push Parser.parse(@xml_2,@params)
-        Activity.update_data(arr_obj.push)
-        obj_1 = Activity.find_or_initialize_by_target_id("59596663")
+        Activity.update_data(arr_obj)
+        obj_1 = Activity.find_by_target_id("59596663")
         obj_1.description.should == "Chuong Huynh accepted \"Include a free text \"Summary\" field in daily report\""
 #      check count of record, should increase by 1
       end.should change(Activity, :count).by(1)
+    end
 
+    it "should get data from source table correctly" do
+      Activity.destroy_all
+#      get data and update
+      lambda do
+        Parser.parse_all(Activity)
+      end.should change(Activity, :count).by(2)
     end
   end
 end

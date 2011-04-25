@@ -11,7 +11,13 @@
       <id type="integer">9963685</id>
       <url>http://www.pivotaltracker.com/services/v3/projects/136215/stories/9963685</url>
       <accepted_at type="datetime">2011/02/28 03:05:10 UTC</accepted_at>
-      <current_state>accepted</current_state>
+      <current_state>changed current state</current_state>
+       <notes type="array">
+          <note>
+            <id type="integer">5681005</id>
+            <text>text changed</text>
+          </note>
+        </notes>
     </story>
   </stories>
 </activity>
