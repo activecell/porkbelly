@@ -11,7 +11,7 @@ module Fetcher
 
       def initialize(credential)
         tmp_credential = normalize_credential!(credential)
-        super(tmp_credential)
+        super(tmp_credential,nil)
       end
 
       def fetch_all

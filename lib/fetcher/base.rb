@@ -9,10 +9,10 @@ module Fetcher
 
     attr_accessor :credential
     attr_accessor :params
-    def initialize(credential, params)
-      raise ArgumentError, "Invalid credential, credential can be only Hash(single fetch) or Array(multiple fetch)" if (credential.nil? or credential.empty?) or (!credential.kind_of?(Array) and !credential.kind_of?(Hash)) 
-      @credential = credential
-      @params = params
+    def initialize(*args)
+      raise ArgumentError, "Invalid credential, credential can be only Hash(single fetch) or Array(multiple fetch)" if (args[0].nil? or args[0].empty?) or (!args[0].kind_of?(Array) and !args[0].kind_of?(Hash))
+      @credential = args[0]
+      @params = args[1]
     end
 
     def single_fetch?
@@ -26,7 +26,7 @@ module Fetcher
 
     # send notification exception
     def notify_exception(site, exception)
-      Mailers::ExceptionNotificationMailer.exception_notification(site, exception).deliver  
+      Mailers::ExceptionNotificationMailer.exception_notification(site, exception).deliver
     end
 
     # extract unique identifiers from the response(xml/json)
@@ -38,7 +38,7 @@ module Fetcher
 
     # get a list of existence keys from db based on the given credential
     # params:
-    #   credential: 
+    #   credential:
     def existence_keys(credential)
       raise NotImplementedError.new("Implement this method to return a list of credential and key.")
     end
@@ -47,7 +47,7 @@ module Fetcher
     def to_sha1(plain_text)
       ::Digest::SHA1.hexdigest(plain_text.to_s)
     end
-    
+
     def hash_to_param_string(param_hash)
       arr_param = []
       param_hash.each do |key, value|
@@ -64,3 +64,4 @@ module Fetcher
     end
   end
 end
+
