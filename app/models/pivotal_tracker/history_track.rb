@@ -47,7 +47,7 @@ module BusinessDomain
             note = Note.find_by_target_id(o[:note_id])
 #            mark project_id = 0 for removed stories
             story.update_attributes(:target_id => o[:story_id],
-                                    :project_id => "0") if story.project_id == "0"
+                                    :project_id => "0") if story.project_id.nil?
             o[:activity_id] = activity[:id]
             o[:story_id] = story[:id]
             o[:note_id] = note[:id] unless note.nil?

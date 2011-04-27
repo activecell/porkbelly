@@ -2,6 +2,8 @@ require File.expand_path(File.join(File.dirname(__FILE__), '..','..', "spec_help
 require "fetcher"
 require 'nokogiri'
 
+include  ::BusinessDomain
+
 module Pivotal
   module Util
     def self.load_fixture(fixture)

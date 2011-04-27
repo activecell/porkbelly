@@ -312,7 +312,11 @@ namespace :parsing do
     end
 
     def parse_all_data
-      BusinessDomain::PivotalTracker::All.new().parse_all
+      BusinessDomain::PivotalTracker::All.parse_all
+    end
+
+    task :test do
+      BusinessDomain::PivotalTracker::All.test
     end
   end
 end

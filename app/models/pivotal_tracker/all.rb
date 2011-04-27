@@ -1,8 +1,8 @@
 module BusinessDomain
   module PivotalTracker
     class All
-
-      def parse_all
+      include ::BusinessDomain
+      def self.parse_all
         Parser.parse_all(Project)
         Parser.parse_all(Story)
         Parser.parse_all(Activity)

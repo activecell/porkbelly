@@ -1,6 +1,3 @@
-require 'rubygems'
-require 'nokogiri'
-
 module BusinessDomain
   module PivotalTracker
     class Base < ActiveRecord::Base

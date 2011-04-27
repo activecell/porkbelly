@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
-describe "::BusinessDomain::PivotalTracker::Parser" do
+describe "::BusinessDomain::Parser" do
 
   before :all do
       @xml = ::Pivotal::Util.load_fixture("activities")
@@ -18,12 +18,12 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
 
   describe "Parse Method" do
     it "should parse XML to array" do
-      result = ::BusinessDomain::PivotalTracker::Parser.parse(@xml,@params)
+      result = Parser.parse(@xml,@params)
       result.should be_kind_of(Array)
     end
 
     it "should parse nodes of XML to array of hashes" do
-      result = ::BusinessDomain::PivotalTracker::Parser.parse(@xml,@params)
+      result = Parser.parse(@xml,@params)
       result.each do |ele|
         ele.should be_kind_of(Hash)
       end
@@ -42,7 +42,7 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
       params[:parent] = "activities/activity"
       params[:key_field] = :target_id
       params[:be_array] = [:arr_story_id,'id']
-      result = ::BusinessDomain::PivotalTracker::Parser.parse(@xml,params)
+      result = Parser.parse(@xml,params)
       result.each do |ele|
         ele[:arr_story_id].should be_kind_of(Array)
         ele.should be_kind_of(Hash)
@@ -51,7 +51,7 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
     end
 
     it "should parse nodes of XML to elements correctly" do
-      result = ::BusinessDomain::PivotalTracker::Parser.parse(@xml,@params)
+      result = Parser.parse(@xml,@params)
 #      test multi element
       result.each do |ele|
         ele[:target_id].should_not be_empty
@@ -83,7 +83,7 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
     end
 
     it "should get values from source data correctly" do
-      arr_obj = ::BusinessDomain::PivotalTracker::Parser.get_content(::PivotalTracker::Activity,@params)
+      arr_obj = Parser.get_content(::PivotalTracker::Activity,@params)
       arr_obj.each do |element|
         element[0][:target_id].should_not be_empty
         element[0][:author].should == "Chuong Huynh"
@@ -99,7 +99,7 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
 
     it "should return nil when content is not matched" do
       @params[:parent] = "activities/activity" # change node position, won't find matched data
-      arr_obj = ::BusinessDomain::PivotalTracker::Parser.get_content(::PivotalTracker::Activity,@params)
+      arr_obj = Parser.get_content(::PivotalTracker::Activity,@params)
       arr_obj.should be_nil
     end
 
@@ -108,7 +108,7 @@ describe "::BusinessDomain::PivotalTracker::Parser" do
   describe "Parse All Method" do
 
     it "should parse all records" do
-      ::BusinessDomain::PivotalTracker::Parser.parse_all(::BusinessDomain::PivotalTracker::Activity)
+      Parser.parse_all(::BusinessDomain::PivotalTracker::Activity)
       sample = ::BusinessDomain::PivotalTracker::Activity.find_by_target_id("59596685")
       sample.version.should == "567"
       sample.event_type.should == "story_update"

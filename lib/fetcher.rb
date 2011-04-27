@@ -86,10 +86,11 @@ module Fetcher
 end
 
 # ---- BUSINESS DOMAIN --- #
+#Utility
+require 'app/models/utility/parser'
 
 # PIVOTAL TRACKER
 require 'app/models/pivotal_tracker/base'
-require 'app/models/pivotal_tracker/parser'
 require 'app/models/pivotal_tracker/project'
 require 'app/models/pivotal_tracker/activity'
 require 'app/models/pivotal_tracker/story'
