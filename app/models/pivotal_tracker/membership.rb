@@ -35,11 +35,11 @@ module BusinessDomain
           arr_obj.each do |arr_ele|
             arr_ele.each do |o|
 #              convert to local id
-              person = Person.find_by_email(o[:person_id]).id
-              project = Project.find_by_target_id(o[:project_id]).id
+              person = Person.find_by_email(o[:person_id])
+              project = Project.find_by_target_id(o[:project_id])
               next if person.nil? or project.nil?
-              o[:person_id] = person.id
-              o[:project_id] = project.id
+              o[:person_id] = person[:id].to_s
+              o[:project_id] = project[:id].to_s
               object = find_or_initialize_by_target_id(o[:target_id])
               object.update_attributes(o)
             end unless arr_ele.nil?

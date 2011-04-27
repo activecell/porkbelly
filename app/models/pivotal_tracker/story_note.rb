@@ -37,8 +37,8 @@ module BusinessDomain
                   next
                 end
                 record = {}
-                record[:story_id] = story[:id]
-                record[:note_id] = note[:id]
+                record[:story_id] = story[:id].to_s
+                record[:note_id] = note[:id].to_s
                 object = find_or_initialize_by_story_id_and_note_id(record[:story_id],record[:note_id])
                 object.update_attributes(record)
               end

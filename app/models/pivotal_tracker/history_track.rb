@@ -48,8 +48,8 @@ module BusinessDomain
 #            mark project_id = 0 for removed stories
             story.update_attributes(:target_id => o[:story_id],
                                     :project_id => "0") if story.project_id.nil?
-            o[:activity_id] = activity[:id]
-            o[:story_id] = story[:id]
+            o[:activity_id] = activity[:id].to_s
+            o[:story_id] = story[:id].to_s
             o[:note_id] = note[:id] unless note.nil?
             object = find_or_initialize_by_story_id_and_activity_id(o[:story_id],o[:activity_id])
             object.update_attributes(o)
