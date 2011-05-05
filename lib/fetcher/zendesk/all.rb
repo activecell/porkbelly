@@ -9,6 +9,9 @@ module Fetcher
       include Fetcher::Zendesk::Entry
       include Fetcher::Zendesk::TicketField
       include Fetcher::Zendesk::Macro
+      include Fetcher::Zendesk::View
+      include Fetcher::Zendesk::Ticket
+      include Fetcher::Zendesk::Post
 
       def initialize(credential)
         #<subdomain>:<username>:<password>
@@ -36,16 +39,20 @@ module Fetcher
       end
 
       def fetch(credential)
-        fetch_organization(credential)
-        fetch_group(credential)
-        fetch_user(credential)
-        fetch_tag(credential)
-        fetch_forum(credential)
-        fetch_entry(credential)
-        fetch_ticket_field(credential)
-        fetch_macro(credential)
+#        fetch_organization(credential)
+#        fetch_group(credential)
+#        fetch_user(credential)
+#        fetch_tag(credential)
+#        fetch_forum(credential)
+#        fetch_entry(credential)
+#        fetch_ticket_field(credential)
+#        fetch_macro(credential)
+#        fetch_view(credential)
+#        fetch_ticket(credential)
+        fetch_post(credential)
       end
 
     end
   end
 end
+

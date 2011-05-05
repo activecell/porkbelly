@@ -52,6 +52,9 @@ require 'fetcher/zendesk/forum'
 require 'fetcher/zendesk/entry'
 require 'fetcher/zendesk/ticket_field'
 require 'fetcher/zendesk/macro'
+require 'fetcher/zendesk/view'
+require 'fetcher/zendesk/ticket'
+require 'fetcher/zendesk/post'
 require 'fetcher/zendesk/all'
 
 # PIVOTAL TRACKER
@@ -103,4 +106,12 @@ require 'app/models/pivotal_tracker/iteration_story'
 require 'app/models/pivotal_tracker/history_track'
 require 'app/models/pivotal_tracker/story_note'
 require 'app/models/pivotal_tracker/all'
+
+# ZENDESK
+require 'app/models/zendesk/base'
+require 'app/models/zendesk/organization'
+require 'app/models/zendesk/ticket'
+require 'app/models/zendesk/view'
+require 'app/models/zendesk/comment'
+require 'app/models/zendesk/all'
 

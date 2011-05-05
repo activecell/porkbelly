@@ -4,7 +4,7 @@ class AddStoryIdToPtTasks < ActiveRecord::Migration
 
   end
   def self.down
-    remove_column :pt_tasks, :story_id, :string
+    remove_column :pt_tasks, :story_id
   end
 end
 

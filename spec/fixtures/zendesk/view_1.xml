@@ -1,0 +1,36 @@
+<view>
+  <id type='integer'>1</id>
+  <is-active type='boolean'>true</is-active>
+  <owner-id type='integer'>68727</owner-id>
+  <owner-type>Account</owner-type>
+  <per-page type='integer'>15</per-page>
+  <position type='integer'>9999</position>
+  <title>New tickets in your groups</title>
+<output>
+  <type>table</type>
+  <order-asc type='boolean'>false</order-asc>
+  <order>created</order>
+  <group>group</group>
+  <columns type='array' count='6'>
+    <column>
+      <name>score</name>
+    </column>
+    <column>
+      <name>description</name>
+    </column>
+    <column>
+      <name>requester</name>
+    </column>
+    <column>
+      <name>created</name>
+    </column>
+    <column>
+      <name>priority</name>
+    </column>
+    <column>
+      <name>assignee</name>
+    </column>
+  </columns>
+</output>
+</view>
+

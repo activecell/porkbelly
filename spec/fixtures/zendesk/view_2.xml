@@ -1,0 +1,36 @@
+<view>
+  <id type='integer'>2</id>
+  <is-active type='boolean'>true</is-active>
+  <owner-id type='integer'>68727</owner-id>
+  <owner-type>Account</owner-type>
+  <per-page type='integer'>15</per-page>
+  <position type='integer'>9999</position>
+  <title>Recently solved tickets</title>
+<output>
+  <type>table</type>
+  <order-asc type='boolean'>false</order-asc>
+  <order>solved</order>
+  <group>assignee</group>
+  <columns type='array' count='6'>
+    <column>
+      <name>description</name>
+    </column>
+    <column>
+      <name>requester</name>
+    </column>
+    <column>
+      <name>created</name>
+    </column>
+    <column>
+      <name>solved</name>
+    </column>
+    <column>
+      <name>priority</name>
+    </column>
+    <column>
+      <name>group</name>
+    </column>
+  </columns>
+</output>
+</view>
+

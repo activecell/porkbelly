@@ -1,0 +1,13 @@
+<organization>
+  <created-at type="datetime">2011-02-14T12:52:43+07:00</created-at>
+  <default nil="true"></default>
+  <details nil="true"></details>
+  <group-id type="integer" nil="true"></group-id>
+  <id type="integer">1</id>
+  <is-shared type="boolean">false</is-shared>
+  <is-shared-comments type="boolean">false</is-shared-comments>
+  <name>Name be changed</name>
+  <notes nil="true"></notes>
+  <updated-at type="datetime">2011-02-14T12:52:43+07:00</updated-at>
+</organization>
+

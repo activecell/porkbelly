@@ -5,7 +5,7 @@ module Fetcher
 
       attr_accessor :content_keys
       def fetch_ticket_field(credential)
-        request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["organizations"] + "." + ZENDESK_CONFIG["format"]
+        request_url =  ZENDESK_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + ZENDESK_CONFIG["apis"]["ticket_fields"] + "." + ZENDESK_CONFIG["format"]
         response = create_request(credential, request_url)
         logger.info "Created request url: #{request_url}"
         logger.info response.get.to_s
@@ -35,3 +35,4 @@ module Fetcher
     end
   end
 end
+

@@ -1,0 +1,77 @@
+<ticket>
+  <assigned-at type="datetime">2011-02-14T13:15:21+07:00</assigned-at>
+  <assignee-id type="integer">27323924</assignee-id>
+  <base-score type="integer">180</base-score>
+  <created-at type="datetime">2011-02-14T13:15:21+07:00</created-at>
+  <current-collaborators nil="true"></current-collaborators>
+  <current-tags nil="true"></current-tags>
+  <description>You've got a new ticket!
+
+To help you get started learning how your zendesk simplifies ticket workflow, I emailed you at support@tpltest.zendesk.com and this ticket was created in your zendesk. Neat!
+
+You can answer this ticket in one of two ways:
+
+By Email: If you are looking at this in your email inbox, simply hit &quot;Reply&quot;
+
+By Zendesk: If you are looking at this ticket in your zendesk:
+
+* Enter a comment (e.g. &quot;How am I doing?&quot;)
+* Change status from Open to Pending (now, you&#8217;re waiting for me to get back to you!)
+* Click submit
+
+Either way, both your reply and follow-ups will be added to the ticket history and organized in your zendesk.
+
+You&#8217;re eligible for 24-hour support throughout your trial. Please don&#8217;t hesitate to call or email our customer advocate team:
+
+*(e) support@zendesk.com
+*(p) +1 415.418.7506
+
+Thank you for using Zendesk,
+
+Kelly
+Customer Advocate at Zendesk</description>
+  <due-date type="datetime" nil="true"></due-date>
+  <entry-id type="integer" nil="true"></entry-id>
+  <external-id nil="true"></external-id>
+  <group-id type="integer">124671</group-id>
+  <initially-assigned-at type="datetime">2011-02-14T13:15:21+07:00</initially-assigned-at>
+  <latest-recipients nil="true"></latest-recipients>
+  <nice-id type="integer">2</nice-id>
+  <organization-id type="integer" nil="true"></organization-id>
+  <original-recipient-address nil="true"></original-recipient-address>
+  <priority-id type="integer">0</priority-id>
+  <recipient>support@tpltest.zendesk.com</recipient>
+  <requester-id type="integer">27324624</requester-id>
+  <resolution-time type="integer" nil="true"></resolution-time>
+  <solved-at type="datetime" nil="true"></solved-at>
+  <status-id type="integer">2</status-id>
+  <status-updated-at type="datetime">2011-02-14T13:15:21+07:00</status-updated-at>
+  <subject>Welcome to Zendesk, You've Got a Ticket!</subject>
+  <submitter-id type="integer">27324624</submitter-id>
+  <ticket-type-id type="integer">0</ticket-type-id>
+  <updated-at type="datetime">2011-02-14T13:15:21+07:00</updated-at>
+  <updated-by-type-id type="integer">1</updated-by-type-id>
+  <via-id type="integer">4</via-id>
+  <score type="integer">180</score>
+  <problem-id nil="true"></problem-id>
+  <linkings type="array"/>
+  <ticket-field-entries type="array">
+    <ticket-field-entry>
+      <ticket-field-id type="integer">20043962</ticket-field-id>
+      <value>1</value>
+    </ticket-field-entry>
+  </ticket-field-entries>
+  <comments type="array">
+    <comment>
+      <author-id type="integer">27324624</author-id>
+      <created-at type="datetime">2011-02-14T13:15:21+07:00</created-at>
+      <is-public type="boolean">true</is-public>
+      <type>Comment</type>
+      <value>this is an comment</value>
+      <via-id type="integer">4</via-id>
+      <attachments type="array"/>
+    </comment>
+  </comments>
+  <channel nil="true"></channel>
+</ticket>
+

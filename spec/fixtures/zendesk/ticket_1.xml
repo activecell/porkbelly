@@ -1,0 +1,53 @@
+<ticket>
+  <assigned-at type="datetime">2011-02-24T17:06:40+07:00</assigned-at>
+  <assignee-id type="integer">27323924</assignee-id>
+  <base-score type="integer">15</base-score>
+  <created-at type="datetime">2011-02-24T17:06:40+07:00</created-at>
+  <current-collaborators nil="true"></current-collaborators>
+  <current-tags>test</current-tags>
+  <description>faslfjkaslasflfl</description>
+  <due-date type="datetime" nil="true"></due-date>
+  <entry-id type="integer" nil="true"></entry-id>
+  <external-id nil="true"></external-id>
+  <group-id type="integer">124671</group-id>
+  <initially-assigned-at type="datetime">2011-02-24T17:06:40+07:00</initially-assigned-at>
+  <latest-recipients nil="true"></latest-recipients>
+  <nice-id type="integer">1</nice-id>
+  <organization-id type="integer">468876</organization-id>
+  <original-recipient-address nil="true"></original-recipient-address>
+  <priority-id type="integer">1</priority-id>
+  <recipient nil="true"></recipient>
+  <requester-id type="integer">27323924</requester-id>
+  <resolution-time type="integer" nil="true"></resolution-time>
+  <solved-at type="datetime" nil="true"></solved-at>
+  <status-id type="integer">1</status-id>
+  <status-updated-at type="datetime">2011-02-24T17:06:40+07:00</status-updated-at>
+  <subject>Test</subject>
+  <submitter-id type="integer">27323924</submitter-id>
+  <ticket-type-id type="integer">1</ticket-type-id>
+  <updated-at type="datetime">2011-02-24T17:06:40+07:00</updated-at>
+  <updated-by-type-id type="integer">0</updated-by-type-id>
+  <via-id type="integer">0</via-id>
+  <score type="integer">15</score>
+  <problem-id nil="true"></problem-id>
+  <linkings type="array"/>
+  <ticket-field-entries type="array">
+    <ticket-field-entry>
+      <ticket-field-id type="integer">20043962</ticket-field-id>
+      <value>0</value>
+    </ticket-field-entry>
+  </ticket-field-entries>
+  <comments type="array">
+    <comment>
+      <author-id type="integer">27323924</author-id>
+      <created-at type="datetime">2011-02-24T17:06:40+07:00</created-at>
+      <is-public type="boolean">true</is-public>
+      <type>Comment</type>
+      <value>faslfjkaslasflfl</value>
+      <via-id type="integer">0</via-id>
+      <attachments type="array"/>
+    </comment>
+  </comments>
+  <channel nil="true"></channel>
+</ticket>
+

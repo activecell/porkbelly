@@ -41,5 +41,20 @@ module Zendesk
       "zendesk_src_macros"
     end
   end
+  class View < ActiveRecord::Base
+    def self.table_name
+      "zendesk_src_views"
+    end
+  end
+  class Ticket < ActiveRecord::Base
+    def self.table_name
+      "zendesk_src_tickets"
+    end
+  end
+  class Post < ActiveRecord::Base
+    def self.table_name
+      "zendesk_src_posts"
+    end
+  end
 end
 

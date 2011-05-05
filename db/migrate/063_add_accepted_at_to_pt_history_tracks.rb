@@ -4,7 +4,7 @@ class AddAcceptedAtToPtHistoryTracks < ActiveRecord::Migration
 
   end
   def self.down
-    remove_column :pt_history_tracks, :accepted_at, :string
+    remove_column :pt_history_tracks, :accepted_at
   end
 end
 

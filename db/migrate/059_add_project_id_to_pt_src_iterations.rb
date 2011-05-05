@@ -4,7 +4,7 @@ class AddProjectIdToPtSrcIterations < ActiveRecord::Migration
 
   end
   def self.down
-    remove_column :pt_src_iterations, :project_id, :string
+    remove_column :pt_src_iterations, :project_id
   end
 end
 

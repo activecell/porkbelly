@@ -214,7 +214,7 @@ namespace :site do
         raise usage
       end
       credential_source = ENV["credentials"] || ENV["credential"]
-      params = ENV["ids"].to_s+" "+ENV["startdate"].to_s+" "+ENV["enddate"].to_s+" "+ENV["metrics"].to_s
+      params = ENV["ids"].to_s+" "+ENV["startdate"].to_s+" "+ENV["enddate"].to_s+" "+ENV["metrics"].to_s+" "+ENV["dimensions"].to_s
       if ENV["credentials"]
         Helpers::Util.hash_from_csv(credential_source).each do |credential|
         puts params
@@ -245,7 +245,7 @@ namespace :site do
         **************************
       }
       # validate arguments
-      unless ENV.include?("credentials") or ENV.include?("credential") and ENV.include?("startdate") and ENV.include?("enddate") and ENV.include?("metrics")
+      unless ENV.include?("credentials") or ENV.include?("credential") and ENV.include?("metrics")
         raise usage
       end
       credential_source = ENV["credentials"] || ENV["credential"]
@@ -253,16 +253,14 @@ namespace :site do
         Helpers::Util.hash_from_csv(credential_source).each do |credential|
           client = Fetcher::GA::All.new({:username => credential["username"],
                                          :password => credential["password"]},
-                                        {:startdate => ENV["startdate"].to_s,
-                                         :enddate => ENV["enddate"].to_s,
-                                         :metrics => ENV["metrics"].to_s})
+                                         {:metrics => ENV["metrics"].to_s,
+                                         :dimensions => ENV["dimensions"].to_s})
           client.fetch_all
         end
       elsif ENV["credential"]
        client = Fetcher::GA::All.new(ENV['credential'],
-                                     {:startdate => ENV["startdate"].to_s,
-                                      :enddate => ENV["enddate"].to_s,
-                                      :metrics => ENV["metrics"].to_s})
+                                     {:metrics => ENV["metrics"].to_s,
+                                      :dimensions => EVN["dimensions"]})
        client.fetch_all
       end
     end
@@ -297,11 +295,19 @@ namespace :db do
       ActiveRecord::Base.establish_connection(DB_CONFIG[STAGE])
       ActiveRecord::Migrator.down("db/migrate", ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
     end
+
+    task :reset do
+      ActiveRecord::Base.establish_connection(DB_CONFIG[STAGE])
+      ActiveRecord::Migrator.down("db/migrate", ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+      ActiveRecord::Migrator.migrate("db/migrate", ENV["VERSION"] ? ENV["VERSION"].to_i : nil )
+    end
   end
 end
 
 namespace :parsing do
-  task :pt => :"pt:all" # default parse all data
+  # default parse all data
+  task :pt => :"pt:all"
+  task :zendesk => :"zendesk:all"
   namespace :pt do
     desc "Parser all data of Pivotal Tracker"
     task :all do
@@ -314,9 +320,15 @@ namespace :parsing do
     def parse_all_data
       BusinessDomain::PivotalTracker::All.parse_all
     end
+  end
 
-    task :test do
-      BusinessDomain::PivotalTracker::All.test
+  namespace :zendesk do
+    desc "Parser all data of Zendesk"
+    task :all do
+      parse_all_data
+    end
+    def parse_all_data
+      BusinessDomain::Zendesk::All.parse_all
     end
   end
 end

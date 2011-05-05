@@ -5,7 +5,8 @@ module BusinessDomain
 #      params has  :parent ===> root node
 #                  :mapper ===> element is mapped to node
 #                  :change ===> in case update from source table, can reference task or iteration model
-#                  :be_array ===> get sub array
+#                                            or ticket model
+#                  :be_array ===> get sub array ref: iteration_story model
 #######################################################################################################
 
     def self.parse(content, params)
@@ -22,7 +23,7 @@ module BusinessDomain
       arr_obj = []
       src_data.find(:all).each do |o|
         obj = parse_XML(o.content, params)
-        obj.each { |element| element[params[:change][0]] = o[params[:change][1]]} unless params[:change].nil?
+        obj.each { |element| element.update params[:change][0] => o[params[:change][1]]} unless params[:change].nil?
         arr_obj.push(obj) unless obj.blank?
       end
       arr_obj.blank? ? nil : arr_obj
@@ -44,10 +45,10 @@ module BusinessDomain
               n.xpath(p[1]).each { |ele| arr_ele.push ele.xpath(params[:be_array][1]).text }
               element[p[0]] = arr_ele
             else
-              element[p[0]] = n.xpath(p[1]).text
+              element.update p[0] => n.xpath(p[1]).text
             end
           else
-            element[p[0]] = n.xpath(p[1]).text
+            element.update p[0] => n.xpath(p[1]).text
           end
 
         end
