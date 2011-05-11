@@ -1,0 +1,20 @@
+<record>
+  <account-id type="integer">68727</account-id>
+  <created-at type="datetime">2011-02-14T12:52:45+07:00</created-at>
+  <description></description>
+  <id type="integer">1</id>
+  <is-active type="boolean">true</is-active>
+  <is-editable-in-portal type="boolean">true</is-editable-in-portal>
+  <is-required type="boolean">false</is-required>
+  <is-required-in-portal type="boolean">true</is-required-in-portal>
+  <is-visible-in-portal type="boolean">true</is-visible-in-portal>
+  <position type="integer">1</position>
+  <regexp-for-validation nil="true"></regexp-for-validation>
+  <sub-type-id type="integer" nil="true"></sub-type-id>
+  <tag nil="true"></tag>
+  <title>Title changed</title>
+  <title-in-portal></title-in-portal>
+  <type>FieldSubject</type>
+  <updated-at type="datetime">2011-02-14T12:52:45+07:00</updated-at>
+</record>
+

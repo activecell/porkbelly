@@ -1,0 +1,12 @@
+<post>
+    <account-id type='integer'>80382</account-id>
+    <body>this is a second</body>
+    <created-at type='datetime'>2011-05-04T16:17:17+07:00</created-at>
+    <entry-id type='integer'>20060102</entry-id>
+    <forum-id type='integer'>20035112</forum-id>
+    <id type='integer'>2</id>
+    <is-informative type='boolean'>false</is-informative>
+    <updated-at type='datetime'>2011-05-04T16:17:17+07:00</updated-at>
+    <user-id type='integer'>55295847</user-id>
+  </post>
+

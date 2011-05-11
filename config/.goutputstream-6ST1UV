@@ -1,0 +1,145 @@
+development:
+  harvest:
+    base_url: "http://[SUBDOMAIN].harvestapp.com"
+    apis:
+      clients: "/clients"
+      contacts: "/contacts"
+      projects: "/projects"
+      tasks: "/tasks"
+      people: "/people"
+      expense_categories: "/expense_categories"
+      expenses: "/expenses"
+      user_assignments: "/projects/[PROJECT_ID]/user_assignments"
+      task_assignments: "/projects/[PROJECT_ID]/task_assignments"
+      invoices: "/invoices"
+      invoice_categories: "/invoice_item_categories"
+      invoice_messages: "/invoices/[INVOICE_ID]/messages"
+      invoice_payments: "/invoices/[INVOICE_ID]/payments"
+      timesheets: "/daily/[DAY_OF_YEAR]/[YEAR]"
+    format: "xml"
+
+  zendesk:
+    base_url: "http://[SUBDOMAIN].zendesk.com"
+    apis:
+      organizations: "/organizations"
+      groups: "/groups"
+      tickets: "/rules" # check it out at API document ex: http://tpltest.zendesk.com/rules/2378172.xml
+      attachments: "/attachments"
+      users: "/users"
+      groups: "/groups"
+      tags: "/tags"
+      forums: "/forums"
+      entries: "/entries"
+      ticket_fields: "/ticket_fields"
+      macros: "/macros"
+      views: "/views"
+      posts: "/posts"
+    format: "xml"
+
+  mixpanel:
+    base_url: "http://mixpanel.com/api"
+    version: "2.0"
+    apis:
+      events: "events"
+      events_properties: "events/properties"
+      funnels: "funnels"
+      funnels_properties: "funnels/properties"
+    params:
+      type: "general"
+      unit: "day"
+      interval: 1
+
+      # Current version of Mixpanel API does not work well witj CSV format.
+      # So the default format is always JSON.
+      #format: "json"
+      limit: 255
+
+  pivotal_tracker:
+    base_url: "https://www.pivotaltracker.com/services/v3"
+    apis:
+    format: "xml"
+
+  ga:
+    auth_url: "https://www.google.com/accounts/ClientLogin?Email=[EMAIL]&Passwd=[PASSWORD]&accountType=GOOGLE&service=analytics&source=curl-accountFeed-v2"
+    base_url: "https://www.google.com/analytics/feeds/accounts/default"
+    data_url: "https://www.google.com/analytics/feeds/data?"
+    apis:
+      accounts: "/accounts"
+      webproperties: "/webproperties"
+      profiles: "/profiles"
+      goals: "/goals"
+      segments: "/segments"
+
+  salesforce:
+    # [VERSION] will be replaced by the value of :version attribute.
+    login_url: "https://login.salesforce.com/services/Soap/u/[VERSION]"
+    version: "21.0"
+    # Format can be 'json' or 'xml'
+    format: 'json'
+
+test:
+  harvest:
+    base_url: "http://[SUBDOMAIN].harvestapp.com"
+    apis:
+      clients: "/clients"
+      contacts: "/contacts"
+      projects: "/projects"
+      tasks: "/tasks"
+      people: "/people"
+      expense_categories: "/expense_categories"
+      expenses: "/expenses"
+      user_assignments: "/projects/[PROJECT_ID]/user_assignments"
+      task_assignments: "/projects/[PROJECT_ID]/task_assignments"
+      invoices: "/invoices"
+      invoice_categories: "/invoice_item_categories"
+      invoice_messages: "/invoices/[INVOICE_ID]/messages"
+      invoice_payments: "/invoices/[INVOICE_ID]/payments"
+      timesheets: "/daily/[DAY_OF_YEAR]/[YEAR]"
+    format: "xml"
+
+  zendesk:
+    base_url: "http://[SUBDOMAIN].zendesk.com"
+    apis:
+      organizations: "/organizations"
+      groups: "/groups"
+      tickets: "/tickets"
+      attachments: "/attachments"
+      users: "/users"
+      groups: "/groups"
+      tags: "/tags"
+      forums: "/forums"
+      entries: "/entries"
+      ticket_fields: "/ticket-fields"
+      macros: "/macros"
+    format: "xml"
+
+  mixpanel:
+    base_url: "http://mixpanel.com/api"
+    version: "2.0"
+    apis:
+      events: "events"
+      events_properties: "events/properties"
+      funnels: "funnels"
+      funnels_properties: "funnels/properties"
+    params:
+      type: "general"
+      unit: "day"
+      interval: 1
+
+      # Current version of Mixpanel API does not work well witj CSV format.
+      # So the default format is always JSON.
+      #format: "json"
+
+      limit: 255
+
+  pivotal_tracker:
+    base_url: "https://www.pivotaltracker.com/services/v3"
+    apis:
+    format: "xml"
+
+  salesforce:
+    login_url: "https://login.salesforce.com/services/Soap/u/21.0"
+    version: "21.0"
+    # Format can be 'json' or 'xml'
+    format: 'json'
+

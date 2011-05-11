@@ -1,0 +1,17 @@
+  <forum>
+    <category-id type="integer" nil="true"></category-id>
+    <description>Description changed</description>
+    <display-type-id type="integer">1</display-type-id>
+    <entries-count type="integer">0</entries-count>
+    <id type="integer">1</id>
+    <is-locked type="boolean">true</is-locked>
+    <name>Announcements</name>
+    <organization-id type="integer" nil="true"></organization-id>
+    <position type="integer">9999</position>
+    <translation-locale-id type="integer" nil="true"></translation-locale-id>
+    <updated-at type="datetime">2011-02-14T12:52:43+07:00</updated-at>
+    <use-for-suggestions type="boolean">true</use-for-suggestions>
+    <visibility-restriction-id type="integer">1</visibility-restriction-id>
+    <is-public type="boolean">true</is-public>
+  </forum>
+

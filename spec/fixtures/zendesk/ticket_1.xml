@@ -33,8 +33,8 @@
   <linkings type="array"/>
   <ticket-field-entries type="array">
     <ticket-field-entry>
-      <ticket-field-id type="integer">20043962</ticket-field-id>
-      <value>0</value>
+      <ticket-field-id type="integer">1</ticket-field-id>
+      <value>1</value>
     </ticket-field-entry>
   </ticket-field-entries>
   <comments type="array">

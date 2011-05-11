@@ -1,0 +1,8 @@
+<tag-score>
+  <account-id type='integer'>80382</account-id>
+  <id type='integer'>1</id>
+  <score type='integer'>1</score>
+  <tag-id type='integer' nil='true'/>
+  <tag-name>appear</tag-name>
+</tag-score>
+

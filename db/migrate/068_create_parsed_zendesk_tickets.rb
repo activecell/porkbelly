@@ -27,7 +27,7 @@ class CreateParsedZendeskTickets < ActiveRecord::Migration
       t.column	:subject	, :string
       t.column	:submitter_id	, :string
       t.column	:ticket_type_id	, :string
-      t.column	:updated_at	, :string
+      t.column	:srv_updated_at	, :string
       t.column	:updated_by_type_id	, :string
       t.column	:via_id	, :string
       t.column	:score	, :string

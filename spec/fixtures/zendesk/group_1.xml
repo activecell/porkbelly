@@ -1,0 +1,32 @@
+<group>
+    <created-at type='datetime'>2011-04-28T14:39:55+07:00</created-at>
+    <id type='integer'>1</id>
+    <is-active type='boolean'>true</is-active>
+    <name>Support</name>
+    <updated-at type='datetime'>2011-04-28T14:39:55+07:00</updated-at>
+    <users type='array'>
+      <user>
+        <created-at type='datetime'>2011-04-28T14:39:56+07:00</created-at>
+        <details nil='true'/>
+        <external-id nil='true'/>
+        <id type='integer'>1</id>
+        <is-active type='boolean'>true</is-active>
+        <last-login type='datetime'>2011-05-05T11:08:52+07:00</last-login>
+        <locale-id type='integer' nil='true'/>
+        <name>An Nguyen</name>
+        <notes nil='true'/>
+        <openid-url nil='true'/>
+        <organization-id type='integer'>20050222</organization-id>
+        <phone nil='true'/>
+        <restriction-id type='integer'>0</restriction-id>
+        <roles type='integer'>2</roles>
+        <time-zone>Asia/Bangkok</time-zone>
+        <updated-at type='datetime'>2011-05-04T17:25:53+07:00</updated-at>
+        <uses-12-hour-clock type='boolean'>false</uses-12-hour-clock>
+        <email>nguyenan169@gmail.com</email>
+        <is-verified type='boolean'>true</is-verified>
+        <photo-url>http://anlp.zendesk.com/images/types/user_sm.png</photo-url>
+      </user>
+    </users>
+  </group>
+

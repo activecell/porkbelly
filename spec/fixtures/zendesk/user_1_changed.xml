@@ -1,0 +1,32 @@
+<user>
+  <created-at type="datetime">2011-02-14T12:52:43+07:00</created-at>
+  <details nil="true"></details>
+  <external-id nil="true"></external-id>
+  <id type="integer">1</id>
+  <is-active type="boolean">true</is-active>
+  <last-login type="datetime">2011-02-24T15:07:33+07:00</last-login>
+  <locale-id type="integer" nil="true"></locale-id>
+  <name>Name changed</name>
+  <notes nil="true"></notes>
+  <openid-url nil="true"></openid-url>
+  <organization-id type="integer">468876</organization-id>
+  <phone nil="true"></phone>
+  <restriction-id type="integer">0</restriction-id>
+  <roles type="integer">2</roles>
+  <time-zone>Bangkok</time-zone>
+  <updated-at type="datetime">2011-02-14T12:54:11+07:00</updated-at>
+  <uses-12-hour-clock type="boolean">false</uses-12-hour-clock>
+  <email>utwkidvn@gmail.com</email>
+  <is-verified type="boolean">true</is-verified>
+  <photo-url>http://tpltest.zendesk.com/images/types/user_sm.png</photo-url>
+  <groups type="array">
+    <group>
+      <created-at type="datetime">2011-02-14T12:52:43+07:00</created-at>
+      <id type="integer">124671</id>
+      <is-active type="boolean">true</is-active>
+      <name>Support</name>
+      <updated-at type="datetime">2011-02-14T12:52:43+07:00</updated-at>
+    </group>
+  </groups>
+</user>
+

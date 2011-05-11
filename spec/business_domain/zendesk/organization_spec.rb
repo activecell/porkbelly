@@ -9,14 +9,14 @@ describe "::BusinessDomain::Zendesk::Organization" do
       @xml_2 = ::Zendesk::Util.load_fixture("organization_2")
       @xml_1_changed = ::Zendesk::Util.load_fixture("organization_1_changed")
       @params = {}
-      @params[:mapper] = [[:created_at,'created-at'],
+      @params[:mapper] = [[:srv_created_at,'created-at'],
                           [:group_id,'group-id'],
                           [:target_id,'id'],
                           [:is_shared,'is-shared'],
                           [:is_shared_comments,'is-shared-comments'],
                           [:name,'name'],
                           [:notes,'notes'],
-                          [:updated_at,'updated-at']]
+                          [:srv_updated_at,'updated-at']]
       @params[:parent] = "organization"
       @params[:key_field] = :target_id
 

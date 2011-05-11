@@ -1,7 +1,6 @@
 class CreateZendeskSrcPosts < ActiveRecord::Migration
   def self.up
     create_table :zendesk_src_posts do |t|
-      t.column :request_url, :string, :null => false
       t.column :content, :text, :null => false
       t.column :format, :string, :null => false
       t.column :credential, :string, :null => false

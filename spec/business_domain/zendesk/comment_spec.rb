@@ -10,9 +10,9 @@ describe "::BusinessDomain::Zendesk::Comment" do
       @xml_1_changed = ::Zendesk::Util.load_fixture("ticket_1_changed")
       @params = {}
       @params[:mapper] =  [[:author_id	,'author-id'],
-                            [:created_at	,'created-at'],
+                            [:srv_created_at	,'created-at'],
                             [:is_public	,'is-public'],
-                            [:type	,'type'],
+                            [:type_ele	,'type'],
                             [:value	,'value'],
                             [:via_id	,'via-id']]
       @params[:parent] = 'ticket/comments//comment'

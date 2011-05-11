@@ -50,7 +50,7 @@ module BusinessDomain
                                   [:subject,'subject'],
                                   [:submitter_id,'submitter-id'],
                                   [:ticket_type_id,'ticket-type-id'],
-                                  [:updated_at,'updated-at'],
+                                  [:srv_updated_at,'updated-at'],
                                   [:updated_by_type_id,'updated-by-type-id'],
                                   [:via_id,'via-id'],
                                   [:score,'score'],

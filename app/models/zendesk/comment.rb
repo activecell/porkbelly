@@ -22,7 +22,7 @@ module BusinessDomain
         params = {}
         params.update :parent => '/ticket/comments//comment'
         params.update :mapper => [[:author_id	,'author-id'],
-                                  [:created_at	,'created-at'],
+                                  [:srv_created_at	,'created-at'],
                                   [:is_public	,'is-public'],
                                   [:type_ele	,'type'],
                                   [:value	,'value'],
@@ -36,7 +36,7 @@ module BusinessDomain
         transaction do
           arr_obj.each do |arr_ele|
             arr_ele.each do |o|
-              o[:token] = o[:created_at] + "+" + (o[:token] || '')
+              o[:token] = o[:srv_created_at] + "+" + (o[:token] || '')
               object = self.find_or_initialize_by_token(o[:token])
               object.update_attributes(o)
             end unless arr_ele.nil?

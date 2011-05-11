@@ -45,43 +45,43 @@ module Harvest
 
   class Invoice < ActiveRecord::Base
     def self.table_name
-      "harvest_invoices"
+      "harvest_src_invoices"
     end
   end
 
   class InvoiceCategory < ActiveRecord::Base
     def self.table_name
-      "harvest_invoice_categories"
+      "harvest_src_invoice_categories"
     end
   end
 
   class InvoiceMessage < ActiveRecord::Base
     def self.table_name
-      "harvest_invoice_messages"
+      "harvest_src_invoice_messages"
     end
   end
 
   class InvoicePayment < ActiveRecord::Base
     def self.table_name
-      "harvest_invoice_payments"
+      "harvest_src_invoice_payments"
     end
   end
 
   class UserAssignment < ActiveRecord::Base
     def self.table_name
-      "harvest_user_assignments"
+      "harvest_src_user_assignments"
     end
   end
 
   class TaskAssignment < ActiveRecord::Base
     def self.table_name
-      "harvest_task_assignments"
+      "harvest_src_task_assignments"
     end
   end
 
   class Timesheet < ActiveRecord::Base
     def self.table_name
-      "harvest_timesheets"
+      "harvest_src_timesheets"
     end
   end
 
