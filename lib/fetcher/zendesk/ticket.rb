@@ -32,6 +32,7 @@ module Fetcher
               items_count = doc.xpath("/tickets/@count").text
               begin
                 save_ticket_data(@content_keys, request_url_param, format_param, credential, view_id)
+                save_view_ticket_data(@content_keys,view_id,credential)
               rescue Exception => e
                 #TODO send email
                 puts e
@@ -53,6 +54,15 @@ module Fetcher
           zendesk_ticket =  ::Zendesk::Ticket.find_or_initialize_by_target_id(extracted_key)
           logger.info zendesk_ticket.inspect
           zendesk_ticket.update_attributes({:request_url => request_url_param, :content => data, :format => format_param, :credential => extract_credential(credential), :target_id => extracted_key, :subdomain => credential[:subdomain]})
+        end
+      end
+#      save to src_view_tickets
+      def save_view_ticket_data(content_keys,view_id,credential)
+        content_keys.each do |content_key|
+          extracted_key = content_key.keys[0]
+          extracted_key = extracted_key.to_s + '--' + credential[:subdomain].to_s
+          zendesk_ticket =  ::Zendesk::ViewTicket.find_or_initialize_by_view_id_and_ticket_id_and_credential(view_id.to_s,extracted_key.to_s,extract_credential(credential))
+          zendesk_ticket.save
         end
       end
 

@@ -124,5 +124,6 @@ require 'app/models/zendesk/tag'
 require 'app/models/zendesk/ticket_field_entry'
 require 'app/models/zendesk/ticket_comment'
 require 'app/models/zendesk/group_user'
+require 'app/models/zendesk/view_ticket'
 require 'app/models/zendesk/all'
 

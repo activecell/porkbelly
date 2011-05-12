@@ -23,7 +23,12 @@ module BusinessDomain
       arr_obj = []
       src_data.find(:all).each do |o|
         obj = parse_XML(o.content, params)
-        obj.each { |element| element.update params[:change][0] => o[params[:change][1]]} unless params[:change].nil?
+        unless params[:change].nil? 
+          temp = params[:change]
+#          turn to array if not array
+          temp = [params[:change]] unless params[:change][0].kind_of?(Array)  
+          obj.each {|element| temp.each {|sub_array| element.update sub_array[0] => o[sub_array[1]]}}
+        end
         arr_obj.push(obj) unless obj.blank?
       end
       arr_obj.blank? ? nil : arr_obj
@@ -38,32 +43,23 @@ module BusinessDomain
       doc.xpath(params[:parent]).each do |n|
         element = {}
         params[:mapper].each do |p|
-           element.update p[0] => n.xpath(p[1]).text
-            unless params[:be_array].nil?
-              if params[:be_array][0].kind_of?(Array)
-                params[:be_array].each do |sub_array|
-                  if sub_array[0] == p[0]
+         element.update p[0] => n.xpath(p[1]).text
+          unless params[:be_array].nil?            
+            temp = params[:be_array]
+#              turn to array if not array
+            temp = [params[:be_array]] unless params[:be_array][0].kind_of?(Array)             
+            temp.each do |sub_array|
+              if sub_array[0] == p[0]
 #                create sub array for nested realationship
-                    arr_ele = []
-                    n.xpath(p[1]).each { |ele| arr_ele.push ele.xpath(sub_array[1]).text }
-                    element.update p[0] => arr_ele
-                  end
-                end
-              else
-                if params[:be_array][0] == p[0]
-#                create sub array for nested realationship
-                  arr_ele = []
-                  n.xpath(p[1]).each { |ele| arr_ele.push ele.xpath(params[:be_array][1]).text }
-                  element.update p[0] => arr_ele
-                end
+                arr_ele = []
+                n.xpath(p[1]).each { |ele| arr_ele.push ele.xpath(sub_array[1]).text }
+                element.update p[0] => arr_ele
               end
-            else
-              if n.xpath(p[1]).text == ''
-                element.delete p[0]
-              end
-            end #end unless
-          end #end params[:mapper].each
-        contain.push(element) unless element[params[:key_field]].blank?
+            end
+          end #end unless
+          element.delete p[0] if n.xpath(p[1]).text == ''
+        end #end params[:mapper].each
+        contain.push(element) unless element[params[:key_field]].blank? and params[:key_field]
       end
       contain
     end

@@ -27,49 +27,62 @@ module Fetcher
       end
 
       def fetch_all
-        if single_fetch?
-          fetch_clients(credential)
-          fetch_contacts(credential)
+        begin
+          tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, SITE)
+          fetch_time = Time.now
+          has_error = false
+          
+          if single_fetch?
+            fetch_clients(credential)
+            fetch_contacts(credential)
 
-          project_ids = fetch_projects(credential)
-          fetch_user_assignments(credential, project_ids)
-          fetch_task_assignments(credential, project_ids)
+            project_ids = fetch_projects(credential)
+            fetch_user_assignments(credential, project_ids)
+            fetch_task_assignments(credential, project_ids)
 
-          fetch_tasks(credential)
-          fetch_people(credential)
-          fetch_expense_categories(credential)
-          fetch_expenses(credential)
+            fetch_tasks(credential)
+            fetch_people(credential)
+            fetch_expense_categories(credential)
+            fetch_expenses(credential)
 
-          invoice_ids = fetch_invoices(credential)
-          fetch_invoice_messages(credential, invoice_ids)
-          fetch_invoice_payments(credential, invoice_ids)
+            invoice_ids = fetch_invoices(credential)
+            fetch_invoice_messages(credential, invoice_ids)
+            fetch_invoice_payments(credential, invoice_ids)
 
-          fetch_invoice_categories(credential)
-          fetch_timesheets(credential)
-          logger.info "FETCH COMPLETED."
-        else
-          logger.info "multi fetch"
-          credential.each do |cd|
-            fetch_client(cd)
-            fetch_contact(cd)
+            fetch_invoice_categories(credential)
+            fetch_timesheets(credential)
+            logger.info "FETCH COMPLETED."
+          else
+            logger.info "multi fetch"
+            credential.each do |cd|
+              fetch_client(cd)
+              fetch_contact(cd)
 
-            project_ids = fetch_projects(cd)
-            fetch_user_assignments(cd, project_ids)
-            fetch_task_assignments(cd, project_ids)
+              project_ids = fetch_projects(cd)
+              fetch_user_assignments(cd, project_ids)
+              fetch_task_assignments(cd, project_ids)
 
-            fetch_tasks(cd)
-            fetch_people(cd)
-            fetch_expense_categories(cd)
-            fetch_expenses(cd)
+              fetch_tasks(cd)
+              fetch_people(cd)
+              fetch_expense_categories(cd)
+              fetch_expenses(cd)
 
-            invoice_ids = fetch_invoices(cd)
-            fetch_invoice_messages(cd, invoice_ids)
-            fetch_invoice_payments(cd, invoice_ids)
+              invoice_ids = fetch_invoices(cd)
+              fetch_invoice_messages(cd, invoice_ids)
+              fetch_invoice_payments(cd, invoice_ids)
 
-            fetch_invoice_categories(cd)
-            fetch_timesheets(cd)
+              fetch_invoice_categories(cd)
+              fetch_timesheets(cd)
+            end
+            logger.info "FETCH COMPLETED."
           end
-          logger.info "FETCH COMPLETED."
+          if !has_error
+            tracking.update_attributes({:last_request => fetch_time})
+          end
+        rescue Exception => exc
+          logger.error exc
+          logger.error exc.backtrace
+          notify_exception(SITE, exc)
         end
       end
     end

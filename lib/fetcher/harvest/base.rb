@@ -68,7 +68,7 @@ module Fetcher
           notify_exception(SITE, exception)
         ensure
           # update tracking record for the next fetch
-          tracking.update_attributes({:last_request => Time.now}) if support_timestamp
+          #tracking.update_attributes({:last_request => Time.now}) if support_timestamp
         end
         logger.info "Fetched #{target}."
         return target_ids

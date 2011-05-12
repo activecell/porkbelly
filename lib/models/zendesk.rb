@@ -56,5 +56,10 @@ module Zendesk
       "zendesk_src_posts"
     end
   end
+  class ViewTicket < ActiveRecord::Base
+    def self.table_name
+      "zendesk_src_view_tickets"
+    end
+  end  
 end
 
