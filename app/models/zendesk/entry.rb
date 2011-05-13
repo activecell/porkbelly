@@ -2,8 +2,8 @@ module BusinessDomain
   module Zendesk
     class Entry < Base
 
-#      belongs_to :forum
-#      has_many :posts
+      belongs_to :forum
+      has_many :posts
 
       def self.table_name
         "zendesk_entries"

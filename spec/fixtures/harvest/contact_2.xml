@@ -1,0 +1,10 @@
+  <contact>
+    <id type="integer">2</id>
+    <client-id type="integer">2</client-id>
+    <email>Second@email.com</email>
+    <first-name>Jane</first-name>
+    <last-name>Doe</last-name>
+    <phone-office>555.555.5555</phone-office>
+    <phone-mobile>555.555.7777</phone-mobile>
+    <fax>555.555.9999</fax>
+  </contact>

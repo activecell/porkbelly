@@ -308,6 +308,7 @@ namespace :parsing do
   # default parse all data
   task :pt => :"pt:all"
   task :zendesk => :"zendesk:all"
+  task :harvest => :"harvest:all"
   namespace :pt do
     desc "Parser all data of Pivotal Tracker"
     task :all do
@@ -330,6 +331,16 @@ namespace :parsing do
     def parse_all_data
       BusinessDomain::Zendesk::All.parse_all
     end
+  end
+  
+  namespace :harvest do
+  desc "Parser all data of Harvest"
+  task :all do
+    parse_all_data
+  end
+  def parse_all_data
+    BusinessDomain::Harvest::All.parse_all
+  end
   end
 end
 

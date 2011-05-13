@@ -2,8 +2,8 @@ module BusinessDomain
   module Zendesk
     class Macro < Base
 
-#      has_many :entries
-#      has_many :posts
+      has_many :entries
+      has_many :posts
 
       def self.table_name
         "zendesk_macros"

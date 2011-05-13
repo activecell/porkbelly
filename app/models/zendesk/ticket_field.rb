@@ -1,10 +1,9 @@
 module BusinessDomain
   module Zendesk
     class TicketField < Base
-
-#      has_many :entries
-#      has_many :posts
-
+    
+      has_many :ticket_field_entries
+      
       def self.table_name
         "zendesk_ticket_fields"
       end

@@ -34,13 +34,14 @@ module Fetcher
         target = model_class.to_s.split("::").last
         logger.info "Fetching #{target} ..."
         target_ids = []
-        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, target) if support_timestamp
+        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, SITE) if support_timestamp
         begin
           base_url = HARVEST_CONFIG["base_url"].gsub(/\[SUBDOMAIN\]/, credential[:subdomain]) + target_api
           params = {}
           params[:updated_since] = tracking.last_request.strftime("%Y-%m-%d %H:%M") if support_timestamp and tracking and tracking.last_request
           response = send_request(credential, base_url, params)
           logger.info "Response #{response}"
+          puts "===============> #{base_url}"
           content_keys = response_parse_logic.call(response)
           if content_keys.kind_of?(Hash) and !content_keys.empty?
             content_keys.each do |key, content|

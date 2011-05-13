@@ -2,10 +2,10 @@ module BusinessDomain
   module Zendesk
     class Comment < Base
 
-#      has_one :ticket_comment
-#      has_one :ticket, :through => :ticket_comment
-#      has_many :attachment_lists
-#      has_many :attachments,:through => :attachment_list
+      has_one :ticket_comment
+      has_one :ticket, :through => :ticket_comment
+      has_many :attachment_lists
+      has_many :attachments,:through => :attachment_list
 
       def self.table_name
         "zendesk_comments"

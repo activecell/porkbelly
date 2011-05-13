@@ -204,7 +204,7 @@ module Fetcher
         target_ids = []
 
         if support_timestamp
-          tracking = ::SiteTracking.find_by_site_and_target(SITE, target)
+          tracking = ::SiteTracking.find_by_site_and_target(SITE, SITE)
         end
 
         begin

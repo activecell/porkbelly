@@ -1,0 +1,14 @@
+  <client>
+    <name>This is a second client</name>
+    <created-at type="datetime">2011-02-21T04:51:52Z</created-at>
+    <details></details>
+    <updated-at type="datetime">2009-12-10T11:03:15Z</updated-at>
+    <highrise-id type="integer" nil="true"></highrise-id>
+    <id type="integer">2</id>
+    <cache-version type="integer">0</cache-version>
+    <default-invoice-timeframe nil="true"></default-invoice-timeframe>
+    <currency>United States Dollars - USD</currency>
+    <active type="boolean">true</active>
+    <currency-symbol>$</currency-symbol>
+  </client>
+

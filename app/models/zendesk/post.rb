@@ -2,9 +2,9 @@ module BusinessDomain
   module Zendesk
     class Post < Base
 
-#      belongs_to :entry
-#      belongs_to :user
-#      belongs_to :forum
+      belongs_to :entry
+      belongs_to :user
+      belongs_to :forum
 
       def self.table_name
         "zendesk_posts"

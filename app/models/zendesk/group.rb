@@ -2,8 +2,7 @@ module BusinessDomain
   module Zendesk
     class Group < Base
 
-#      has_many :view_tickets
-#      has_many tickets, :through => :view_tickets
+      has_many :group_users
 
       def self.table_name
         "zendesk_groups"

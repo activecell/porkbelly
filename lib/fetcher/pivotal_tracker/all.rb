@@ -17,7 +17,7 @@ module Fetcher
       def fetch_all
         begin
           tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, SITE)
-          fetch_time = Time.now
+          fetch_time = Time.now.utc
           has_error = false
 
           if single_fetch?

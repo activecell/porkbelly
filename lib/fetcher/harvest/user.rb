@@ -10,7 +10,7 @@ module Fetcher
           content_keys = {}
           doc = Nokogiri::XML(response)
           doc.xpath("/users/user").each do |node|
-            content_keys["#{node.xpath("//id").first.text}"] = node.to_s
+            content_keys["#{node.xpath("id").first.text}"] = node.to_s
           end
           return content_keys
         }

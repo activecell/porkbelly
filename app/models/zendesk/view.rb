@@ -2,8 +2,8 @@ module BusinessDomain
   module Zendesk
     class View < Base
 
-#      has_many :view_tickets
-#      has_many tickets, :through => :view_tickets
+      has_many :view_tickets
+      has_many :tickets, :through => :view_tickets
 
 
       def self.table_name

@@ -29,7 +29,7 @@ module Fetcher
       def fetch_all
         begin
           tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, SITE)
-          fetch_time = Time.now
+          fetch_time = Time.now.utc
           has_error = false
           
           if single_fetch?
@@ -50,7 +50,7 @@ module Fetcher
             fetch_invoice_payments(credential, invoice_ids)
 
             fetch_invoice_categories(credential)
-            fetch_timesheets(credential)
+            fetch_timesheets(credential,tracking)
             logger.info "FETCH COMPLETED."
           else
             logger.info "multi fetch"
@@ -72,7 +72,7 @@ module Fetcher
               fetch_invoice_payments(cd, invoice_ids)
 
               fetch_invoice_categories(cd)
-              fetch_timesheets(cd)
+              fetch_timesheets(cd,tracking)
             end
             logger.info "FETCH COMPLETED."
           end

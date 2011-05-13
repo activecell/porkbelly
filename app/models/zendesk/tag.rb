@@ -2,9 +2,9 @@ module BusinessDomain
   module Zendesk
     class Tag < Base
 
-#      belongs_to :entry
-#      belongs_to :user
-#      belongs_to :forum
+      belongs_to :entry
+      belongs_to :user
+      belongs_to :forum
 
       def self.table_name
         "zendesk_tags"

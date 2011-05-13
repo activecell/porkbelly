@@ -3,6 +3,7 @@ module BusinessDomain
     class Organization < Base
 
       has_many :users
+      has_many :forums
 
       def self.table_name
         "zendesk_organizations"

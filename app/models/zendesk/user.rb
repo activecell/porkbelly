@@ -2,8 +2,9 @@ module BusinessDomain
   module Zendesk
     class User < Base
 
-#      has_many :entries
-#      has_many :posts
+      has_many :group_users
+      belongs_to :organization
+      has_many :posts
 
       def self.table_name
         "zendesk_users"

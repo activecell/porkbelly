@@ -1,14 +1,13 @@
 module BusinessDomain
   module Zendesk
     class Ticket < Base
-
-#      TODO: remove comments to make association
-#      has_many :ticket_comments
-#      has_many :ticket_field_entries
-#      has_many :view_tickets
-#      has_many :comments, :through => :ticket_comments
-#      has_many :ticket_field_entries, :through => :ticket_field_entries
-#      has_many :views, :through => :view_tickets
+    
+      has_many :ticket_comments
+      has_many :ticket_field_entries
+      has_many :view_tickets
+      has_many :comments, :through => :ticket_comments
+      has_many :ticket_field_entries, :through => :ticket_field_entries
+      has_many :views, :through => :view_tickets
 
       def self.table_name
         "zendesk_tickets"
