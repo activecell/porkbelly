@@ -5,7 +5,6 @@ module BusinessDomain
       has_many :day_entries
       has_many :task_assignments
       has_many :projects, :through => :task_assignments
-  
       def self.table_name
         "harvest_tasks"
       end

@@ -1,11 +1,10 @@
 module BusinessDomain
   module Harvest
     class Client < Base
-
       has_many :invoices
       has_many :contacts
       has_many :projects
-
+      
       def self.table_name
         "harvest_clients"
       end

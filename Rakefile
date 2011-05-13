@@ -376,6 +376,7 @@ namespace :parsing do
   task :harvest => :"harvest:all"
   task :mixpanel => :"mixpanel:all"
   task :ga => :"ga:all"
+  
   namespace :pt do
     desc "Parser all data of Pivotal Tracker"
     task :all do
