@@ -1,0 +1,29 @@
+<invoice>
+    <number>1</number>
+    <period-end type='date' nil='true'/>
+    <tax type='decimal' nil='true'/>
+    <created-at type='datetime'>2011-05-12T06:28:32Z</created-at>
+    <discount type='decimal' nil='true'/>
+    <due-at-human-format>upon receipt</due-at-human-format>
+    <notes/>
+    <updated-at type='datetime'>2011-05-12T08:18:09Z</updated-at>
+    <amount type='decimal'>0.0</amount>
+    <client-key>599adc1671bc72654e35df273cd2ff169538a22a</client-key>
+    <discount-amount type='decimal' nil='true'/>
+    <period-start type='date' nil='true'/>
+    <recurring-invoice-id type='integer' nil='true'/>
+    <due-amount type='decimal'>-1.0</due-amount>
+    <id type='integer'>2</id>
+    <subject/>
+    <tax-amount type='decimal' nil='true'/>
+    <client-id type='integer'>2</client-id>
+    <purchase-order/>
+    <tax2-amount type='decimal' nil='true'/>
+    <currency>United States Dollars - USD</currency>
+    <retainer-id type='integer' nil='true'/>
+    <estimate-id type='integer' nil='true'/>
+    <issued-at type='date'>2011-05-12</issued-at>
+    <tax2 type='decimal' nil='true'/>
+    <due-at type='date'>2011-05-12</due-at>
+    <state>draf</state>
+  </invoice>

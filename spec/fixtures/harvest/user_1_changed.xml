@@ -1,0 +1,32 @@
+<user>
+    <first-timer type="boolean">true</first-timer>
+    <created-at type="datetime">2011-05-11T08:27:37Z</created-at>
+    <has-access-to-all-future-projects type="boolean">false</has-access-to-all-future-projects>
+    <preferred-approval-screen>timeframe</preferred-approval-screen>
+    <preferred-project-status-reports-screen>active</preferred-project-status-reports-screen>
+    <wants-newsletter type="boolean">true</wants-newsletter>
+    <twitter-username nil="true"/>
+    <default-expense-category-id type="integer" nil="true"/>
+    <default-task-id type="integer" nil="true"/>
+    <default-time-project-id type="integer" nil="true"/>
+    <is-contractor type="boolean">false</is-contractor>
+    <preferred-entry-method>daily</preferred-entry-method>
+    <updated-at type="datetime">2011-05-12T09:29:58Z</updated-at>
+    <id type="integer">1</id>
+    <timezone>Bangkok</timezone>
+    <duplicate-timesheet-wants-notes type="boolean">true</duplicate-timesheet-wants-notes>
+    <is-admin type="boolean">true</is-admin>
+    <opensocial-identifier nil="true"/>
+    <cache-version type="integer">0</cache-version>
+    <default-hourly-rate type="decimal" nil="true"/>
+    <is-active type="boolean">true</is-active>
+    <last-name>Nguyen</last-name>
+    <wants-timesheet-duplication type="boolean">false</wants-timesheet-duplication>
+    <default-expense-project-id type="integer" nil="true"/>
+    <email-after-submit type="boolean">true</email-after-submit>
+    <telephone/>
+    <department nil="true"/>
+    <identity-url nil="true"/>
+    <email>nguyenan169@gmail.com</email>
+    <first-name>Changed</first-name>
+  </user>

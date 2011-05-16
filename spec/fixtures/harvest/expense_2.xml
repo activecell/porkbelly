@@ -1,0 +1,16 @@
+<expense>
+    <created-at type='datetime'>2011-05-12T06:41:21Z</created-at>
+    <is-billed type='boolean'>false</is-billed>
+    <notes/>
+    <project-id type='integer'>2</project-id>
+    <updated-at type='datetime'>2011-05-12T06:41:21Z</updated-at>
+    <spent-at type='date'>2011-05-12</spent-at>
+    <units type='decimal'>1.0</units>
+    <id type='integer'>2</id>
+    <is-closed type='boolean'>false</is-closed>
+    <user-id type='integer'>2</user-id>
+    <expense-category-id type='integer'>2</expense-category-id>
+    <total-cost type='decimal'>30.0</total-cost>
+    <has-receipt type='boolean'>false</has-receipt>
+    <receipt-url/>
+  </expense>

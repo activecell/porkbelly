@@ -1,0 +1,8 @@
+<invoice-item-category>
+    <name>Service</name>
+    <created-at type='datetime'>2011-05-11T08:27:37Z</created-at>
+    <updated-at type='datetime'>2011-05-11T08:27:37Z</updated-at>
+    <use-as-expense type='boolean'>false</use-as-expense>
+    <use-as-service type='boolean'>true</use-as-service>
+    <id type='integer'>1</id>
+  </invoice-item-category>

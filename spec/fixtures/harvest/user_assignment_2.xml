@@ -1,0 +1,12 @@
+<user-assignment>
+    <created-at type="datetime">2011-05-11T09:51:31Z</created-at>
+    <project-id type="integer">2</project-id>
+    <updated-at type="datetime">2011-05-11T09:51:31Z</updated-at>
+    <hourly-rate type="decimal" nil="true"/>
+    <id type="integer">2</id>
+    <user-id type="integer">2</user-id>
+    <deactivated type="boolean">false</deactivated>
+    <is-project-manager type="boolean">true</is-project-manager>
+    <budget type="decimal" nil="true"/>
+    <estimate type="yaml" nil="true"/>
+  </user-assignment>

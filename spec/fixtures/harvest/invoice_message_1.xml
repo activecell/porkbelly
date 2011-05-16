@@ -1,0 +1,14 @@
+<invoice-message>
+    <sent-by-email>nguyenan169@gmail.com</sent-by-email>
+    <created-at type='datetime'>2011-05-12T06:30:22Z</created-at>
+    <include-pay-pal-link type='boolean'>false</include-pay-pal-link>
+    <thank-you type='boolean'>false</thank-you>
+    <body>First Invoice Message</body>
+    <send-me-a-copy type='boolean'>false</send-me-a-copy>
+    <updated-at type='datetime'>2011-05-12T06:30:22Z</updated-at>
+    <invoice-id type='integer'>1</invoice-id>
+    <id type='integer'>1</id>
+    <subject>Invoice #1 from anlp</subject>
+    <sent-by>An Nguyen</sent-by>
+    <full-recipient-list>&quot;An Nguyen&quot; &lt;nguyenan169@gmail.com&gt;</full-recipient-list>
+  </invoice-message>

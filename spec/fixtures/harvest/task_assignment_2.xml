@@ -1,0 +1,12 @@
+<task-assignment>
+    <billable type='boolean'>false</billable>
+    <created-at type='datetime'>2011-05-12T10:25:51Z</created-at>
+    <task-id type='integer'>2</task-id>
+    <project-id type='integer'>2</project-id>
+    <updated-at type='datetime'>2011-05-12T10:25:51Z</updated-at>
+    <hourly-rate type='decimal' nil='true'/>
+    <id type='integer'>2</id>
+    <deactivated type='boolean'>false</deactivated>
+    <budget type='decimal' nil='true'/>
+    <estimate type='yaml' nil='true'/>
+  </task-assignment>

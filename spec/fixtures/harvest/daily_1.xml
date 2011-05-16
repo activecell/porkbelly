@@ -1,0 +1,32 @@
+<daily> 
+  <for_day type="date">Thu, 12 May 2011</for_day> 
+  <day_entries> 
+    <day_entry> 
+      <id type="integer">1</id> 
+      <spent_at type="date">2011-05-12</spent_at> 
+      <user_id type="integer">1</user_id> 
+      <client>anlp</client> 
+      <project_id>1</project_id> 
+      <project>Internal</project> 
+      <task_id>1</task_id> 
+      <task>Admin</task> 
+      <hours type="float">17.37</hours> 
+      <notes>Note for first</notes> 
+      <created_at type="datetime">Thu, 12 May 2011 07:31:27 +0000</created_at> 
+      <updated_at type="datetime">Fri, 13 May 2011 02:17:13 +0000</updated_at> 
+    </day_entry> 
+  <projects> 
+    <project> 
+      <name>Internal</name> 
+      <code></code> 
+      <id type="integer">1</id> 
+      <client>anlp</client> 
+      <tasks> 
+        </task> 
+        </task> 
+      </tasks> 
+    </project> 
+    <project> 
+    </project> 
+  </projects> 
+</daily> 

@@ -5,21 +5,18 @@ module BusinessDomain
       def self.parse_all
         Parser.parse_all Client
         Parser.parse_all Contact
-#        Parser.parse_all View
-#        Parser.parse_all Comment
-#        Parser.parse_all Post
-#        Parser.parse_all Group
-#        Parser.parse_all Forum
-#        Parser.parse_all Entry
-#        Parser.parse_all TicketField
-#        Parser.parse_all Tag
-#        Parser.parse_all User
-#        Parser.parse_all Macro
-#        Parser.parse_all TicketFieldEntry
-#        Parser.parse_all TicketComment
-#        Parser.parse_all GroupUser
-#        the special case no need parser
-#        ViewTicket.tranfer_data
+        Parser.parse_all Project
+        Parser.parse_all Task
+        Parser.parse_all User
+        Parser.parse_all ExpenseCategory
+        Parser.parse_all Expense
+        Parser.parse_all UserAssignment
+        Parser.parse_all TaskAssignment
+        Parser.parse_all DayEntry
+        Parser.parse_all Invoice
+        Parser.parse_all InvoiceMessage 
+        Parser.parse_all Payment
+        Parser.parse_all InvoiceCategory
       end
     end
   end
