@@ -47,7 +47,7 @@ development:
     params:
       type: "general"
       unit: "day"
-      interval: 1
+      interval: 30
 
       # Current version of Mixpanel API does not work well witj CSV format.
       # So the default format is always JSON.

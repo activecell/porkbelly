@@ -3,11 +3,12 @@ module BusinessDomain
     class Project < Base
 
       belongs_to :client
-#      has_many :expenses
-#      has_many :user_assignments
-#      has_many :users, :through => :user_assignments
-#      has_many :task_assignments
-#      has_many :tasks, :through => :task_assignments
+      has_many :expenses
+      has_many :day_entries
+      has_many :user_assignments
+      has_many :users, :through => :user_assignments
+      has_many :task_assignments
+      has_many :tasks, :through => :task_assignments
       def self.table_name
         "harvest_projects"
       end

@@ -65,6 +65,17 @@ describe "::BusinessDomain::Parser" do
       result[0][:project_id].should == "136215"
       result[0][:description].should == "Chuong Huynh accepted \"Can't create issue for iteration\""
     end
+    
+    it "should parse JSON string to hash with params" do
+      json = ::Mixpanel::Util.load_fixture("parsed_events")
+      json_params = {}
+      json_params[:root] = "data/values"
+      json_params[:key] = :at_date
+      json_params[:value] = :srv_count
+      result = Parser.parse(json, json_params, "JSON")
+      result[0][:at_date].should == "2011-04-27"
+      result[0][:srv_count].should == 1
+    end
   end
 
   describe "Get Content Method" do

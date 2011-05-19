@@ -1,3 +1,5 @@
+require 'json'
+
 module BusinessDomain
   class Parser
 
@@ -7,22 +9,28 @@ module BusinessDomain
 #                  :change ===> in case update from source table, can reference task or iteration model
 #                                            or ticket model
 #                  :be_array ===> get sub array ref: iteration_story model
+#                  :root ===> use to get root of JSON
+#                  :key ===> field contain keys in hash converted from JSON
+#                  :value ===> field contain values in hash converted from JSON
 #######################################################################################################
 
-    def self.parse(content, params)
-      parse_XML(content,params)
+    def self.parse(content, params, type = "XML")
+      obj = parse_XML(content, params) if type == "XML"
+      obj = params[:block].call(content) if type == "JSON"
+      return obj
     end
 
-    def self.parse_all(target)
-      arr_obj = get_content(target.src_data,target.filter_params)
+    def self.parse_all(target, type = "XML")
+      arr_obj = get_content(target.src_data,target.filter_params, type)
       target.update_data(arr_obj) unless arr_obj.nil?
     end
 
 #      for RSpec
-    def self.get_content(src_data,params)
+    def self.get_content(src_data,params, type = "XML")
       arr_obj = []
       src_data.find(:all).each do |o|
-        obj = parse_XML(o.content, params)
+        obj = parse_XML(o.content, params) if type == "XML"
+        obj = params[:block].call(o.content) if type == "JSON"
         unless params[:change].nil? 
           temp = params[:change]
 #          turn to array if not array
@@ -56,9 +64,9 @@ module BusinessDomain
                 element.update p[0] => arr_ele
               end
             end
-          end #end unless
+          end # end unless
           element.delete p[0] if n.xpath(p[1]).text == ''
-        end #end params[:mapper].each
+        end # end params[:mapper].each
         contain.push(element) unless element[params[:key_field]].blank? and params[:key_field]
       end
       contain

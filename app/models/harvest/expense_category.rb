@@ -2,8 +2,7 @@ module BusinessDomain
   module Harvest
     class ExpenseCategory < Base
 
-# TODO: remember uncomment
-#      has_many :expenses
+      has_many :expenses
 
       def self.table_name
         "harvest_expense_categories"

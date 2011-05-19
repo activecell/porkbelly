@@ -3,8 +3,8 @@ module BusinessDomain
     class Invoice < Base
 
       belongs_to :client
-#      has_many :invoice_messages
-#      has_many :invoice_category
+      has_many :invoice_messages
+      has_many :invoice_category
 
       def self.table_name
         "harvest_invoices"

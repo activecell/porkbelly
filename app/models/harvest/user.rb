@@ -2,10 +2,10 @@ module BusinessDomain
   module Harvest
     class User < Base
 
-# TODO: remember uncomment
-#      has_many :expenses
-#      has_many :user_assignments
-#      has_many :assignments, :through => :assignments
+      has_many :day_entries
+      has_many :expenses
+      has_many :user_assignments
+      has_many :assignments, :through => :assignments
 
       def self.table_name
         "harvest_users"

@@ -309,6 +309,7 @@ namespace :parsing do
   task :pt => :"pt:all"
   task :zendesk => :"zendesk:all"
   task :harvest => :"harvest:all"
+  task :mixpanel => :"mixpanel:all"
   namespace :pt do
     desc "Parser all data of Pivotal Tracker"
     task :all do
@@ -334,13 +335,23 @@ namespace :parsing do
   end
   
   namespace :harvest do
-  desc "Parser all data of Harvest"
-  task :all do
-    parse_all_data
+    desc "Parser all data of Harvest"
+    task :all do
+      parse_all_data
+    end
+    def parse_all_data
+      BusinessDomain::Harvest::All.parse_all
+    end
   end
-  def parse_all_data
-    BusinessDomain::Harvest::All.parse_all
-  end
-  end
+  
+  namespace :mixpanel do
+    desc "Parser all data of Mixpanel"
+    task :all do
+      parse_all_data
+    end
+    def parse_all_data
+      BusinessDomain::Mixpanel::All.parse_all
+    end
+  end  
 end
 
