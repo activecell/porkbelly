@@ -270,9 +270,73 @@ end
 namespace :db do
   desc "Create database"
   task :create do
-    puts STAGE
-    unless File.exist?(DB_FILE)
-      SQLite3::Database.new(DB_FILE)
+    create_database DB_CONFIG[STAGE]
+  end 
+  
+  def create_database (config)
+    begin
+      if config['adapter'] =~ /sqlite/
+        if File.exist?(config['database'])
+          puts "#{config['database']} already exists"
+        else
+          begin
+            # Create the SQLite database
+            ActiveRecord::Base.establish_connection(config)
+            ActiveRecord::Base.connection
+          rescue Exception => e
+            puts e, *(e.backtrace)
+            puts "Couldn't create database for #{DB_CONFIG.inspect}"
+          end
+        end
+        return # Skip the else clause of begin/rescue
+      else
+        ActiveRecord::Base.establish_connection(config)
+        ActiveRecord::Base.connection
+      end
+    rescue
+      case config['adapter']
+      when /mysql/
+        @charset   = ENV['CHARSET']   || 'utf8'
+        @collation = ENV['COLLATION'] || 'utf8_unicode_ci'
+        creation_options = {:charset => (config['charset'] || @charset), :collation => (config['collation'] || @collation)}
+        error_class = config['adapter'] =~ /mysql2/ ? Mysql2::Error : Mysql::Error
+        access_denied_error = 1045
+        begin
+          ActiveRecord::Base.establish_connection(config.merge('database' => nil))
+          ActiveRecord::Base.connection.create_database(config['database'], creation_options)
+          ActiveRecord::Base.establish_connection(config)
+        rescue error_class => sqlerr
+          if sqlerr.errno == access_denied_error
+            puts "#{sqlerr.error}. \nPlease provide the root password for your mysql installation\n>"
+            root_password = $stdin.gets.strip
+            grant_statement = "GRANT ALL PRIVILEGES ON #{config['database']}.* " \
+              "TO '#{config['username']}'@'localhost' " \
+              "IDENTIFIED BY '#{config['password']}' WITH GRANT OPTION;"
+            ActiveRecord::Base.establish_connection(config.merge(
+                'database' => nil, 'username' => 'root', 'password' => root_password))
+            ActiveRecord::Base.connection.create_database(config['database'], creation_options)
+            ActiveRecord::Base.connection.execute grant_statement
+            ActiveRecord::Base.establish_connection(config)
+          else
+            puts sqlerr.error
+            puts "Couldn't create database for #{DB_CONFIG.inspect}, charset: #{config['charset'] || @charset}, collation: #{config['collation'] || @collation}"
+            puts "(if you set the charset manually, make sure you have a matching collation)" if config['charset']
+          end
+        end
+      when 'postgresql'
+        
+        @encoding = config['encoding'] || ENV['CHARSET'] || 'utf8'
+        begin
+          ActiveRecord::Base.establish_connection(config.merge('database' => 'postgres', 'schema_search_path' => 'public'))
+          ActiveRecord::Base.connection.create_database(config['database'], config.merge('encoding' => @encoding))
+          ActiveRecord::Base.establish_connection(config)
+        rescue Exception => e
+          puts e, *(e.backtrace)
+          puts "Couldn't create database for #{DB_CONFIG.inspect}"
+        end
+      end
+    else
+      puts "#{config['database']} already exists"
     end
   end
 
@@ -353,5 +417,16 @@ namespace :parsing do
       BusinessDomain::Mixpanel::All.parse_all
     end
   end  
+  
+  namespace :ga do
+    desc "Parser all data of Google Analytics"
+    task :all do
+      parse_all_data
+    end
+    def parse_all_data
+      BusinessDomain::GA::All.parse_all
+    end
+  end  
+  
 end
 

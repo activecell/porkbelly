@@ -11,5 +11,6 @@ class CreateParsedMixpanelFunnelPropertySteps < ActiveRecord::Migration
 
   def self.down
     drop_table :mixpanel_funnel_property_steps
+  end
 end
 
