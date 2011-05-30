@@ -50,7 +50,7 @@ describe "::BusinessDomain::Mixpanel::Funnel" do
 #      reset table
       Funnel.destroy_all
       arr_obj = []
-      arr_obj.push Parser.parse(@xml_1,@params, "JSON")
+      arr_obj.push Parser.parse(@xml_1,@params, "SPEC")
       arr_obj[0].each do |element| 
         element[:name] = 'View my blog'
         element[:token] = 'for test'
@@ -60,7 +60,7 @@ describe "::BusinessDomain::Mixpanel::Funnel" do
 #      second sample
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1_changed,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1_changed,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'View my blog'
           element[:token] = 'for test'
@@ -79,7 +79,7 @@ describe "::BusinessDomain::Mixpanel::Funnel" do
       Funnel.destroy_all
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_2,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_2,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'Test Mixpanel API'
           element[:token] = 'for test'
@@ -95,7 +95,7 @@ describe "::BusinessDomain::Mixpanel::Funnel" do
       Funnel.destroy_all
 #      get data and update
       lambda do
-        Parser.parse_all(Funnel, "JSON")
+        Parser.parse_all(Funnel, "SPEC")
         obj_1 = Funnel.find_by_token_and_at_date(@token_2,"2011-05-16")
         obj_1.completion.should == "0.0"
       end.should change(Funnel, :count).by(8)

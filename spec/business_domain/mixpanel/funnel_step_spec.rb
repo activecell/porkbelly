@@ -46,14 +46,14 @@ describe "::BusinessDomain::Mixpanel::FunnelStep" do
       record.request_url = "www.google.com"
       record.update_attributes(record)
       
-      Parser.parse_all(Funnel, "JSON")
+      Parser.parse_all(Funnel, "SPEC")
     end
 
     it "should update data to table when same token and at_date" do
 #      reset table
         FunnelStep.destroy_all
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'View my blog'
           element[:token] = 'for test'
@@ -64,7 +64,7 @@ describe "::BusinessDomain::Mixpanel::FunnelStep" do
 #      second sample
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1_changed,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1_changed,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'View my blog'
           element[:token] = 'for test'
@@ -84,7 +84,7 @@ describe "::BusinessDomain::Mixpanel::FunnelStep" do
       FunnelStep.destroy_all
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_2,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_2,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'Test Mixpanel API'
           element[:token] = 'for test'
@@ -101,11 +101,11 @@ describe "::BusinessDomain::Mixpanel::FunnelStep" do
       FunnelStep.destroy_all
 #      get data and update
       lambda do
-        Parser.parse_all(FunnelStep, "JSON")
+        Parser.parse_all(FunnelStep, "SPEC")
         funnel = Funnel.find_by_token_and_at_date(@token_2,"2011-05-16")
         obj_1 = FunnelStep.find_by_goal_and_funnel_id("Test MixPanel API",funnel[:id].to_s)
         obj_1.overall_conv_ratio.should == "3.0"
-      end.should change(FunnelStep, :count).by(20)
+      end.should change(FunnelStep, :count).by(32)
     end
   end
 end

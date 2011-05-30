@@ -5,7 +5,7 @@ class CreateGaData < ActiveRecord::Migration
       t.column :table_id, :string, :null => false
       t.column :content, :text
       t.column :credential, :string, :null => false
-      t.column :request_url, :string
+      t.column :request_url, :text
       t.column :format, :string
 
       t.timestamps

@@ -57,7 +57,7 @@ describe "::BusinessDomain::Mixpanel::EventProperty" do
 #      reset table
         EventProperty.destroy_all
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'test_num'
           element[:credential] = 'for test'
@@ -68,7 +68,7 @@ describe "::BusinessDomain::Mixpanel::EventProperty" do
 #      second sample
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1_changed,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1_changed,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'test_num'
           element[:credential] = 'for test'
@@ -88,7 +88,7 @@ describe "::BusinessDomain::Mixpanel::EventProperty" do
       EventProperty.destroy_all
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_2,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_2,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'test_time'
           element[:credential] = 'for test'
@@ -105,7 +105,7 @@ describe "::BusinessDomain::Mixpanel::EventProperty" do
       EventProperty.destroy_all
 #      get data and update
       lambda do
-        Parser.parse_all(EventProperty, "JSON")
+        Parser.parse_all(EventProperty, "SPEC")
         obj_1 = EventProperty.find_by_event_token_and_name_and_at_date_and_value(@token_2,'test_time',"2011-05-15",'VN')
         obj_1.srv_count.should == "1"
       end.should change(EventProperty, :count).by(7)

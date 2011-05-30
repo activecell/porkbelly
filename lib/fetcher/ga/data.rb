@@ -22,9 +22,7 @@ module Fetcher
           end
           request_url << "&end-date=" << Time.now.utc.strftime("%Y-%m-%d") << "&metrics=" + params[:metrics].to_s
           request_url << "&dimensions="  + params[:dimensions].to_s unless params[:dimensions].blank? #dimensions can be nil
-          request_for_pagination = request_url + "&max-results=2"
-          puts "=================================================***********"
-          puts SiteTracking.find(:all).inspect
+          request_for_pagination = request_url
           response = create_request(request_for_pagination)
           doc = Nokogiri::XML(response)
           total = doc.xpath("*/openSearch:totalResults").text.to_i

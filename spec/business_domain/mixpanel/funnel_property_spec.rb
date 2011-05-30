@@ -60,14 +60,14 @@ describe "::BusinessDomain::Mixpanel::FunnelProperty" do
       record.request_url = "www.google.com"
       record.update_attributes(record)
       
-      Parser.parse_all(Funnel, "JSON")
+      Parser.parse_all(Funnel, "SPEC")
     end
 
     it "should update data to table when same date,name and funnel_id" do
 #      reset table
         FunnelProperty.destroy_all
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'mp_country_code'
           element[:token] = 'for test'
@@ -81,7 +81,7 @@ describe "::BusinessDomain::Mixpanel::FunnelProperty" do
 #      second sample
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1_changed,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1_changed,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'mp_country_code'
           element[:token] = 'for test'
@@ -102,7 +102,7 @@ describe "::BusinessDomain::Mixpanel::FunnelProperty" do
       FunnelProperty.destroy_all
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_2,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_2,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:name] = 'gender'
           element[:token] = 'for test'
@@ -120,7 +120,7 @@ describe "::BusinessDomain::Mixpanel::FunnelProperty" do
       FunnelProperty.destroy_all
 #      get data and update
       lambda do
-        Parser.parse_all(FunnelProperty, "JSON")
+        Parser.parse_all(FunnelProperty, "SPEC")
         funnel = Funnel.find_by_token_and_at_date(@token_2,"2011-05-16")
         obj_1 = FunnelProperty.find_by_date_and_funnel_id("2011-05-16",funnel[:id].to_s)
         obj_1.steps.should == "2"

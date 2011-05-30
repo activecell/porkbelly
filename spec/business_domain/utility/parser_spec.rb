@@ -72,7 +72,24 @@ describe "::BusinessDomain::Parser" do
       json_params[:root] = "data/values"
       json_params[:key] = :at_date
       json_params[:value] = :srv_count
-      result = Parser.parse(json, json_params, "JSON")
+      json_params[:block] = lambda {|content|
+            object = []
+            data = JSON content
+            roots = json_params[:root].split('/')
+            roots.each {|element| data = data[element]}
+            
+            data.each do |key, value| 
+              data[key].each do |a|
+                next if a[1] == 0
+                element = {}
+                element.update json_params[:key] => a[0]
+                element.update json_params[:value] => a[1]
+                object.push element
+              end
+            end
+            object
+          }
+      result = Parser.parse(json, json_params, "SPEC")
       result[0][:at_date].should == "2011-04-27"
       result[0][:srv_count].should == 1
     end

@@ -65,3 +65,9 @@ require 'app/models/mixpanel/funnel_property'
 require 'app/models/mixpanel/funnel_property_value'
 require 'app/models/mixpanel/funnel_property_step'
 require 'app/models/mixpanel/all'
+
+# GA
+require 'app/models/ga/base'
+require 'app/models/ga/entry'
+require 'app/models/ga/profile'
+require 'app/models/ga/all'

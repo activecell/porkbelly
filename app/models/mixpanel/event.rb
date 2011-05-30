@@ -8,9 +8,8 @@ module BusinessDomain
         "mixpanel_events"
       end
 
-######################
-#      override method
-######################
+      # override method
+
       def self.src_data
         return ::Mixpanel::Event
       end

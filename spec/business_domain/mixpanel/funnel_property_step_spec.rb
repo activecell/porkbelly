@@ -66,16 +66,16 @@ describe "::BusinessDomain::Mixpanel::FunnelPropertyValue" do
       record.request_url = "www.google.com"
       record.update_attributes(record)
       
-      Parser.parse_all(Funnel, "JSON")
-      Parser.parse_all(FunnelProperty, "JSON")
-      Parser.parse_all(FunnelPropertyValue, "JSON")
+      Parser.parse_all(Funnel, "SPEC")
+      Parser.parse_all(FunnelProperty, "SPEC")
+      Parser.parse_all(FunnelPropertyValue, "SPEC")
     end
 
     it "should update data to table when same funnel_property_value_id and name" do
 #      reset table
         FunnelPropertyStep.destroy_all
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:token] = 'for test'
           element[:funnel_name] = 'Test Mixpanel API'
@@ -89,7 +89,7 @@ describe "::BusinessDomain::Mixpanel::FunnelPropertyValue" do
 #      second sample
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_1_changed,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_1_changed,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:token] = 'for test'
           element[:funnel_name] = 'Test Mixpanel API'
@@ -112,7 +112,7 @@ describe "::BusinessDomain::Mixpanel::FunnelPropertyValue" do
       FunnelPropertyStep.destroy_all
       lambda do
         arr_obj = []
-        arr_obj.push Parser.parse(@xml_2,@params, "JSON")
+        arr_obj.push Parser.parse(@xml_2,@params, "SPEC")
         arr_obj[0].each do |element| 
           element[:token] = 'for test'
           element[:funnel_name] = 'Signup'
@@ -132,7 +132,7 @@ describe "::BusinessDomain::Mixpanel::FunnelPropertyValue" do
       FunnelPropertyStep.destroy_all
 #      get data and update
       lambda do
-        Parser.parse_all(FunnelPropertyStep, "JSON")
+        Parser.parse_all(FunnelPropertyStep, "SPEC")
         funnel = Funnel.find_by_token_and_at_date(@token_2,"2011-05-16")
         funnel_property = FunnelProperty.find_by_date_and_name_and_funnel_id("2011-05-16","gender",funnel[:id].to_s)
         funnel_property_value = FunnelPropertyValue.find_by_funnel_property_id_and_name(funnel_property[:id].to_s,"male")

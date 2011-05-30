@@ -16,7 +16,7 @@ module BusinessDomain
 
     def self.parse(content, params, type = "XML")
       obj = parse_XML(content, params) if type == "XML"
-      obj = params[:block].call(content) if type == "JSON"
+      obj = params[:block].call(content) if type == "SPEC"
       return obj
     end
 
@@ -30,7 +30,7 @@ module BusinessDomain
       arr_obj = []
       src_data.find(:all).each do |o|
         obj = parse_XML(o.content, params) if type == "XML"
-        obj = params[:block].call(o.content) if type == "JSON"
+        obj = params[:block].call(o.content) if type == "SPEC"
         unless params[:change].nil? 
           temp = params[:change]
 #          turn to array if not array
@@ -48,7 +48,7 @@ module BusinessDomain
     def self.parse_XML(content,params)
       contain = []
       doc = Nokogiri::XML(content)
-      doc.xpath(params[:parent]).each do |n|
+      doc.xpath(params[:parent],params[:namespace]).each do |n|
         element = {}
         params[:mapper].each do |p|
          element.update p[0] => n.xpath(p[1]).text
