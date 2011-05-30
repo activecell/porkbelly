@@ -12,6 +12,7 @@ module BusinessDomain
 #                  :root ===> use to get root of JSON
 #                  :key ===> field contain keys in hash converted from JSON
 #                  :value ===> field contain values in hash converted from JSON
+#                  :field_pos ===> in case the field to ref. is not "content"
 #######################################################################################################
 
     def self.parse(content, params, type = "XML")
@@ -28,9 +29,10 @@ module BusinessDomain
 #      for RSpec
     def self.get_content(src_data,params, type = "XML")
       arr_obj = []
+      field_pos = params[:field_pos] || :content
       src_data.find(:all).each do |o|
-        obj = parse_XML(o.content, params) if type == "XML"
-        obj = params[:block].call(o.content) if type == "SPEC"
+        obj = parse_XML(o[field_pos], params) if type == "XML"
+        obj = params[:block].call(o[field_pos]) if type == "SPEC"
         unless params[:change].nil? 
           temp = params[:change]
 #          turn to array if not array

@@ -16,12 +16,13 @@ module BusinessDomain
         params = {}
         params.update :change => [:account_id, :account_id]
         params.update :mapper => [[:profileId,'ga:profileId']]
+        params.update :field_pos => :entry
         params.update :block => lambda {|content|
           contain = []
           doc = Nokogiri::XML(content)
           doc.remove_namespaces!
           element = {}
-          element.update :title => doc.xpath('title').text
+          element.update :title => doc.xpath('//title').text
           doc.xpath("//*").each do |ele|
             name = ele.xpath("@name").text
             sym = name[3..-1].to_sym if !name[3..-1].nil?
