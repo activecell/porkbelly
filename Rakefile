@@ -254,7 +254,8 @@ namespace :site do
           client = Fetcher::GA::All.new({:username => credential["username"],
                                          :password => credential["password"]},
                                          {:metrics => ENV["metrics"].to_s,
-                                         :dimensions => ENV["dimensions"].to_s})
+                                         :dimensions => ENV["dimensions"].to_s,
+                                         :request_id => ENV["request_name"].to_s})
           client.fetch_all
         end
       elsif ENV["credential"]
