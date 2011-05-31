@@ -1,0 +1,22 @@
+<entry gd:etag="W/&quot;D0UGSXYyfCp7I2A9WhZQGE0.&quot;" gd:kind="analytics#account">
+  <id>http://www.google.com/analytics/feeds/accounts/ga:42991252</id>
+  <updated>2011-04-26T01:07:08.894-07:00</updated>
+  <title>changed</title>
+  <link rel="alternate" type="text/html" href="http://www.google.com/analytics"/>
+  <ga:goal active="true" name="testgoal" number="1" value="1.0">
+    <ga:destination caseSensitive="false" expression="/posts/5" matchType="head" step1Required="false"/>
+  </ga:goal>
+  <ga:goal active="true" name="demogoal" number="4" value="1.5">
+    <ga:engagement comparison="&gt;" thresholdValue="7964" type="timeOnSite"/>
+  </ga:goal>
+  <ga:goal active="true" name="malouda" number="11" value="22.0">
+    <ga:engagement comparison="=" thresholdValue="2" type="pagesVisited"/>
+  </ga:goal>
+  <dxp:property name="ga:accountId" value="21764954"/>
+  <dxp:property name="ga:accountName" value="profitably"/>
+  <dxp:property name="ga:profileId" value="42991252"/>
+  <dxp:property name="ga:webPropertyId" value="UA-21764954-1"/>
+  <dxp:property name="ga:currency" value="USD"/>
+  <dxp:property name="ga:timezone" value="Asia/Tokyo"/>
+  <dxp:tableId>ga:42991252</dxp:tableId>
+</entry>

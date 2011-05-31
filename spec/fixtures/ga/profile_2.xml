@@ -1,0 +1,13 @@
+<entry gd:etag="W/&quot;CE8AR3o_eyp7I2A9WhZTFE4.&quot;" gd:kind="analytics#account">
+  <id>http://www.google.com/analytics/feeds/accounts/ga:43683834</id>
+  <updated>2011-03-18T00:20:46.443-07:00</updated>
+  <title>tpl-dev.blogspot.com/</title>
+  <link rel="alternate" type="text/html" href="http://www.google.com/analytics"/>
+  <dxp:property name="ga:accountId" value="22140029"/>
+  <dxp:property name="ga:accountName" value="tpl-dev.blogspot.com/"/>
+  <dxp:property name="ga:profileId" value="43683834"/>
+  <dxp:property name="ga:webPropertyId" value="UA-22140029-1"/>
+  <dxp:property name="ga:currency" value="USD"/>
+  <dxp:property name="ga:timezone" value="Asia/Saigon"/>
+  <dxp:tableId>ga:43683834</dxp:tableId>
+</entry>

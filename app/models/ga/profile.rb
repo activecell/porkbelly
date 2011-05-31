@@ -2,6 +2,8 @@ module BusinessDomain
   module GA
     class Profile < Base
 
+      has_many :entries
+
       def self.table_name
         "ga_profiles"
       end

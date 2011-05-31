@@ -29,7 +29,7 @@ module Fetcher
           index = doc.xpath("*/openSearch:startIndex").text.to_i
           items = doc.xpath("*/openSearch:itemsPerPage").text.to_i
           start_index = index + items
-#          loop here
+          # loop here
           while total > start_index
             save_data(response, account_id, table_id, credential, request_url)
             request_for_pagination = request_url + "&start-index=#{start_index}" + "&max-results=10000"
@@ -40,7 +40,7 @@ module Fetcher
             start_index = index + items
           end
           logger.info "Created request url: #{request_for_pagination}"
-          #puts response
+          # puts response
           save_data(response, account_id, table_id, credential, request_url)
         end
       end

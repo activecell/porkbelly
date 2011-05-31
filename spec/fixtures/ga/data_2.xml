@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:dxp='http://schemas.google.com/analytics/2009' xmlns:openSearch='http://a9.com/-/spec/opensearch/1.1/' xmlns:gd='http://schemas.google.com/g/2005' gd:etag='W/&quot;CUMFSXs7fyp7I2A9WhZVF0g.&quot;' gd:kind='analytics#data'>
+  <entry gd:etag='W/&quot;CUEEQX47eSp7I2A9WhZVF0w.&quot;' gd:kind='analytics#datarow'>
+    <updated>2011-05-29T17:00:00.001-07:00</updated>
+    <title>ga:visitorType=Returning Visitor | ga:referralPath=/ | ga:campaign=(not set) | ga:source=www.tinyurl.com/MakeMoneyWithYourWebsite | ga:hostname=www.tinyurl.com/MakeMoneyWithYourWebsite | ga:date=20110530</title>
+    <link rel='alternate' type='text/html' href='http://www.google.com/analytics'/>
+    <dxp:dimension name='ga:visitorType' value='Returning Visitor'/>
+    <dxp:dimension name='ga:referralPath' value='/'/>
+    <dxp:dimension name='ga:campaign' value='(not set)'/>
+    <dxp:dimension name='ga:source' value='www.tinyurl.com/MakeMoneyWithYourWebsite'/>
+    <dxp:dimension name='ga:hostname' value='www.tinyurl.com/MakeMoneyWithYourWebsite'/>
+    <dxp:dimension name='ga:date' value='20110420'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:visits' type='integer' value='10'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:visitors' type='integer' value='11'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:pageviews' type='integer' value='4'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:pageviewsPerVisit' type='float' value='2.0'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:uniquePageviews' type='integer' value='15'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:avgTimeOnPage' type='time' value='0.0'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:avgTimeOnSite' type='time' value='3.0'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:entrances' type='integer' value='2'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:exits' type='integer' value='4'/>
+    <dxp:metric confidenceInterval='0.0' name='ga:organicSearches' type='integer' value='5'/>
+  </entry>
+</feed>
