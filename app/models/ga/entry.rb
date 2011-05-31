@@ -17,34 +17,6 @@ module BusinessDomain
       def self.filter_params
         params = {}
         params.update :change => [[:account_id, :account_id],[:profile_id,:table_id]]
-        params.update :mapper => [[:visitorType,'ga:visitorType'],
-                                  [:pagePath,'ga:pagePath'],
-                                  [:date,'ga:date'],
-                                  [:referralPath,'ga:referralPath'],
-                                  [:campaign,'ga:campaign'],
-                                  [:source,'ga:source'],
-                                  [:hostname,'ga:hostname'],
-                                  [:pagePath,'ga:pagePath'],
-                                  [:visitors,'ga:visitors'],
-                                  [:visits,'ga:visits'],
-                                  [:pageviews,'ga:pageviews'],
-                                  [:pageviewsPerVisit,'ga:pageviewsPerVisit'],
-                                  [:uniquePageviews,'ga:uniquePageviews'],
-                                  [:avgTimeOnPage,'ga:avgTimeOnPage'],
-                                  [:avgTimeOnSite,'ga:avgTimeOnSite'],
-                                  [:entrances,'ga:entrances'],
-                                  [:exits,'ga:exits'],
-                                  [:organicSearches,'ga:organicSearches'],
-                                  [:impressions,'ga:impressions'],
-                                  [:adClicks,'ga:adClicks'],
-                                  [:adCost,'ga:adCost'],
-                                  [:CPM,'ga:CPM'],
-                                  [:CPC,'ga:CPC'],
-                                  [:CTR,'ga:CTR'],
-                                  [:costPerGoalConversion,'ga:costPerGoalConversion'],
-                                  [:costPerTransaction,'ga:costPerTransaction'],
-                                  [:costPerConversion,'ga:costPerConversion'],
-                                  [:RPC,'ga:RPC']]
         params.update :block => lambda {|content|
           contain = []
           doc = Nokogiri::XML(content)
@@ -53,10 +25,13 @@ module BusinessDomain
             element = {}
             node.xpath("*").each do |ele|
               name = ele.xpath("@name").text
-              sym = name[3..-1].to_sym if !name[3..-1].nil?
-              element.update(sym => ele.xpath("@value").text) if params[:mapper].include? [sym,name]
+              if !name[3..-1].nil?
+                cut_name = name[3..-1]
+                sym = cut_name.to_sym 
+                element.update(sym => ele.xpath("@value").text) if Entry.column_names.include? cut_name
+              end
             end
-            contain.push(element)
+            contain.push(element) if !element.blank?
           end
           return contain
         }

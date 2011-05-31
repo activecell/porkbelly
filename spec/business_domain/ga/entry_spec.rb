@@ -16,35 +16,6 @@ describe "::BusinessDomain::GA::Entry" do
       @xml_1_changed_prf = ::GA::Util.load_fixture("profile_1_changed")
       
       @params = {}
-      @params[:root] = "data/values"
-      @params[:mapper] = [[:visitorType,'ga:visitorType'],
-                          [:pagePath,'ga:pagePath'],
-                          [:date,'ga:date'],
-                          [:referralPath,'ga:referralPath'],
-                          [:campaign,'ga:campaign'],
-                          [:source,'ga:source'],
-                          [:hostname,'ga:hostname'],
-                          [:pagePath,'ga:pagePath'],
-                          [:visitors,'ga:visitors'],
-                          [:visits,'ga:visits'],
-                          [:pageviews,'ga:pageviews'],
-                          [:pageviewsPerVisit,'ga:pageviewsPerVisit'],
-                          [:uniquePageviews,'ga:uniquePageviews'],
-                          [:avgTimeOnPage,'ga:avgTimeOnPage'],
-                          [:avgTimeOnSite,'ga:avgTimeOnSite'],
-                          [:entrances,'ga:entrances'],
-                          [:exits,'ga:exits'],
-                          [:organicSearches,'ga:organicSearches'],
-                          [:impressions,'ga:impressions'],
-                          [:adClicks,'ga:adClicks'],
-                          [:adCost,'ga:adCost'],
-                          [:CPM,'ga:CPM'],
-                          [:CPC,'ga:CPC'],
-                          [:CTR,'ga:CTR'],
-                          [:costPerGoalConversion,'ga:costPerGoalConversion'],
-                          [:costPerTransaction,'ga:costPerTransaction'],
-                          [:costPerConversion,'ga:costPerConversion'],
-                          [:RPC,'ga:RPC']]
       @params[:change] = [[:account_id, :account_id],[:profile_id,:table_id]]
       @params[:block] = lambda {|content|
             contain = []
@@ -54,8 +25,11 @@ describe "::BusinessDomain::GA::Entry" do
               element = {}
               node.xpath("*").each do |ele|
                 name = ele.xpath("@name").text
-                sym = name[3..-1].to_sym if !name[3..-1].nil?
-                element.update(sym => ele.xpath("@value").text) if @params[:mapper].include? [sym,name]
+                if !name[3..-1].nil?
+                  cut_name = name[3..-1]
+                  sym = cut_name.to_sym 
+                  element.update(sym => ele.xpath("@value").text) if Entry.column_names.include? cut_name
+                end
               end
               contain.push(element)
             end

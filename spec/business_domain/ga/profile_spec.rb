@@ -11,7 +11,6 @@ describe "::BusinessDomain::GA::Account" do
       @xml_2 = ::GA::Util.load_fixture("profile_2")
       @xml_1_changed = ::GA::Util.load_fixture("profile_1_changed")
       @params = {}
-      @params[:mapper] = [[:profileId,'ga:profileId']]
       @params[:change] = [:account_id, :account_id]
       @params[:field_pos] = :entry
       @params[:block] = lambda {|content|
@@ -22,8 +21,11 @@ describe "::BusinessDomain::GA::Account" do
             element.update :title => doc.xpath('//title').text
             doc.xpath("//*").each do |ele|
               name = ele.xpath("@name").text
-              sym = name[3..-1].to_sym if !name[3..-1].nil?
-              element.update(sym => ele.xpath("@value").text) if @params[:mapper].include? [sym,name]
+              if !name[3..-1].nil?
+                cut_name = name[3..-1]
+                sym = cut_name.to_sym 
+                element.update(sym => ele.xpath("@value").text) if Profile.column_names.include? cut_name
+              end
             end
             contain.push(element)
             return contain

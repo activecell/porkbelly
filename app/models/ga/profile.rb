@@ -17,7 +17,6 @@ module BusinessDomain
       def self.filter_params
         params = {}
         params.update :change => [:account_id, :account_id]
-        params.update :mapper => [[:profileId,'ga:profileId']]
         params.update :field_pos => :entry
         params.update :block => lambda {|content|
           contain = []
@@ -27,8 +26,11 @@ module BusinessDomain
           element.update :title => doc.xpath('//title').text
           doc.xpath("//*").each do |ele|
             name = ele.xpath("@name").text
-            sym = name[3..-1].to_sym if !name[3..-1].nil?
-            element.update(sym => ele.xpath("@value").text) if params[:mapper].include? [sym,name]
+            if !name[3..-1].nil?
+              cut_name = name[3..-1]
+              sym = cut_name.to_sym 
+              element.update(sym => ele.xpath("@value").text) if Profile.column_names.include? cut_name
+            end
           end
           contain.push(element)
           return contain

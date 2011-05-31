@@ -10,7 +10,7 @@ module Fetcher
 
       def fetch_data(credential, params)
         load_account_ids
-        tracking = ::SiteTracking.find_by_site_and_target(SITE, SITE)
+        tracking = ::SiteTracking.find_by_site_and_target(SITE, params[:request_id])
         last_request = tracking.last_request.strftime("%Y-%m-%d") unless tracking.nil?
         @a_ids.each do |aid|
           table_id =  aid.table_id

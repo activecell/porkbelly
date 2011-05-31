@@ -9,7 +9,7 @@ module Fetcher
         if !credential.is_a?(Hash)
           username, password = credential.split(":")
           credential = {:username => username, :password => password}
-          params = {:metrics => metrics, :dimensions => dimensions}
+          params = {:metrics => metrics, :dimensions => dimensions, :req => request_id}
           super(credential, params)
         else
           super(credential, params)
@@ -17,11 +17,10 @@ module Fetcher
       end
 
       def fetch_all
-        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, SITE)
+        tracking = ::SiteTracking.find_or_initialize_by_site_and_target(SITE, params[:request_id])
         fetch_time = Time.now.utc
         has_error = false
         if single_fetch?
-          puts params
           begin
             fetch(credential, params)
           rescue Exception => exc
@@ -32,8 +31,6 @@ module Fetcher
         else
           logger.info "multi fetch"
           credential.each do |cd|
-            puts credential
-            puts params
             begin
               fetch(cd, params)
             rescue Exception => exc
