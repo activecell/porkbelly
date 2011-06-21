@@ -41,7 +41,7 @@ module BusinessDomain
                 record[:story_id] = story[:id].to_s
                 object = find_or_initialize_by_iteration_id_and_story_id(record[:iteration_id],record[:story_id])
                 object.update_attributes(record)
-              end
+              end unless o[:arr_story_id].nil?
             end unless arr_ele.nil?
           end
         end

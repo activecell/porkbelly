@@ -379,13 +379,13 @@ namespace :parsing do
   namespace :pt do
     desc "Parser all data of Pivotal Tracker"
     task :all do
-      ENV['credentials'] = "doc/pt.csv"
+      # ENV['credentials'] = "doc/pt.csv"
       # TODO: remove comment for do fetching from here
       # Rake::Task["site:pt:all"].invoke
-      parse_all_data
+      parse_all_data_pt
     end
 
-    def parse_all_data
+    def parse_all_data_pt
       BusinessDomain::PivotalTracker::All.parse_all
     end
   end
@@ -393,9 +393,9 @@ namespace :parsing do
   namespace :zendesk do
     desc "Parser all data of Zendesk"
     task :all do
-      parse_all_data
+      parse_all_data_zendesk
     end
-    def parse_all_data
+    def parse_all_data_zendesk
       BusinessDomain::Zendesk::All.parse_all
     end
   end
@@ -403,9 +403,9 @@ namespace :parsing do
   namespace :harvest do
     desc "Parser all data of Harvest"
     task :all do
-      parse_all_data
+      parse_all_data_harvest
     end
-    def parse_all_data
+    def parse_all_data_harvest
       BusinessDomain::Harvest::All.parse_all
     end
   end
@@ -413,9 +413,9 @@ namespace :parsing do
   namespace :mixpanel do
     desc "Parser all data of Mixpanel"
     task :all do
-      parse_all_data
+      parse_all_data_mixpanel
     end
-    def parse_all_data
+    def parse_all_data_mixpanel
       BusinessDomain::Mixpanel::All.parse_all
     end
   end  
@@ -423,9 +423,9 @@ namespace :parsing do
   namespace :ga do
     desc "Parser all data of Google Analytics"
     task :all do
-      parse_all_data
+      parse_all_data_ga
     end
-    def parse_all_data
+    def parse_all_data_ga
       BusinessDomain::GA::All.parse_all
     end
   end  

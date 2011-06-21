@@ -51,9 +51,9 @@ module Fetcher
         request_params = self.select_params(params, [:type, :unit, :interval, :format, :bucket])
         request_params[:resource] = method_url
         request_params[:event] = event_names.to_json
-                
+        puts ">>>>>>>>>>>>>>>>> #{request_params.inspect}"        
         event_data = send_request(request_params)
-        
+        puts ">>>>>>>>>>>>>>>>> #{event_data}"
         # Detect event data is empty or not
         is_empty = (event_data.blank? || event_data[RESPONSE_KEYS[:legend_size]].to_i <= 0)
         if save_to_db && !is_empty

@@ -26,7 +26,6 @@ module BusinessDomain
       end
 
       def self.update_data(arr_obj)
-
         transaction do
           arr_obj.each do |arr_ele|
             arr_ele.each do |o|
@@ -41,7 +40,7 @@ module BusinessDomain
                 record[:note_id] = note[:id].to_s
                 object = find_or_initialize_by_story_id_and_note_id(record[:story_id],record[:note_id])
                 object.update_attributes(record)
-              end
+              end unless o[:arr_note_id].nil?
             end unless arr_ele.nil?
           end
         end
