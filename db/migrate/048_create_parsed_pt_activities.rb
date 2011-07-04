@@ -5,9 +5,9 @@ class CreateParsedPtActivities < ActiveRecord::Migration
       t.column :version	 , :string
       t.column :event_type	 , :string
       t.column :occurred_at	 , :string
-      t.column :author	 , :string
+      t.column :author	 , :text
       t.column :project_id	 , :string,	:null => false
-      t.column :description	 , :string
+      t.column :description	 , :text
       t.timestamps
     end
   end
