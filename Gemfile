@@ -1,7 +1,7 @@
 source "http://rubygems.org"
 
-gem "activerecord", :require 'active_record'
-gem "activesupport"
+gem "activerecord", :require => 'active_record'
+gem "activesupport", :require => 'active_support'
 gem "actionmailer"
 gem "pg"
 gem "whenever", :require => false
