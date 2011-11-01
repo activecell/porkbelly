@@ -1,8 +1,7 @@
 source "http://rubygems.org"
 
-gem "activerecord"
+gem "activerecord", :require 'active_record'
 gem "activesupport"
-#gem "sqlite3"
 gem "actionmailer"
 gem "pg"
 gem "whenever", :require => false
@@ -10,13 +9,10 @@ gem "rest-client"
 gem "mixpanel_client"
 gem "nokogiri"
 gem 'garb'
-gem 'rforce'# For Salesforce fetcher.
 gem 'json'
-gem 'rforce' # For Salesforce fetcher.
-gem 'sqlite3'
 
 group :development, :test do
-  gem "ruby-debug"
+  gem "ruby-debug19"
   gem "rspec"
 end
 
