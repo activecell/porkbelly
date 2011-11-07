@@ -49,6 +49,7 @@ GEM
     mime-types (1.16)
     mixpanel_client (0.5.1)
     nokogiri (1.4.4)
+    oauth (0.4.5)
     pg (0.10.1)
     polyglot (0.3.1)
     rack (1.2.1)
@@ -58,6 +59,9 @@ GEM
       rack (>= 1.0)
     rest-client (1.6.1)
       mime-types (>= 1.16)
+    rforce (0.6)
+      builder (~> 2.0)
+      oauth (~> 0.4)
     rspec (2.5.0)
       rspec-core (~> 2.5.0)
       rspec-expectations (~> 2.5.0)
@@ -96,6 +100,7 @@ DEPENDENCIES
   nokogiri
   pg
   rest-client
+  rforce
   rspec
   ruby-debug19
   whenever

@@ -9,7 +9,9 @@ gem "rest-client"
 gem "mixpanel_client"
 gem "nokogiri"
 gem 'garb'
-gem 'json'
+gem 'json', :require => true
+#adding salesforce for now
+gem 'rforce'
 
 group :development, :test do
   gem "ruby-debug19"
