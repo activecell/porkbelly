@@ -1,6 +1,7 @@
 $: << File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
 require File.expand_path(File.join(File.dirname(__FILE__), '..', "config", "boot"))
 require File.expand_path(File.join(File.dirname(__FILE__), "mailers", "exception_notification_mailer"))
+require File.expand_path(File.join(File.dirname(__FILE__), '..', "app", "models","utility", "parser"))
 
 # models
 require 'models/site_tracking'
@@ -68,14 +69,10 @@ require 'fetcher/pivotal_tracker/task'
 require 'fetcher/pivotal_tracker/note'
 require 'fetcher/pivotal_tracker/all'
 
-#GOOGLE ANALYTIC
+#GOOGLE ANALYTICS
 require 'fetcher/ga/base'
 require 'fetcher/ga/account'
 require 'fetcher/ga/data'
-#require 'fetcher/ga/webproperty'
-#require 'fetcher/ga/profile'
-#require 'fetcher/ga/goal'
-#require 'fetcher/ga/segment'
 require 'fetcher/ga/all'
 
 # SALESFORCE
@@ -87,6 +84,3 @@ require 'fetcher/salesforce/all'
 module Fetcher
   VERSION = "1.0.0"
 end
-
-require 'parser.rb'
-

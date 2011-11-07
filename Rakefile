@@ -7,7 +7,6 @@ require "yaml"
 
 PROJECT_DIR = File.dirname(__FILE__)
 DATABASE_CONFIG = YAML::load(File.open(File.join(PROJECT_DIR, "config", "database.yml")))
-DB_FILE = File.join(PROJECT_DIR, DATABASE_CONFIG[STAGE]["database"])
 
 namespace :site do
   task :harvest => :"harvest:all" # default fetch all data
